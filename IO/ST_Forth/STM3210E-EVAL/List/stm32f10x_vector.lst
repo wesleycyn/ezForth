@@ -1,0 +1,350 @@
+###############################################################################
+#                                                                             #
+# IAR ANSI C/C++ Compiler V5.20.0.50892/W32 for ARM     07/Oct/2009  13:04:02 #
+# Copyright 1999-2008 IAR Systems AB.                                         #
+#                                                                             #
+#    Cpu mode     =  thumb                                                    #
+#    Endian       =  little                                                   #
+#    Source file  =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\stm32f10x_vector.c #
+#    Command line =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\stm32f10x_vector.c #
+#                     -D VECT_TAB_FLASH -lC F:\CoLtd\Forth\MCU\STM32F10x\ST_F #
+#                    orth\STM3210E-EVAL\List\ -o                              #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\ #
+#                     --no_cse --no_unroll --no_inline --no_code_motion       #
+#                    --no_tbaa --no_clustering --no_scheduling --debug        #
+#                    --endian=little --cpu=Cortex-M3 -e --char_is_signed      #
+#                    --require_prototypes --fpu=None --dlib_config            #
+#                    "C:\Program Files\IAR Systems\Embedded Workbench         #
+#                    5.0\ARM\INC\DLib_Config_Full.h" -I                       #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\ -I                #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\library\inc\ -I    #
+#                    "C:\Program Files\IAR Systems\Embedded Workbench         #
+#                    5.0\ARM\INC\" -On                                        #
+#    List file    =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\List #
+#                    \stm32f10x_vector.lst                                    #
+#    Object file  =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\ #
+#                    stm32f10x_vector.o                                       #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\stm32f10x_vector.c
+      1          /******************** (C) COPYRIGHT 2008 STMicroelectronics ********************
+      2          * File Name          : stm32f10x_vector.c
+      3          * Author             : MCD Application Team
+      4          * Version            : V2.0.3
+      5          * Date               : 09/22/2008
+      6          * Description        : STM32F10x vector table for EWARM5.x toolchain.
+      7          *                      This module performs:
+      8          *                      - Set the initial SP
+      9          *                      - Set the initial PC == __iar_program_start,
+     10          *                      - Set the vector table entries with the exceptions ISR address,
+     11          *                      - Configure external SRAM mounted on STM3210E-EVAL board
+     12          *                       to be used as data memory (optional, to be enabled by user)
+     13          *                      After Reset the Cortex-M3 processor is in Thread mode,
+     14          *                      priority is Privileged, and the Stack is set to Main.
+     15          ********************************************************************************
+     16          * THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
+     17          * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE TIME.
+     18          * AS A RESULT, STMICROELECTRONICS SHALL NOT BE HELD LIABLE FOR ANY DIRECT,
+     19          * INDIRECT OR CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING FROM THE
+     20          * CONTENT OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE CODING
+     21          * INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
+     22          *******************************************************************************/
+     23          
+     24          /* Includes ------------------------------------------------------------------*/
+     25          #include "stm32f10x_lib.h"
+     26          #include "stm32f10x_it.h"
+     27          
+     28          /* Private typedef -----------------------------------------------------------*/
+     29          typedef void( *intfunc )( void );
+     30          typedef union { intfunc __fun; void * __ptr; } intvec_elem;
+     31          
+     32          /* Private define ------------------------------------------------------------*/
+     33          /* Uncomment the following line if you need to use external SRAM mounted on
+     34             STM3210E-EVAL board as data memory */
+     35          #define DATA_IN_ExtSRAM 
+     36          
+     37          /* Private macro -------------------------------------------------------------*/
+     38          /* Private variables ---------------------------------------------------------*/
+     39          /* Private function prototypes -----------------------------------------------*/
+     40          /* Private functions ---------------------------------------------------------*/
+     41          
+     42          
+     43          #pragma language=extended
+     44          #pragma segment="CSTACK"
+     45          
+     46          void __iar_program_start( void );
+     47          
+     48          #pragma location = ".intvec"
+     49          /* STM32F10x Vector Table entries */
+
+   \                                 In section .intvec, align 4
+     50          const intvec_elem __vector_table[] =
+   \                     __vector_table:
+   \   00000000   ............       DC32 SFE(CSTACK), __iar_program_start, NMIException, HardFaultException
+   \              ............
+   \              ........    
+   \   00000010   ............       DC32 MemManageException, BusFaultException, UsageFaultException, 0H, 0H
+   \              ............
+   \              000000000000
+   \              0000        
+   \   00000024   000000000000       DC32 0H, 0H, SVCHandler, DebugMonitor, 0H, PendSVC, SysTickHandler
+   \              0000........
+   \              ........0000
+   \              0000........
+   \              ........    
+   \   00000040   ............       DC32 WWDG_IRQHandler, PVD_IRQHandler, TAMPER_IRQHandler, RTC_IRQHandler
+   \              ............
+   \              ........    
+   \   00000050   ............       DC32 FLASH_IRQHandler, RCC_IRQHandler, EXTI0_IRQHandler
+   \              ............
+   \   0000005C   ............       DC32 EXTI1_IRQHandler, EXTI2_IRQHandler, EXTI3_IRQHandler
+   \              ............
+   \   00000068   ............       DC32 EXTI4_IRQHandler, DMA1_Channel1_IRQHandler
+   \              ....        
+   \   00000070   ............       DC32 DMA1_Channel2_IRQHandler, DMA1_Channel3_IRQHandler
+   \              ....        
+   \   00000078   ............       DC32 DMA1_Channel4_IRQHandler, DMA1_Channel5_IRQHandler
+   \              ....        
+   \   00000080   ............       DC32 DMA1_Channel6_IRQHandler, DMA1_Channel7_IRQHandler
+   \              ....        
+   \   00000088   ............       DC32 ADC1_2_IRQHandler, USB_HP_CAN_TX_IRQHandler
+   \              ....        
+   \   00000090   ............       DC32 USB_LP_CAN_RX0_IRQHandler, CAN_RX1_IRQHandler, CAN_SCE_IRQHandler
+   \              ............
+   \   0000009C   ............       DC32 EXTI9_5_IRQHandler, TIM1_BRK_IRQHandler, TIM1_UP_IRQHandler
+   \              ............
+   \   000000A8   ............       DC32 TIM1_TRG_COM_IRQHandler, TIM1_CC_IRQHandler, TIM2_IRQHandler
+   \              ............
+   \   000000B4   ............       DC32 TIM3_IRQHandler, TIM4_IRQHandler, I2C1_EV_IRQHandler
+   \              ............
+   \   000000C0   ............       DC32 I2C1_ER_IRQHandler, I2C2_EV_IRQHandler, I2C2_ER_IRQHandler
+   \              ............
+   \   000000CC   ............       DC32 SPI1_IRQHandler, SPI2_IRQHandler, USART1_IRQHandler
+   \              ............
+   \   000000D8   ............       DC32 USART2_IRQHandler, USART3_IRQHandler, EXTI15_10_IRQHandler
+   \              ............
+   \   000000E4   ............       DC32 RTCAlarm_IRQHandler, USBWakeUp_IRQHandler, TIM8_BRK_IRQHandler
+   \              ............
+   \   000000F0   ............       DC32 TIM8_UP_IRQHandler, TIM8_TRG_COM_IRQHandler, TIM8_CC_IRQHandler
+   \              ............
+   \   000000FC   ............       DC32 ADC3_IRQHandler, FSMC_IRQHandler, SDIO_IRQHandler, TIM5_IRQHandler
+   \              ............
+   \              ........    
+   \   0000010C   ............       DC32 SPI3_IRQHandler, UART4_IRQHandler, UART5_IRQHandler
+   \              ............
+   \   00000118   ............       DC32 TIM6_IRQHandler, TIM7_IRQHandler, DMA2_Channel1_IRQHandler
+   \              ............
+   \   00000124   ............       DC32 DMA2_Channel2_IRQHandler, DMA2_Channel3_IRQHandler
+   \              ....        
+   \   0000012C   ........           DC32 DMA2_Channel4_5_IRQHandler
+     51          {
+     52            { .__ptr = __sfe( "CSTACK" ) },
+     53            __iar_program_start,
+     54            NMIException,
+     55            HardFaultException,
+     56            MemManageException,
+     57            BusFaultException,
+     58            UsageFaultException,
+     59            0, 0, 0, 0,            /* Reserved */ 
+     60            SVCHandler,
+     61            DebugMonitor,
+     62            0,                      /* Reserved */
+     63            PendSVC,
+     64            SysTickHandler,
+     65            WWDG_IRQHandler,
+     66            PVD_IRQHandler,
+     67            TAMPER_IRQHandler,
+     68            RTC_IRQHandler,
+     69            FLASH_IRQHandler,
+     70            RCC_IRQHandler,
+     71            EXTI0_IRQHandler,
+     72            EXTI1_IRQHandler,
+     73            EXTI2_IRQHandler,
+     74            EXTI3_IRQHandler,
+     75            EXTI4_IRQHandler,
+     76            DMA1_Channel1_IRQHandler,
+     77            DMA1_Channel2_IRQHandler,
+     78            DMA1_Channel3_IRQHandler,
+     79            DMA1_Channel4_IRQHandler,
+     80            DMA1_Channel5_IRQHandler,
+     81            DMA1_Channel6_IRQHandler,
+     82            DMA1_Channel7_IRQHandler,
+     83            ADC1_2_IRQHandler,
+     84            USB_HP_CAN_TX_IRQHandler,
+     85            USB_LP_CAN_RX0_IRQHandler,
+     86            CAN_RX1_IRQHandler,
+     87            CAN_SCE_IRQHandler,
+     88            EXTI9_5_IRQHandler,
+     89            TIM1_BRK_IRQHandler,
+     90            TIM1_UP_IRQHandler,
+     91            TIM1_TRG_COM_IRQHandler,
+     92            TIM1_CC_IRQHandler,
+     93            TIM2_IRQHandler,
+     94            TIM3_IRQHandler,
+     95            TIM4_IRQHandler,
+     96            I2C1_EV_IRQHandler,
+     97            I2C1_ER_IRQHandler,
+     98            I2C2_EV_IRQHandler,
+     99            I2C2_ER_IRQHandler,
+    100            SPI1_IRQHandler,
+    101            SPI2_IRQHandler,
+    102            USART1_IRQHandler,
+    103            USART2_IRQHandler,
+    104            USART3_IRQHandler,
+    105            EXTI15_10_IRQHandler,
+    106            RTCAlarm_IRQHandler,
+    107            USBWakeUp_IRQHandler,
+    108            TIM8_BRK_IRQHandler,
+    109            TIM8_UP_IRQHandler,
+    110            TIM8_TRG_COM_IRQHandler,
+    111            TIM8_CC_IRQHandler,
+    112            ADC3_IRQHandler,
+    113            FSMC_IRQHandler,
+    114            SDIO_IRQHandler,
+    115            TIM5_IRQHandler,
+    116            SPI3_IRQHandler,
+    117            UART4_IRQHandler,
+    118            UART5_IRQHandler,
+    119            TIM6_IRQHandler,
+    120            TIM7_IRQHandler,
+    121            DMA2_Channel1_IRQHandler,
+    122            DMA2_Channel2_IRQHandler,
+    123            DMA2_Channel3_IRQHandler,
+    124            DMA2_Channel4_5_IRQHandler,
+    125          };
+    126          
+    127          #ifdef DATA_IN_ExtSRAM
+    128          #pragma language=extended
+    129          
+    130          __interwork int __low_level_init(void);
+    131          
+    132          #pragma location="ICODE"
+
+   \                                 In section ICODE, align 4, keep-with-next
+    133          __interwork int __low_level_init(void)
+    134          {
+    135             
+    136          /* FSMC Bank1 NOR/SRAM3 is used for the STM3210E-EVAL, if another Bank is 
+    137            required, then adjust the Register Addresses*/
+    138          
+    139            /* Enable FSMC clock */
+    140            *(vu32 *)0x40021014 = 0x00000114;
+   \                     __low_level_init:
+   \   00000000   1548               LDR.N    R0,??__low_level_init_0  ;; 0x40021014
+   \   00000002   4FF48A71           MOV      R1,#+276
+   \   00000006   0160               STR      R1,[R0, #+0]
+    141            
+    142            /* Enable GPIOD, GPIOE, GPIOF and GPIOG clocks */  
+    143            *(vu32 *)0x40021018 = 0x000001E0;
+   \   00000008   1448               LDR.N    R0,??__low_level_init_0+0x4  ;; 0x40021018
+   \   0000000A   4FF4F071           MOV      R1,#+480
+   \   0000000E   0160               STR      R1,[R0, #+0]
+    144            
+    145          /* ---------------  SRAM Data lines, NOE and NWE configuration ---------------*/
+    146          /*----------------  SRAM Address lines configuration -------------------------*/
+    147          /*----------------  NOE and NWE configuration --------------------------------*/  
+    148          /*----------------  NE3 configuration ----------------------------------------*/
+    149          /*----------------  NBL0, NBL1 configuration ---------------------------------*/
+    150            
+    151            *(vu32 *)0x40011400 = 0x44BB44BB; // GPIOD_
+   \   00000010   1348               LDR.N    R0,??__low_level_init_0+0x8  ;; 0x40011400
+   \   00000012   1449               LDR.N    R1,??__low_level_init_0+0xC  ;; 0x44bb44bb
+   \   00000014   0160               STR      R1,[R0, #+0]
+    152            *(vu32 *)0x40011404 = 0xBBBBBBBB; // GPIOD_
+   \   00000016   1448               LDR.N    R0,??__low_level_init_0+0x10  ;; 0x40011404
+   \   00000018   5FF0BB31           MOVS     R1,#-1145324613
+   \   0000001C   0160               STR      R1,[R0, #+0]
+    153            
+    154            *(vu32 *)0x40011800 = 0xB44444BB; // GPIOE_
+   \   0000001E   1348               LDR.N    R0,??__low_level_init_0+0x14  ;; 0x40011800
+   \   00000020   1349               LDR.N    R1,??__low_level_init_0+0x18  ;; 0xb44444bb
+   \   00000022   0160               STR      R1,[R0, #+0]
+    155            *(vu32 *)0x40011804 = 0xBBBBBBBB; // GPIOE_
+   \   00000024   1348               LDR.N    R0,??__low_level_init_0+0x1C  ;; 0x40011804
+   \   00000026   5FF0BB31           MOVS     R1,#-1145324613
+   \   0000002A   0160               STR      R1,[R0, #+0]
+    156             
+    157            *(vu32 *)0x40011C00 = 0x44BBBBBB; // GPIOF_
+   \   0000002C   1248               LDR.N    R0,??__low_level_init_0+0x20  ;; 0x40011c00
+   \   0000002E   1349               LDR.N    R1,??__low_level_init_0+0x24  ;; 0x44bbbbbb
+   \   00000030   0160               STR      R1,[R0, #+0]
+    158            *(vu32 *)0x40011C04 = 0xBBBB4444; // GPIOF_  
+   \   00000032   1348               LDR.N    R0,??__low_level_init_0+0x28  ;; 0x40011c04
+   \   00000034   1349               LDR.N    R1,??__low_level_init_0+0x2C  ;; 0xbbbb4444
+   \   00000036   0160               STR      R1,[R0, #+0]
+    159          
+    160            *(vu32 *)0x40012000 = 0x44BBBBBB; // GPIOG_
+   \   00000038   1348               LDR.N    R0,??__low_level_init_0+0x30  ;; 0x40012000
+   \   0000003A   1049               LDR.N    R1,??__low_level_init_0+0x24  ;; 0x44bbbbbb
+   \   0000003C   0160               STR      R1,[R0, #+0]
+    161            *(vu32 *)0x40012004 = 0x44444BB4; // GPIOG_10:NE3 GPIO_9:NE2
+   \   0000003E   1348               LDR.N    R0,??__low_level_init_0+0x34  ;; 0x40012004
+   \   00000040   1349               LDR.N    R1,??__low_level_init_0+0x38  ;; 0x44444bb4
+   \   00000042   0160               STR      R1,[R0, #+0]
+    162            
+    163          /*----------------  FSMC Configuration ---------------------------------------*/  
+    164          /*----------------  Enable FSMC Bank1_SRAM Bank ------------------------------*/
+    165            
+    166            *(vu32 *)0xA0000010 = 0x00001011; // FSMC bank3_reg
+   \   00000044   1348               LDR.N    R0,??__low_level_init_0+0x3C  ;; 0xa0000010
+   \   00000046   41F21101           MOVW     R1,#+4113
+   \   0000004A   0160               STR      R1,[R0, #+0]
+    167            *(vu32 *)0xA0000014 = 0x00000200; // FSMC Bank3_reg
+   \   0000004C   1248               LDR.N    R0,??__low_level_init_0+0x40  ;; 0xa0000014
+   \   0000004E   4FF40071           MOV      R1,#+512
+   \   00000052   0160               STR      R1,[R0, #+0]
+    168            
+    169          
+    170            return (1);
+   \   00000054   0120               MOVS     R0,#+1
+   \   00000056   7047               BX       LR               ;; return
+   \                     ??__low_level_init_0:
+   \   00000058   14100240           DC32     0x40021014
+   \   0000005C   18100240           DC32     0x40021018
+   \   00000060   00140140           DC32     0x40011400
+   \   00000064   BB44BB44           DC32     0x44bb44bb
+   \   00000068   04140140           DC32     0x40011404
+   \   0000006C   00180140           DC32     0x40011800
+   \   00000070   BB4444B4           DC32     0xb44444bb
+   \   00000074   04180140           DC32     0x40011804
+   \   00000078   001C0140           DC32     0x40011c00
+   \   0000007C   BBBBBB44           DC32     0x44bbbbbb
+   \   00000080   041C0140           DC32     0x40011c04
+   \   00000084   4444BBBB           DC32     0xbbbb4444
+   \   00000088   00200140           DC32     0x40012000
+   \   0000008C   04200140           DC32     0x40012004
+   \   00000090   B44B4444           DC32     0x44444bb4
+   \   00000094   100000A0           DC32     0xa0000010
+   \   00000098   140000A0           DC32     0xa0000014
+    171          }
+    172          #endif /*DATA_IN_ExtSRAM*/
+    173          
+    174          /******************* (C) COPYRIGHT 2008 STMicroelectronics *****END OF FILE****/
+    175          
+    176          
+
+   Maximum stack usage in bytes:
+
+     Function         .cstack
+     --------         -------
+     __low_level_init      0
+
+
+   Section sizes:
+
+     Function/Label   Bytes
+     --------------   -----
+     __vector_table    304
+     __low_level_init  156
+
+ 
+ 304 bytes in section .intvec
+ 156 bytes in section ICODE
+ 
+ 156 bytes of CODE  memory
+ 304 bytes of CONST memory
+
+Errors: none
+Warnings: none

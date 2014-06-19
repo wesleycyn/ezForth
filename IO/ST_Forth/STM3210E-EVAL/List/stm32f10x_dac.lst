@@ -1,0 +1,625 @@
+###############################################################################
+#                                                                             #
+# IAR ANSI C/C++ Compiler V5.20.0.50892/W32 for ARM     07/Oct/2009  13:03:54 #
+# Copyright 1999-2008 IAR Systems AB.                                         #
+#                                                                             #
+#    Cpu mode     =  thumb                                                    #
+#    Endian       =  little                                                   #
+#    Source file  =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\library\src\stm32f #
+#                    10x_dac.c                                                #
+#    Command line =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\library\src\stm32f #
+#                    10x_dac.c -D VECT_TAB_FLASH -lC                          #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\List #
+#                    \ -o F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL #
+#                    \Obj\ --debug --endian=little --cpu=Cortex-M3 -e         #
+#                    --char_is_signed --require_prototypes --fpu=None         #
+#                    --dlib_config "C:\Program Files\IAR Systems\Embedded     #
+#                    Workbench 5.0\ARM\INC\DLib_Config_Full.h" -I             #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\ -I                #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\library\inc\ -I    #
+#                    "C:\Program Files\IAR Systems\Embedded Workbench         #
+#                    5.0\ARM\INC\" -Ohz                                       #
+#    List file    =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\List #
+#                    \stm32f10x_dac.lst                                       #
+#    Object file  =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\ #
+#                    stm32f10x_dac.o                                          #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\library\src\stm32f10x_dac.c
+      1          /******************** (C) COPYRIGHT 2008 STMicroelectronics ********************
+      2          * File Name          : stm32f10x_dac.c
+      3          * Author             : MCD Application Team
+      4          * Version            : V2.0.3
+      5          * Date               : 09/22/2008
+      6          * Description        : This file provides all the DAC firmware functions.
+      7          ********************************************************************************
+      8          * THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
+      9          * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE TIME.
+     10          * AS A RESULT, STMICROELECTRONICS SHALL NOT BE HELD LIABLE FOR ANY DIRECT,
+     11          * INDIRECT OR CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING FROM THE
+     12          * CONTENT OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE CODING
+     13          * INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
+     14          *******************************************************************************/
+     15          
+     16          /* Includes ------------------------------------------------------------------*/
+     17          #include "stm32f10x_dac.h"
+     18          #include "stm32f10x_rcc.h"
+     19          
+     20          /* Private typedef -----------------------------------------------------------*/
+     21          /* Private define ------------------------------------------------------------*/
+     22          /* DAC EN mask */
+     23          #define CR_EN_Set                  ((u32)0x00000001)
+     24          
+     25          /* DAC DMAEN mask */
+     26          #define CR_DMAEN_Set               ((u32)0x00001000)
+     27          
+     28          /* CR register Mask */
+     29          #define CR_CLEAR_Mask              ((u32)0x00000FFE)
+     30          
+     31          /* DAC SWTRIG mask */
+     32          #define SWTRIGR_SWTRIG_Set         ((u32)0x00000001)
+     33          
+     34          /* DAC Dual Channels SWTRIG masks */
+     35          #define DUAL_SWTRIG_Set            ((u32)0x00000003)
+     36          #define DUAL_SWTRIG_Reset          ((u32)0xFFFFFFFC)
+     37          
+     38          /* DHR registers offsets */
+     39          #define DHR12R1_Offset             ((u32)0x00000008)
+     40          #define DHR12R2_Offset             ((u32)0x00000014)
+     41          #define DHR12RD_Offset             ((u32)0x00000020)
+     42          
+     43          /* DOR register offset */
+     44          #define DOR_Offset                 ((u32)0x0000002C)
+     45          
+     46          /* Private macro -------------------------------------------------------------*/
+     47          /* Private variables ---------------------------------------------------------*/
+     48          /* Private function prototypes -----------------------------------------------*/
+     49          /* Private functions ---------------------------------------------------------*/
+     50          
+     51          /*******************************************************************************
+     52          * Function Name  : DAC_DeInit
+     53          * Description    : Deinitializes the DAC peripheral registers to their default
+     54          *                  reset values.
+     55          * Input          : None.
+     56          * Output         : None
+     57          * Return         : None
+     58          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+     59          void DAC_DeInit(void)
+     60          {
+   \                     DAC_DeInit:
+   \   00000000   80B5               PUSH     {R7,LR}
+     61            /* Enable DAC reset state */
+     62            RCC_APB1PeriphResetCmd(RCC_APB1Periph_DAC, ENABLE);
+   \   00000002   0121               MOVS     R1,#+1
+   \   00000004   4FF00050           MOV      R0,#+536870912
+   \   00000008   ........           BL       RCC_APB1PeriphResetCmd
+     63            /* Release DAC from reset state */
+     64            RCC_APB1PeriphResetCmd(RCC_APB1Periph_DAC, DISABLE);
+   \   0000000C   0021               MOVS     R1,#+0
+   \   0000000E   4FF00050           MOV      R0,#+536870912
+   \   00000012   BDE80440           POP      {R2,LR}
+   \   00000016   ........           B.W      RCC_APB1PeriphResetCmd
+     65          }
+     66          
+     67          /*******************************************************************************
+     68          * Function Name  : DAC_Init
+     69          * Description    : Initializes the DAC peripheral according to the specified 
+     70          *                  parameters in the DAC_InitStruct.
+     71          * Input          : - DAC_Channel: the selected DAC channel. 
+     72          *                    This parameter can be one of the following values:
+     73          *                       - DAC_Channel_1: DAC Channel1 selected
+     74          *                       - DAC_Channel_2: DAC Channel2 selected
+     75          *                  - DAC_InitStruct: pointer to a DAC_InitTypeDef structure that
+     76          *                    contains the configuration information for the specified
+     77          *                    DAC channel.
+     78          * Output         : None
+     79          * Return         : None
+     80          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+     81          void DAC_Init(u32 DAC_Channel, DAC_InitTypeDef* DAC_InitStruct)
+     82          {
+   \                     DAC_Init:
+   \   00000000   80B5               PUSH     {R7,LR}
+     83            u32 tmpreg1 = 0, tmpreg2 = 0;
+     84          
+     85            /* Check the DAC parameters */
+     86            assert_param(IS_DAC_TRIGGER(DAC_InitStruct->DAC_Trigger));
+     87            assert_param(IS_DAC_GENERATE_WAVE(DAC_InitStruct->DAC_WaveGeneration));
+     88            assert_param(IS_DAC_LFSR_UNMASK_TRIANGLE_AMPLITUDE(DAC_InitStruct->DAC_LFSRUnmask_TriangleAmplitude));
+     89            assert_param(IS_DAC_OUTPUT_BUFFER_STATE(DAC_InitStruct->DAC_OutputBuffer));
+     90          
+     91          /*---------------------------- DAC CR Configuration --------------------------*/
+     92            /* Get the DAC CR value */
+     93            tmpreg1 = DAC->CR;
+   \   00000002   ....               LDR.N    R2,??DataTable5  ;; 0x40007400
+   \   00000004   1368               LDR      R3,[R2, #+0]
+     94            /* Clear BOFFx, TENx, TSELx, WAVEx and MAMPx bits */
+     95            tmpreg1 &= ~(CR_CLEAR_Mask << DAC_Channel);
+     96            /* Configure for the selected DAC channel: buffer output, trigger, wave genration,
+     97               mask/amplitude for wave genration */
+     98            /* Set TSELx and TENx bits according to DAC_Trigger value */
+     99            /* Set WAVEx bits according to DAC_WaveGeneration value */
+    100            /* Set MAMPx bits according to DAC_LFSRUnmask_TriangleAmplitude value */ 
+    101            /* Set BOFFx bit according to DAC_OutputBuffer value */   
+    102            tmpreg2 = (DAC_InitStruct->DAC_Trigger | DAC_InitStruct->DAC_WaveGeneration |
+    103                       DAC_InitStruct->DAC_LFSRUnmask_TriangleAmplitude | DAC_InitStruct->DAC_OutputBuffer);
+    104            /* Calculate CR register value depending on DAC_Channel */
+    105            tmpreg1 |= tmpreg2 << DAC_Channel;
+    106            /* Write to DAC CR */
+    107            DAC->CR = tmpreg1;
+   \   00000006   40F6FE7C           MOVW     R12,#+4094
+   \   0000000A   0CFA00FC           LSL      R12,R12,R0
+   \   0000000E   6FEA0C0C           MVN      R12,R12
+   \   00000012   0CEA0303           AND      R3,R12,R3
+   \   00000016   D1F800C0           LDR      R12,[R1, #+0]
+   \   0000001A   D1F804E0           LDR      LR,[R1, #+4]
+   \   0000001E   4EEA0C0C           ORR      R12,LR,R12
+   \   00000022   D1F808E0           LDR      LR,[R1, #+8]
+   \   00000026   4EEA0C0C           ORR      R12,LR,R12
+   \   0000002A   C968               LDR      R1,[R1, #+12]
+   \   0000002C   41EA0C01           ORR      R1,R1,R12
+   \   00000030   01FA00F0           LSL      R0,R1,R0
+   \   00000034   1843               ORRS     R0,R0,R3
+   \   00000036   1060               STR      R0,[R2, #+0]
+    108          }
+   \   00000038   01BD               POP      {R0,PC}          ;; return
+    109          
+    110          /*******************************************************************************
+    111          * Function Name  : DAC_StructInit
+    112          * Description    : Fills each DAC_InitStruct member with its default value.
+    113          * Input          : - DAC_InitStruct : pointer to a DAC_InitTypeDef structure
+    114          *                    which will be initialized.
+    115          * Output         : None
+    116          * Return         : None
+    117          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+    118          void DAC_StructInit(DAC_InitTypeDef* DAC_InitStruct)
+    119          {
+    120          /*--------------- Reset DAC init structure parameters values -----------------*/
+    121            /* Initialize the DAC_Trigger member */
+    122            DAC_InitStruct->DAC_Trigger = DAC_Trigger_None;
+   \                     DAC_StructInit:
+   \   00000000   0021               MOVS     R1,#+0
+   \   00000002   0160               STR      R1,[R0, #+0]
+    123          
+    124            /* Initialize the DAC_WaveGeneration member */
+    125            DAC_InitStruct->DAC_WaveGeneration = DAC_WaveGeneration_None;
+   \   00000004   4160               STR      R1,[R0, #+4]
+    126          
+    127            /* Initialize the DAC_LFSRUnmask_TriangleAmplitude member */
+    128            DAC_InitStruct->DAC_LFSRUnmask_TriangleAmplitude = DAC_LFSRUnmask_Bit0;
+   \   00000006   8160               STR      R1,[R0, #+8]
+    129          
+    130            /* Initialize the DAC_OutputBuffer member */
+    131            DAC_InitStruct->DAC_OutputBuffer = DAC_OutputBuffer_Enable;
+   \   00000008   C160               STR      R1,[R0, #+12]
+    132          }
+   \   0000000A   7047               BX       LR               ;; return
+    133          
+    134          /*******************************************************************************
+    135          * Function Name  : DAC_Cmd
+    136          * Description    : Enables or disables the specified DAC channel.
+    137          * Input            - DAC_Channel: the selected DAC channel. 
+    138          *                    This parameter can be one of the following values:
+    139          *                       - DAC_Channel_1: DAC Channel1 selected
+    140          *                       - DAC_Channel_2: DAC Channel2 selected
+    141          *                  - NewState: new state of the DAC channel. 
+    142          *                    This parameter can be: ENABLE or DISABLE.
+    143          * Output         : None
+    144          * Return         : None
+    145          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+    146          void DAC_Cmd(u32 DAC_Channel, FunctionalState NewState)
+    147          {
+    148            /* Check the parameters */
+    149            assert_param(IS_DAC_CHANNEL(DAC_Channel));
+    150            assert_param(IS_FUNCTIONAL_STATE(NewState));
+    151          
+    152            if (NewState != DISABLE)
+   \                     DAC_Cmd:
+   \   00000000   0122               MOVS     R2,#+1
+   \   00000002   02FA00F0           LSL      R0,R2,R0
+   \   00000006   ....               LDR.N    R2,??DataTable5  ;; 0x40007400
+   \   00000008   ....               B.N      ?Subroutine0
+    153            {
+    154              /* Enable the selected DAC channel */
+    155              DAC->CR |= CR_EN_Set << DAC_Channel;
+    156            }
+    157            else
+    158            {
+    159              /* Disable the selected DAC channel */
+    160              DAC->CR &= ~(CR_EN_Set << DAC_Channel);
+    161            }
+    162          }
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ?Subroutine0:
+   \   00000000   0029               CMP      R1,#+0
+   \   00000002   1168               LDR      R1,[R2, #+0]
+   \   00000004   01D0               BEQ.N    ??Subroutine0_0
+   \   00000006   0843               ORRS     R0,R0,R1
+   \   00000008   01E0               B.N      ??Subroutine0_1
+   \                     ??Subroutine0_0:
+   \   0000000A   C043               MVNS     R0,R0
+   \   0000000C   0840               ANDS     R0,R0,R1
+   \                     ??Subroutine0_1:
+   \   0000000E   1060               STR      R0,[R2, #+0]
+   \   00000010   7047               BX       LR               ;; return
+    163          
+    164          /*******************************************************************************
+    165          * Function Name  : DAC_DMACmd
+    166          * Description    : Enables or disables the specified DAC channel DMA request.
+    167          * Input            - DAC_Channel: the selected DAC channel. 
+    168          *                    This parameter can be one of the following values:
+    169          *                       - DAC_Channel_1: DAC Channel1 selected
+    170          *                       - DAC_Channel_2: DAC Channel2 selected
+    171          *                  - NewState: new state of the selected DAC channel DMA request.
+    172          *                    This parameter can be: ENABLE or DISABLE.
+    173          * Output         : None
+    174          * Return         : None
+    175          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+    176          void DAC_DMACmd(u32 DAC_Channel, FunctionalState NewState)
+    177          {
+    178            /* Check the parameters */
+    179            assert_param(IS_DAC_CHANNEL(DAC_Channel));
+    180            assert_param(IS_FUNCTIONAL_STATE(NewState));
+    181          
+    182            if (NewState != DISABLE)
+   \                     DAC_DMACmd:
+   \   00000000   4FF48052           MOV      R2,#+4096
+   \   00000004   02FA00F0           LSL      R0,R2,R0
+   \   00000008   ....               LDR.N    R2,??DataTable5  ;; 0x40007400
+   \   0000000A   00BF               Nop      
+   \   0000000C                      REQUIRE ?Subroutine0
+   \   0000000C                      ;; // Fall through to label ?Subroutine0
+    183            {
+    184              /* Enable the selected DAC channel DMA request */
+    185              DAC->CR |= CR_DMAEN_Set << DAC_Channel;
+    186            }
+    187            else
+    188            {
+    189              /* Disable the selected DAC channel DMA request */
+    190              DAC->CR &= ~(CR_DMAEN_Set << DAC_Channel);
+    191            }
+    192          }
+    193          
+    194          /*******************************************************************************
+    195          * Function Name  : DAC_SoftwareTriggerCmd
+    196          * Description    : Enables or disables the selected DAC channel software trigger.
+    197          * Input            - DAC_Channel: the selected DAC channel. 
+    198          *                    This parameter can be one of the following values:
+    199          *                       - DAC_Channel_1: DAC Channel1 selected
+    200          *                       - DAC_Channel_2: DAC Channel2 selected
+    201          *                  - NewState: new state of the selected DAC channel software trigger.
+    202          *                    This parameter can be: ENABLE or DISABLE.
+    203          * Output         : None
+    204          * Return         : None
+    205          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+    206          void DAC_SoftwareTriggerCmd(u32 DAC_Channel, FunctionalState NewState)
+    207          {
+    208            /* Check the parameters */
+    209            assert_param(IS_DAC_CHANNEL(DAC_Channel));
+    210            assert_param(IS_FUNCTIONAL_STATE(NewState));
+    211          
+    212            if (NewState != DISABLE)
+   \                     DAC_SoftwareTriggerCmd:
+   \   00000000   0122               MOVS     R2,#+1
+   \   00000002   0009               LSRS     R0,R0,#+4
+   \   00000004   02FA00F0           LSL      R0,R2,R0
+   \   00000008   ....               LDR.N    R2,??DataTable4  ;; 0x40007404
+   \   0000000A   ....               B.N      ?Subroutine0
+    213            {
+    214              /* Enable software trigger for the selected DAC channel */
+    215              DAC->SWTRIGR |= SWTRIGR_SWTRIG_Set << (DAC_Channel >> 4);
+    216            }
+    217            else
+    218            {
+    219              /* Disable software trigger for the selected DAC channel */
+    220              DAC->SWTRIGR &= ~(SWTRIGR_SWTRIG_Set << (DAC_Channel >> 4));
+    221            }
+    222          }
+    223          
+    224          /*******************************************************************************
+    225          * Function Name  : DAC_DualSoftwareTriggerCmd
+    226          * Description    : Enables or disables simultaneously the two DAC channels software
+    227          *                  triggers.
+    228          * Input            - NewState: new state of the DAC channels software triggers.
+    229          *                    This parameter can be: ENABLE or DISABLE.
+    230          * Output         : None
+    231          * Return         : None
+    232          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+    233          void DAC_DualSoftwareTriggerCmd(FunctionalState NewState)
+    234          {
+    235            /* Check the parameters */
+    236            assert_param(IS_FUNCTIONAL_STATE(NewState));
+    237          
+    238            if (NewState != DISABLE)
+   \                     DAC_DualSoftwareTriggerCmd:
+   \   00000000   ....               LDR.N    R1,??DataTable4  ;; 0x40007404
+   \   00000002   0028               CMP      R0,#+0
+   \   00000004   0868               LDR      R0,[R1, #+0]
+   \   00000006   02D0               BEQ.N    ??DAC_DualSoftwareTriggerCmd_0
+    239            {
+    240              /* Enable software trigger for both DAC channels */
+    241              DAC->SWTRIGR |= DUAL_SWTRIG_Set ;
+   \   00000008   40F00300           ORR      R0,R0,#0x3
+   \   0000000C   01E0               B.N      ??DAC_DualSoftwareTriggerCmd_1
+    242            }
+    243            else
+    244            {
+    245              /* Disable software trigger for both DAC channels */
+    246              DAC->SWTRIGR &= DUAL_SWTRIG_Reset;
+   \                     ??DAC_DualSoftwareTriggerCmd_0:
+   \   0000000E   0322               MOVS     R2,#+3
+   \   00000010   9043               BICS     R0,R0,R2
+   \                     ??DAC_DualSoftwareTriggerCmd_1:
+   \   00000012   0860               STR      R0,[R1, #+0]
+    247            }
+    248          }
+   \   00000014   7047               BX       LR               ;; return
+    249          
+    250          /*******************************************************************************
+    251          * Function Name  : DAC_WaveGenerationCmd
+    252          * Description    : Enables or disables the selected DAC channel wave generation.
+    253          * Input            - DAC_Channel: the selected DAC channel. 
+    254          *                    This parameter can be one of the following values:
+    255          *                       - DAC_Channel_1: DAC Channel1 selected
+    256          *                       - DAC_Channel_2: DAC Channel2 selected
+    257          *                  - DAC_Wave: Specifies the wave type to enable or disable.
+    258          *                    This parameter can be one of the following values:
+    259          *                       - DAC_Wave_Noise: noise wave generation
+    260          *                       - DAC_Wave_Triangle: triangle wave generation
+    261          *                  - NewState: new state of the selected DAC channel wave generation.
+    262          *                    This parameter can be: ENABLE or DISABLE.
+    263          * Output         : None
+    264          * Return         : None
+    265          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+    266          void DAC_WaveGenerationCmd(u32 DAC_Channel, u32 DAC_Wave, FunctionalState NewState)
+    267          {
+    268            /* Check the parameters */
+    269            assert_param(IS_DAC_CHANNEL(DAC_Channel));
+    270            assert_param(IS_DAC_WAVE(DAC_Wave)); 
+    271            assert_param(IS_FUNCTIONAL_STATE(NewState));
+    272          
+    273            if (NewState != DISABLE)
+   \                     DAC_WaveGenerationCmd:
+   \   00000000   01FA00F0           LSL      R0,R1,R0
+   \   00000004   ....               LDR.N    R1,??DataTable5  ;; 0x40007400
+   \   00000006   002A               CMP      R2,#+0
+   \   00000008   0A68               LDR      R2,[R1, #+0]
+   \   0000000A   01D0               BEQ.N    ??DAC_WaveGenerationCmd_0
+    274            {
+    275              /* Enable the selected wave generation for the selected DAC channel */
+    276              DAC->CR |= DAC_Wave << DAC_Channel;
+   \   0000000C   1043               ORRS     R0,R0,R2
+   \   0000000E   01E0               B.N      ??DAC_WaveGenerationCmd_1
+    277            }
+    278            else
+    279            {
+    280              /* Disable the selected wave generation for the selected DAC channel */
+    281              DAC->CR &= ~(DAC_Wave << DAC_Channel);
+   \                     ??DAC_WaveGenerationCmd_0:
+   \   00000010   C043               MVNS     R0,R0
+   \   00000012   1040               ANDS     R0,R0,R2
+   \                     ??DAC_WaveGenerationCmd_1:
+   \   00000014   0860               STR      R0,[R1, #+0]
+    282            }
+    283          }
+   \   00000016   7047               BX       LR               ;; return
+    284          
+    285          /*******************************************************************************
+    286          * Function Name  : DAC_SetChannel1Data
+    287          * Description    : Set the specified data holding register value for DAC channel1.
+    288          * Input          : - DAC_Align: Specifies the data alignement for DAC channel1.
+    289          *                    This parameter can be one of the following values:
+    290          *                       - DAC_Align_8b_R: 8bit right data alignement selected
+    291          *                       - DAC_Align_12b_L: 12bit left data alignement selected
+    292          *                       - DAC_Align_12b_R: 12bit right data alignement selected
+    293          *                  - Data : Data to be loaded in the selected data holding 
+    294          *                    register.
+    295          * Output         : None
+    296          * Return         : None
+    297          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+    298          void DAC_SetChannel1Data(u32 DAC_Align, u16 Data)
+    299          {
+    300            /* Check the parameters */
+    301            assert_param(IS_DAC_ALIGN(DAC_Align));
+    302            assert_param(IS_DAC_DATA(Data));
+    303          
+    304            /* Set the DAC channel1 selected data holding register */
+    305            *((vu32 *)(DAC_BASE + DHR12R1_Offset + DAC_Align)) = (u32)Data;
+   \                     DAC_SetChannel1Data:
+   \   00000000   014A               LDR.N    R2,??DAC_SetChannel1Data_0  ;; 0x40007408
+   \   00000002   1150               STR      R1,[R2, R0]
+    306          }
+   \   00000004   7047               BX       LR               ;; return
+   \   00000006   00BF               Nop      
+   \                     ??DAC_SetChannel1Data_0:
+   \   00000008   08740040           DC32     0x40007408
+    307          
+    308          /*******************************************************************************
+    309          * Function Name  : DAC_SetChannel2Data
+    310          * Description    : Set the specified data holding register value for DAC channel2.
+    311          * Input          : - DAC_Align: Specifies the data alignement for DAC channel2.
+    312          *                    This parameter can be one of the following values:
+    313          *                       - DAC_Align_8b_R: 8bit right data alignement selected
+    314          *                       - DAC_Align_12b_L: 12bit left data alignement selected
+    315          *                       - DAC_Align_12b_R: 12bit right data alignement selected
+    316          *                  - Data : Data to be loaded in the selected data holding 
+    317          *                    register.
+    318          * Output         : None
+    319          * Return         : None
+    320          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+    321          void DAC_SetChannel2Data(u32 DAC_Align, u16 Data)
+    322          {
+    323            /* Check the parameters */
+    324            assert_param(IS_DAC_ALIGN(DAC_Align));
+    325            assert_param(IS_DAC_DATA(Data));
+    326          
+    327            /* Set the DAC channel2 selected data holding register */
+    328            *((vu32 *)(DAC_BASE + DHR12R2_Offset + DAC_Align)) = (u32)Data;
+   \                     DAC_SetChannel2Data:
+   \   00000000   014A               LDR.N    R2,??DAC_SetChannel2Data_0  ;; 0x40007414
+   \   00000002   1150               STR      R1,[R2, R0]
+    329          }
+   \   00000004   7047               BX       LR               ;; return
+   \   00000006   00BF               Nop      
+   \                     ??DAC_SetChannel2Data_0:
+   \   00000008   14740040           DC32     0x40007414
+    330          
+    331          /*******************************************************************************
+    332          * Function Name  : DAC_SetDualChannelData
+    333          * Description    : Set the specified data holding register value for dual channel
+    334          *                  DAC.
+    335          * Input          : - DAC_Align: Specifies the data alignement for dual channel DAC.
+    336          *                    This parameter can be one of the following values:
+    337          *                       - DAC_Align_8b_R: 8bit right data alignement selected
+    338          *                       - DAC_Align_12b_L: 12bit left data alignement selected
+    339          *                       - DAC_Align_12b_R: 12bit right data alignement selected
+    340          *                  - Data2: Data for DAC Channel2 to be loaded in the selected data 
+    341          *                    holding register.
+    342          *                  - Data1: Data for DAC Channel1 to be loaded in the selected data 
+    343          *                    holding register.
+    344          * Output         : None
+    345          * Return         : None
+    346          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+    347          void DAC_SetDualChannelData(u32 DAC_Align, u16 Data2, u16 Data1)
+    348          {
+    349            u32 data = 0;
+    350          
+    351            /* Check the parameters */
+    352            assert_param(IS_DAC_ALIGN(DAC_Align));
+    353            assert_param(IS_DAC_DATA(Data1));
+    354            assert_param(IS_DAC_DATA(Data2));
+    355            
+    356            /* Calculate and set dual DAC data holding register value */
+    357            if (DAC_Align == DAC_Align_8b_R)
+   \                     DAC_SetDualChannelData:
+   \   00000000   0828               CMP      R0,#+8
+   \   00000002   14BF               ITE      NE 
+   \   00000004   42EA0141           ORRNE    R1,R2,R1, LSL #+16
+    358            {
+    359              data = ((u32)Data2 << 8) | Data1; 
+   \   00000008   42EA0121           ORREQ    R1,R2,R1, LSL #+8
+    360            }
+    361            else
+    362            {
+    363              data = ((u32)Data2 << 16) | Data1;
+    364            }
+    365          
+    366            /* Set the dual DAC selected data holding register */
+    367            *((vu32 *)(DAC_BASE + DHR12RD_Offset + DAC_Align)) = data;
+   \   0000000C   014A               LDR.N    R2,??DAC_SetDualChannelData_0  ;; 0x40007420
+   \   0000000E   1150               STR      R1,[R2, R0]
+    368          }
+   \   00000010   7047               BX       LR               ;; return
+   \   00000012   00BF               Nop      
+   \                     ??DAC_SetDualChannelData_0:
+   \   00000014   20740040           DC32     0x40007420
+    369          
+    370          /*******************************************************************************
+    371          * Function Name  : DAC_GetDataOutputValue
+    372          * Description    : Returns the last data output value of the selected DAC cahnnel.
+    373          * Input            - DAC_Channel: the selected DAC channel. 
+    374          *                    This parameter can be one of the following values:
+    375          *                       - DAC_Channel_1: DAC Channel1 selected
+    376          *                       - DAC_Channel_2: DAC Channel2 selected
+    377          * Output         : None
+    378          * Return         : The selected DAC channel data output value.
+    379          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+    380          u16 DAC_GetDataOutputValue(u32 DAC_Channel)
+    381          {
+    382            /* Check the parameters */
+    383            assert_param(IS_DAC_CHANNEL(DAC_Channel));
+    384          
+    385            /* Returns the DAC channel data output register value */
+    386            return (u16) (*(vu32*)(DAC_BASE + DOR_Offset + ((u32)DAC_Channel >> 2)));
+   \                     DAC_GetDataOutputValue:
+   \   00000000   8008               LSRS     R0,R0,#+2
+   \   00000002   0249               LDR.N    R1,??DAC_GetDataOutputValue_0  ;; 0x4000742c
+   \   00000004   0858               LDR      R0,[R1, R0]
+   \   00000006   80B2               UXTH     R0,R0
+   \   00000008   7047               BX       LR               ;; return
+   \   0000000A   00BF               Nop      
+   \                     ??DAC_GetDataOutputValue_0:
+   \   0000000C   2C740040           DC32     0x4000742c
+    387          }
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable4:
+   \   00000000   04740040           DC32     0x40007404
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable5:
+   \   00000000   00740040           DC32     0x40007400
+    388          
+    389          /******************* (C) COPYRIGHT 2008 STMicroelectronics *****END OF FILE****/
+
+   Maximum stack usage in bytes:
+
+     Function                   .cstack
+     --------                   -------
+     DAC_Cmd                         0
+     DAC_DMACmd                      0
+     DAC_DeInit                      0
+     DAC_DualSoftwareTriggerCmd      0
+     DAC_GetDataOutputValue          0
+     DAC_Init                        0
+     DAC_SetChannel1Data             0
+     DAC_SetChannel2Data             0
+     DAC_SetDualChannelData          0
+     DAC_SoftwareTriggerCmd          0
+     DAC_StructInit                  0
+     DAC_WaveGenerationCmd           0
+
+
+   Section sizes:
+
+     Function/Label             Bytes
+     --------------             -----
+     DAC_DeInit                   26
+     DAC_Init                     58
+     DAC_StructInit               12
+     DAC_Cmd                      10
+     ?Subroutine0                 18
+     DAC_DMACmd                   12
+     DAC_SoftwareTriggerCmd       12
+     DAC_DualSoftwareTriggerCmd   22
+     DAC_WaveGenerationCmd        24
+     DAC_SetChannel1Data          12
+     DAC_SetChannel2Data          12
+     DAC_SetDualChannelData       24
+     DAC_GetDataOutputValue       16
+     ??DataTable4                  4
+     ??DataTable5                  4
+
+ 
+ 266 bytes in section .text
+ 
+ 266 bytes of CODE memory
+
+Errors: none
+Warnings: none

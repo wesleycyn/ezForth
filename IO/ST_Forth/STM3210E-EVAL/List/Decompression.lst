@@ -1,0 +1,347 @@
+###############################################################################
+#                                                                             #
+# IAR ANSI C/C++ Compiler V5.20.0.50892/W32 for ARM     05/May/2009  18:27:47 #
+# Copyright 1999-2008 IAR Systems AB.                                         #
+#                                                                             #
+#    Cpu mode     =  thumb                                                    #
+#    Endian       =  little                                                   #
+#    Source file  =  D:\wesley\AS210R_ST\Decompression.c                      #
+#    Command line =  D:\wesley\AS210R_ST\Decompression.c -D VECT_TAB_FLASH    #
+#                    -lC D:\wesley\AS210R_ST\STM3210E-EVAL\List\ -o           #
+#                    D:\wesley\AS210R_ST\STM3210E-EVAL\Obj\ --no_cse          #
+#                    --no_unroll --no_inline --no_code_motion --no_tbaa       #
+#                    --no_clustering --no_scheduling --debug --endian=little  #
+#                    --cpu=Cortex-M3 -e --char_is_signed                      #
+#                    --require_prototypes --fpu=None --dlib_config            #
+#                    "C:\Program Files\IAR Systems\Embedded Workbench         #
+#                    5.0\ARM\INC\DLib_Config_Full.h" -I D:\wesley\AS210R_ST\  #
+#                    -I D:\wesley\AS210R_ST\library\inc\ -I "C:\Program       #
+#                    Files\IAR Systems\Embedded Workbench 5.0\ARM\INC\" -On   #
+#    List file    =  D:\wesley\AS210R_ST\STM3210E-EVAL\List\Decompression.lst #
+#    Object file  =  D:\wesley\AS210R_ST\STM3210E-EVAL\Obj\Decompression.o    #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+D:\wesley\AS210R_ST\Decompression.c
+      1          #define   FLAG_Copied         0x80
+      2          
+      3          
+      4          unsigned long  Decompression(unsigned char *Source,unsigned char *Dest,unsigned long SourceSize);
+      5          
+      6          unsigned long  DecprLen(unsigned char *Source,unsigned long SourceSize);
+      7          
+      8          
+
+   \                                 In section .text, align 4, keep-with-next
+      9          unsigned long  Decompression(unsigned char *Source,unsigned char *Dest,unsigned long SourceSize)
+     10          {
+   \                     Decompression:
+   \   00000000   2DE9F843           PUSH     {R3-R9,LR}
+   \   00000004   0300               MOVS     R3,R0
+     11            unsigned long     X                        = 3;
+   \   00000006   0320               MOVS     R0,#+3
+   \   00000008   8446               MOV      R12,R0
+     12            unsigned long     Y                        = 0;
+   \   0000000A   0020               MOVS     R0,#+0
+   \   0000000C   8646               MOV      LR,R0
+     13            unsigned long     Pos,Size,K;
+     14            unsigned long     Command                  = (Source[1] << 8) + Source[2];
+   \   0000000E   5878               LDRB     R0,[R3, #+1]
+   \   00000010   93F80290           LDRB     R9,[R3, #+2]
+   \   00000014   19EB0020           ADDS     R0,R9,R0, LSL #+8
+   \   00000018   0700               MOVS     R7,R0
+     15            unsigned char     Bit                      = 16;
+   \   0000001A   1020               MOVS     R0,#+16
+   \   0000001C   8046               MOV      R8,R0
+     16            if ( Source[0] == FLAG_Copied){
+   \   0000001E   1878               LDRB     R0,[R3, #+0]
+   \   00000020   8028               CMP      R0,#+128
+   \   00000022   0ED1               BNE.N    ??Decompression_0
+     17              	//for (Y = 1; Y < SourceSize;(*Flash_Write_fun)(&Dest[Y-1],Source[Y++]));  
+     18                for(Y = 1; Y < SourceSize;Y++)
+   \   00000024   0120               MOVS     R0,#+1
+   \   00000026   8646               MOV      LR,R0
+   \                     ??Decompression_1:
+   \   00000028   9645               CMP      LR,R2
+   \   0000002A   08D2               BCS.N    ??Decompression_2
+     19                {
+     20              	Dest[Y-1] = Source[Y];    
+   \   0000002C   1EEB0100           ADDS     R0,LR,R1
+   \   00000030   1EF80390           LDRB     R9,[LR, R3]
+   \   00000034   00F8019C           STRB     R9,[R0, #-1]
+     21                } 
+   \   00000038   1EF1010E           ADDS     LR,LR,#+1
+   \   0000003C   F4E7               B.N      ??Decompression_1
+     22              	return(SourceSize-1);
+   \                     ??Decompression_2:
+   \   0000003E   501E               SUBS     R0,R2,#+1
+   \   00000040   68E0               B.N      ??Decompression_3
+     23          	  }
+     24            for (; X < SourceSize;)
+   \                     ??Decompression_0:
+   \   00000042   9445               CMP      R12,R2
+   \   00000044   65D2               BCS.N    ??Decompression_4
+     25            {
+     26              if (Bit == 0)
+   \   00000046   5FFA88F8           UXTB     R8,R8            ;; ZeroExt  R8,R8,#+24,#+24
+   \   0000004A   B8F1000F           CMP      R8,#+0
+   \   0000004E   0CD1               BNE.N    ??Decompression_5
+     27              {
+     28                Command = (Source[X++] << 8);
+   \   00000050   1CF80300           LDRB     R0,[R12, R3]
+   \   00000054   0002               LSLS     R0,R0,#+8
+   \   00000056   0700               MOVS     R7,R0
+   \   00000058   1CF1010C           ADDS     R12,R12,#+1
+     29                Command += Source[X++];
+   \   0000005C   1CF80300           LDRB     R0,[R12, R3]
+   \   00000060   C719               ADDS     R7,R0,R7
+   \   00000062   1CF1010C           ADDS     R12,R12,#+1
+     30                Bit = 16;
+   \   00000066   1020               MOVS     R0,#+16
+   \   00000068   8046               MOV      R8,R0
+     31              }
+     32              if (Command & 0x8000)
+   \                     ??Decompression_5:
+   \   0000006A   3800               MOVS     R0,R7
+   \   0000006C   10F4004F           TST      R0,#0x8000
+   \   00000070   43D0               BEQ.N    ??Decompression_6
+     33              {
+     34                Pos = (Source[X++] << 4);
+   \   00000072   1CF80300           LDRB     R0,[R12, R3]
+   \   00000076   0001               LSLS     R0,R0,#+4
+   \   00000078   0400               MOVS     R4,R0
+   \   0000007A   1CF1010C           ADDS     R12,R12,#+1
+     35                Pos += (Source[X] >> 4);
+   \   0000007E   1CF80300           LDRB     R0,[R12, R3]
+   \   00000082   C0B2               UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \   00000084   0009               LSRS     R0,R0,#+4
+   \   00000086   C0B2               UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \   00000088   0419               ADDS     R4,R0,R4
+     36                if (Pos)
+   \   0000008A   002C               CMP      R4,#+0
+   \   0000008C   18D0               BEQ.N    ??Decompression_7
+     37                {
+     38                  Size = (Source[X++] & 0x0f)+3;
+   \   0000008E   1CF80300           LDRB     R0,[R12, R3]
+   \   00000092   10F00F00           ANDS     R0,R0,#0xF
+   \   00000096   C01C               ADDS     R0,R0,#+3
+   \   00000098   0500               MOVS     R5,R0
+   \   0000009A   1CF1010C           ADDS     R12,R12,#+1
+     39                  for (K = 0; K < Size; K++)
+   \   0000009E   0020               MOVS     R0,#+0
+   \   000000A0   0600               MOVS     R6,R0
+   \                     ??Decompression_8:
+   \   000000A2   AE42               CMP      R6,R5
+   \   000000A4   09D2               BCS.N    ??Decompression_9
+     40                     //(*Flash_Write_fun)(&Dest[Y+K],Dest[Y-Pos+K]);
+     41                     Dest[Y+K] = Dest[Y-Pos+K];
+   \   000000A6   BEEB0400           SUBS     R0,LR,R4
+   \   000000AA   3018               ADDS     R0,R6,R0
+   \   000000AC   405C               LDRB     R0,[R0, R1]
+   \   000000AE   16EB0E09           ADDS     R9,R6,LR
+   \   000000B2   09F80100           STRB     R0,[R9, R1]
+   \   000000B6   761C               ADDS     R6,R6,#+1
+   \   000000B8   F3E7               B.N      ??Decompression_8
+     42                  Y += Size;
+   \                     ??Decompression_9:
+   \   000000BA   15EB0E0E           ADDS     LR,R5,LR
+   \   000000BE   24E0               B.N      ??Decompression_10
+     43                }
+     44                else
+     45                {
+     46                  Size = (Source[X++] << 8);
+   \                     ??Decompression_7:
+   \   000000C0   1CF80300           LDRB     R0,[R12, R3]
+   \   000000C4   0002               LSLS     R0,R0,#+8
+   \   000000C6   0500               MOVS     R5,R0
+   \   000000C8   1CF1010C           ADDS     R12,R12,#+1
+     47                  Size += Source[X++] + 16;
+   \   000000CC   1CF80300           LDRB     R0,[R12, R3]
+   \   000000D0   1030               ADDS     R0,R0,#+16
+   \   000000D2   4519               ADDS     R5,R0,R5
+   \   000000D4   1CF1010C           ADDS     R12,R12,#+1
+     48          //        for (K = 0; K < Size; (*Flash_Write_fun)(&Dest[Y+K++],Source[X]));    //Dest[Y+K++]=Source[X]
+     49                  for (K = 0; K < Size; Dest[Y+K++]=Source[X]);
+   \   000000D8   0020               MOVS     R0,#+0
+   \   000000DA   0600               MOVS     R6,R0
+   \                     ??Decompression_11:
+   \   000000DC   AE42               CMP      R6,R5
+   \   000000DE   07D2               BCS.N    ??Decompression_12
+   \   000000E0   16EB0E00           ADDS     R0,R6,LR
+   \   000000E4   1CF80390           LDRB     R9,[R12, R3]
+   \   000000E8   00F80190           STRB     R9,[R0, R1]
+   \   000000EC   761C               ADDS     R6,R6,#+1
+   \   000000EE   F5E7               B.N      ??Decompression_11
+     50                  X++;
+   \                     ??Decompression_12:
+   \   000000F0   1CF1010C           ADDS     R12,R12,#+1
+     51                  Y += Size;
+   \   000000F4   15EB0E0E           ADDS     LR,R5,LR
+   \   000000F8   07E0               B.N      ??Decompression_10
+     52                }
+     53              }
+     54              else 
+     55              {
+     56              	//(*Flash_Write_fun)(&Dest[Y++], Source[X++]);
+     57              	Dest[Y++] = Source[X++];
+   \                     ??Decompression_6:
+   \   000000FA   1CF80300           LDRB     R0,[R12, R3]
+   \   000000FE   0EF80100           STRB     R0,[LR, R1]
+   \   00000102   1CF1010C           ADDS     R12,R12,#+1
+   \   00000106   1EF1010E           ADDS     LR,LR,#+1
+     58              }
+     59              Command <<= 1;
+   \                     ??Decompression_10:
+   \   0000010A   7F00               LSLS     R7,R7,#+1
+     60              Bit--;
+   \   0000010C   B8F10108           SUBS     R8,R8,#+1
+   \   00000110   97E7               B.N      ??Decompression_0
+     61            }
+     62            return(Y);
+   \                     ??Decompression_4:
+   \   00000112   7046               MOV      R0,LR
+   \                     ??Decompression_3:
+   \   00000114   BDE8F283           POP      {R1,R4-R9,PC}    ;; return
+     63          }
+     64          //--------------------------------------------------- 
+     65          
+
+   \                                 In section .text, align 4, keep-with-next
+     66          unsigned long  DecprLen(unsigned char *Source,unsigned long SourceSize)
+     67          {
+   \                     DecprLen:
+   \   00000000   F8B5               PUSH     {R3-R7,LR}
+   \   00000002   0200               MOVS     R2,R0
+     68            unsigned long     X                        = 3;
+   \   00000004   0320               MOVS     R0,#+3
+   \   00000006   0300               MOVS     R3,R0
+     69            unsigned long     Y                        = 0;
+   \   00000008   0020               MOVS     R0,#+0
+   \   0000000A   8446               MOV      R12,R0
+     70            unsigned long     Pos,Size;
+     71            unsigned long     Command                  = (Source[1] << 8) + Source[2];
+   \   0000000C   5078               LDRB     R0,[R2, #+1]
+   \   0000000E   9778               LDRB     R7,[R2, #+2]
+   \   00000010   17EB0020           ADDS     R0,R7,R0, LSL #+8
+   \   00000014   0500               MOVS     R5,R0
+     72            unsigned char     Bit                      = 16;
+   \   00000016   1020               MOVS     R0,#+16
+   \   00000018   0600               MOVS     R6,R0
+     73            if (Source[0] == FLAG_Copied)
+   \   0000001A   1078               LDRB     R0,[R2, #+0]
+   \   0000001C   8028               CMP      R0,#+128
+   \   0000001E   01D1               BNE.N    ??DecprLen_0
+     74              return(SourceSize-1);
+   \   00000020   481E               SUBS     R0,R1,#+1
+   \   00000022   3AE0               B.N      ??DecprLen_1
+     75            for (; X < SourceSize;){
+   \                     ??DecprLen_0:
+   \   00000024   8B42               CMP      R3,R1
+   \   00000026   37D2               BCS.N    ??DecprLen_2
+     76              if (Bit == 0){
+   \   00000028   F6B2               UXTB     R6,R6            ;; ZeroExt  R6,R6,#+24,#+24
+   \   0000002A   002E               CMP      R6,#+0
+   \   0000002C   08D1               BNE.N    ??DecprLen_3
+     77                Command = (Source[X++] << 8);
+   \   0000002E   985C               LDRB     R0,[R3, R2]
+   \   00000030   0002               LSLS     R0,R0,#+8
+   \   00000032   0500               MOVS     R5,R0
+   \   00000034   5B1C               ADDS     R3,R3,#+1
+     78                Command += Source[X++];
+   \   00000036   985C               LDRB     R0,[R3, R2]
+   \   00000038   4519               ADDS     R5,R0,R5
+   \   0000003A   5B1C               ADDS     R3,R3,#+1
+     79                Bit = 16;
+   \   0000003C   1020               MOVS     R0,#+16
+   \   0000003E   0600               MOVS     R6,R0
+     80              }
+     81              if (Command & 0x8000){
+   \                     ??DecprLen_3:
+   \   00000040   2800               MOVS     R0,R5
+   \   00000042   10F4004F           TST      R0,#0x8000
+   \   00000046   21D0               BEQ.N    ??DecprLen_4
+     82                Pos = (Source[X++] << 4);
+   \   00000048   985C               LDRB     R0,[R3, R2]
+   \   0000004A   0001               LSLS     R0,R0,#+4
+   \   0000004C   8646               MOV      LR,R0
+   \   0000004E   5B1C               ADDS     R3,R3,#+1
+     83                Pos += (Source[X] >> 4);
+   \   00000050   985C               LDRB     R0,[R3, R2]
+   \   00000052   C0B2               UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \   00000054   0009               LSRS     R0,R0,#+4
+   \   00000056   C0B2               UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \   00000058   10EB0E0E           ADDS     LR,R0,LR
+     84                if (Pos){
+   \   0000005C   BEF1000F           CMP      LR,#+0
+   \   00000060   08D0               BEQ.N    ??DecprLen_5
+     85                  Size = (Source[X++] & 0x0f)+3;
+   \   00000062   985C               LDRB     R0,[R3, R2]
+   \   00000064   10F00F00           ANDS     R0,R0,#0xF
+   \   00000068   C01C               ADDS     R0,R0,#+3
+   \   0000006A   0400               MOVS     R4,R0
+   \   0000006C   5B1C               ADDS     R3,R3,#+1
+     86                  Y += Size;
+   \   0000006E   14EB0C0C           ADDS     R12,R4,R12
+   \   00000072   0EE0               B.N      ??DecprLen_6
+     87                }else{
+     88                  Size = (Source[X++] << 8);
+   \                     ??DecprLen_5:
+   \   00000074   985C               LDRB     R0,[R3, R2]
+   \   00000076   0002               LSLS     R0,R0,#+8
+   \   00000078   0400               MOVS     R4,R0
+   \   0000007A   5B1C               ADDS     R3,R3,#+1
+     89                  Size += Source[X++] + 16;
+   \   0000007C   985C               LDRB     R0,[R3, R2]
+   \   0000007E   1030               ADDS     R0,R0,#+16
+   \   00000080   0419               ADDS     R4,R0,R4
+   \   00000082   5B1C               ADDS     R3,R3,#+1
+     90                  X++;
+   \   00000084   5B1C               ADDS     R3,R3,#+1
+     91                  Y += Size;
+   \   00000086   14EB0C0C           ADDS     R12,R4,R12
+   \   0000008A   02E0               B.N      ??DecprLen_6
+     92                }
+     93              }else {
+     94                Y++;
+   \                     ??DecprLen_4:
+   \   0000008C   1CF1010C           ADDS     R12,R12,#+1
+     95                X++;
+   \   00000090   5B1C               ADDS     R3,R3,#+1
+     96              }
+     97              Command <<= 1;
+   \                     ??DecprLen_6:
+   \   00000092   6D00               LSLS     R5,R5,#+1
+     98              Bit--;
+   \   00000094   761E               SUBS     R6,R6,#+1
+   \   00000096   C5E7               B.N      ??DecprLen_0
+     99            }
+    100            return(Y);
+   \                     ??DecprLen_2:
+   \   00000098   6046               MOV      R0,R12
+   \                     ??DecprLen_1:
+   \   0000009A   F2BD               POP      {R1,R4-R7,PC}    ;; return
+    101          }
+
+   Maximum stack usage in bytes:
+
+     Function      .cstack
+     --------      -------
+     Decompression      0
+     DecprLen           0
+
+
+   Section sizes:
+
+     Function/Label Bytes
+     -------------- -----
+     Decompression   280
+     DecprLen        156
+
+ 
+ 436 bytes in section .text
+ 
+ 436 bytes of CODE memory
+
+Errors: none
+Warnings: none

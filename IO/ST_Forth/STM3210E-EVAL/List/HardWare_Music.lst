@@ -1,0 +1,593 @@
+###############################################################################
+#                                                                             #
+# IAR ANSI C/C++ Compiler V5.20.0.50892/W32 for ARM     07/Oct/2009  13:03:50 #
+# Copyright 1999-2008 IAR Systems AB.                                         #
+#                                                                             #
+#    Cpu mode     =  thumb                                                    #
+#    Endian       =  little                                                   #
+#    Source file  =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\HardWare_Music.c   #
+#    Command line =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\HardWare_Music.c   #
+#                    -D VECT_TAB_FLASH -lC F:\CoLtd\Forth\MCU\STM32F10x\ST_Fo #
+#                    rth\STM3210E-EVAL\List\ -o F:\CoLtd\Forth\MCU\STM32F10x\ #
+#                    ST_Forth\STM3210E-EVAL\Obj\ --debug --endian=little      #
+#                    --cpu=Cortex-M3 -e --char_is_signed                      #
+#                    --require_prototypes --fpu=None --dlib_config            #
+#                    "C:\Program Files\IAR Systems\Embedded Workbench         #
+#                    5.0\ARM\INC\DLib_Config_Full.h" -I                       #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\ -I                #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\library\inc\ -I    #
+#                    "C:\Program Files\IAR Systems\Embedded Workbench         #
+#                    5.0\ARM\INC\" -Ohz                                       #
+#    List file    =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\List #
+#                    \HardWare_Music.lst                                      #
+#    Object file  =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\ #
+#                    HardWare_Music.o                                         #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\HardWare_Music.c
+      1          #include "stm32f10x.h"
+      2          //#include <Table_Music.h>
+      3          
+      4          extern long SYS_sec;
+      5          
+      6          
+      7          extern TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
+      8          extern TIM_TimeBaseInitTypeDef  TIM2_TimeBaseStructure;
+      9          extern TIM_TimeBaseInitTypeDef  TIM3_TimeBaseStructure;
+     10          extern TIM_TimeBaseInitTypeDef  TIM4_TimeBaseStructure;
+     11          extern TIM_TimeBaseInitTypeDef  TIM5_TimeBaseStructure;
+     12          
+     13          extern TIM_OCInitTypeDef  TIM_OCInitStructure;
+     14          extern TIM_OCInitTypeDef  TIM2_OCInitStructure;
+     15          extern TIM_OCInitTypeDef  TIM3_OCInitStructure;
+     16          extern TIM_OCInitTypeDef  TIM4_OCInitStructure;
+     17          extern TIM_OCInitTypeDef  TIM5_OCInitStructure;
+     18          
+     19          extern u16 capture;
+     20          extern vu16 Tim3_CCR1_Val;
+     21          extern vu16 Tim4_CCR1_Val;
+     22          extern vu16 Tim5_CCR1_Val;
+     23          
+     24          
+
+   \                                 In section FastDataRAM, align 4
+     25          u32  Music_PTR @"FastDataRAM";
+   \                     Music_PTR:
+   \   00000000                      DS8 4
+     26          unsigned char *POINT @"FastDataRAM";
+   \                     POINT:
+   \   00000004                      DS8 4
+     27          
+     28          void Set_Tone(vu16 Tone_Tim5_CCR1_Val);
+     29          void Set_Beat(vu16 Beat_Tim4_CCR1_Val);
+     30          
+     31          void TIM4_ISR(void);
+     32          void TIM5_ISR(void);
+     33          
+     34          void beep_vibrate_stop(void);
+     35          void beep_vibrate( unsigned char beep_type );
+     36          void beep_1(void);
+     37          void Play_Music(const unsigned char *Music_tbl);
+     38          
+     39          // [Description ]
+     40          // This is PC simulate Beep sound and vibrate stop function
+     41          // Return value : no return variable
+     42          // [LIB include]
+     43          // music.h
+     44          // [Variable]
+     45          // [example]
+     46          // beep_vibrate_stop() ;
+     47          // this example will stop beep or vibrate
+
+   \                                 In section .text, align 4, keep-with-next
+     48          void beep_vibrate_stop(void)
+     49          {    
+     50              	Set_Tone(0);		// STOP PWM
+   \                     beep_vibrate_stop:
+   \   00000000   0020               MOVS     R0,#+0
+   \   00000002   ....               B.N      Set_Tone
+     51          }
+     52          
+     53          
+
+   \                                 In section .text, align 4, keep-with-next
+     54          void Play_Music(const unsigned char *Music_tbl)
+     55          {
+   \                     Play_Music:
+   \   00000000   10B5               PUSH     {R4,LR}
+     56            POINT=(unsigned char *)Music_tbl;  
+   \   00000002   ....               LDR.N    R4,??DataTable7  ;; Music_PTR
+   \   00000004   6060               STR      R0,[R4, #+4]
+     57            Set_Beat(POINT[1] *10);
+   \   00000006   4078               LDRB     R0,[R0, #+1]
+   \   00000008   0A21               MOVS     R1,#+10
+   \   0000000A   4843               MULS     R0,R0,R1
+   \   0000000C   ........           BL       Set_Beat
+     58            Set_Tone(POINT[0]);		// Duty = Ontime / time     
+   \   00000010   6068               LDR      R0,[R4, #+4]
+   \   00000012   0078               LDRB     R0,[R0, #+0]
+   \   00000014   ........           BL       Set_Tone
+     59            Music_PTR=2;
+   \   00000018   0220               MOVS     R0,#+2
+   \   0000001A   2060               STR      R0,[R4, #+0]
+     60          }
+   \   0000001C   10BD               POP      {R4,PC}          ;; return
+     61          
+     62          void TIM3_ISR(void);
+     63          
+     64          /*******************************************************************************
+     65          * Function Name  : TIM3_IRQHandler
+     66          * Description    : This function handles TIM3 global interrupt request.
+     67          * Input          : None
+     68          * Output         : None
+     69          * Return         : None
+     70          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+     71          void TIM3_ISR(void)
+     72          {
+   \                     TIM3_ISR:
+   \   00000000   38B5               PUSH     {R3-R5,LR}
+     73            if (TIM_GetITStatus(TIM3, TIM_IT_CC1) != RESET)
+   \   00000002   0E4C               LDR.N    R4,??TIM3_ISR_0  ;; 0x40000400
+   \   00000004   0221               MOVS     R1,#+2
+   \   00000006   2000               MOVS     R0,R4
+   \   00000008   ........           BL       TIM_GetITStatus
+   \   0000000C   A8B1               CBZ      R0,??TIM3_ISR_1
+     74            {
+     75              TIM_ClearITPendingBit(TIM3, TIM_IT_CC1);   
+   \   0000000E   0221               MOVS     R1,#+2
+   \   00000010   2000               MOVS     R0,R4
+   \   00000012   ........           BL       TIM_ClearITPendingBit
+     76              if ( SYS_sec > 0 )
+   \   00000016   ....               LDR.N    R0,??DataTable6  ;; SYS_sec
+   \   00000018   0168               LDR      R1,[R0, #+0]
+   \   0000001A   0129               CMP      R1,#+1
+   \   0000001C   01DB               BLT.N    ??TIM3_ISR_2
+     77               SYS_sec-=1 ;    
+   \   0000001E   491E               SUBS     R1,R1,#+1
+   \   00000020   0160               STR      R1,[R0, #+0]
+     78              /* Pin PC.06 toggling with frequency = 73.24 Hz */
+     79          //    GPIO_WriteBit(GPIOC, GPIO_Pin_6, (BitAction)(1 - GPIO_ReadOutputDataBit(GPIOC, GPIO_Pin_6)));
+     80              capture = TIM_GetCapture1(TIM3);
+   \                     ??TIM3_ISR_2:
+   \   00000022   ....               LDR.N    R5,??DataTable9  ;; capture
+   \   00000024   2000               MOVS     R0,R4
+   \   00000026   ........           BL       TIM_GetCapture1
+   \   0000002A   2880               STRH     R0,[R5, #+0]
+     81              TIM_SetCompare1(TIM3, capture + Tim3_CCR1_Val);
+   \   0000002C   0449               LDR.N    R1,??TIM3_ISR_0+0x4  ;; Tim3_CCR1_Val
+   \   0000002E   0988               LDRH     R1,[R1, #+0]
+   \   00000030   0918               ADDS     R1,R1,R0
+   \   00000032   89B2               UXTH     R1,R1
+   \   00000034   2000               MOVS     R0,R4
+   \   00000036   ........           BL       TIM_SetCompare1
+     82            }
+     83          }
+   \                     ??TIM3_ISR_1:
+   \   0000003A   31BD               POP      {R0,R4,R5,PC}    ;; return
+   \                     ??TIM3_ISR_0:
+   \   0000003C   00040040           DC32     0x40000400
+   \   00000040   ........           DC32     Tim3_CCR1_Val
+     84          /*******************************************************************************
+     85          * Function Name  : TIM4_IRQHandler
+     86          * Description    : This function handles TIM4 global interrupt request.
+     87          * Input          : None
+     88          * Output         : None
+     89          * Return         : None
+     90          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+     91          void TIM4_ISR(void)
+     92          {
+   \                     TIM4_ISR:
+   \   00000000   38B5               PUSH     {R3-R5,LR}
+     93          
+     94            if (TIM_GetITStatus(TIM4, TIM_IT_CC1) != RESET)
+   \   00000002   ....               LDR.N    R4,??DataTable17  ;; 0x40000800
+   \   00000004   0221               MOVS     R1,#+2
+   \   00000006   2000               MOVS     R0,R4
+   \   00000008   ........           BL       TIM_GetITStatus
+   \   0000000C   0028               CMP      R0,#+0
+   \   0000000E   2FD0               BEQ.N    ??TIM4_ISR_0
+     95            {
+     96              TIM_ClearITPendingBit(TIM4, TIM_IT_CC1);
+   \   00000010   0221               MOVS     R1,#+2
+   \   00000012   2000               MOVS     R0,R4
+   \   00000014   ........           BL       TIM_ClearITPendingBit
+     97          //    GPIO_WriteBit(GPIOC, GPIO_Pin_6, (BitAction)(1 - GPIO_ReadOutputDataBit(GPIOC, GPIO_Pin_6)));
+     98              capture = TIM_GetCapture1(TIM4);
+   \   00000018   ....               LDR.N    R5,??DataTable9  ;; capture
+   \   0000001A   2000               MOVS     R0,R4
+   \   0000001C   ........           BL       TIM_GetCapture1
+   \   00000020   2880               STRH     R0,[R5, #+0]
+     99              TIM_SetCompare1(TIM4, capture + Tim4_CCR1_Val);   
+   \   00000022   ....               LDR.N    R1,??DataTable15  ;; Tim4_CCR1_Val
+   \   00000024   0988               LDRH     R1,[R1, #+0]
+   \   00000026   0918               ADDS     R1,R1,R0
+   \   00000028   89B2               UXTH     R1,R1
+   \   0000002A   2000               MOVS     R0,R4
+   \   0000002C   ........           BL       TIM_SetCompare1
+    100          //    SYS_sec=1;
+    101             if (SYS_sec > 0 )
+   \   00000030   ....               LDR.N    R0,??DataTable6  ;; SYS_sec
+   \   00000032   0068               LDR      R0,[R0, #+0]
+   \   00000034   0128               CMP      R0,#+1
+   \   00000036   18DB               BLT.N    ??TIM4_ISR_1
+    102             {
+    103          	  if	((POINT[Music_PTR+1]==0 )&&(POINT[Music_PTR]==0 ) )
+   \   00000038   ....               LDR.N    R4,??DataTable7  ;; Music_PTR
+   \   0000003A   6068               LDR      R0,[R4, #+4]
+   \   0000003C   2168               LDR      R1,[R4, #+0]
+   \   0000003E   0A18               ADDS     R2,R1,R0
+   \   00000040   5278               LDRB     R2,[R2, #+1]
+   \   00000042   12B9               CBNZ     R2,??TIM4_ISR_2
+   \   00000044   095C               LDRB     R1,[R1, R0]
+   \   00000046   01B9               CBNZ     R1,??TIM4_ISR_2
+    104          	  {
+    105          		Music_PTR = 0;
+   \   00000048   2160               STR      R1,[R4, #+0]
+    106          	  }
+    107          	  Set_Beat(POINT[Music_PTR+1]*10);
+   \                     ??TIM4_ISR_2:
+   \   0000004A   2168               LDR      R1,[R4, #+0]
+   \   0000004C   0818               ADDS     R0,R1,R0
+   \   0000004E   4078               LDRB     R0,[R0, #+1]
+   \   00000050   0A21               MOVS     R1,#+10
+   \   00000052   4843               MULS     R0,R0,R1
+   \   00000054   ........           BL       Set_Beat
+    108          	  Set_Tone(POINT[Music_PTR]);		// Duty = Ontime / time 
+   \   00000058   2068               LDR      R0,[R4, #+0]
+   \   0000005A   6168               LDR      R1,[R4, #+4]
+   \   0000005C   405C               LDRB     R0,[R0, R1]
+   \   0000005E   ........           BL       Set_Tone
+    109          	  Music_PTR=(Music_PTR+2);
+   \   00000062   2068               LDR      R0,[R4, #+0]
+   \   00000064   801C               ADDS     R0,R0,#+2
+   \   00000066   2060               STR      R0,[R4, #+0]
+   \   00000068   31BD               POP      {R0,R4,R5,PC}
+    110             }
+    111             else
+    112             {
+    113              		Set_Tone(0);		// STOP PWM
+   \                     ??TIM4_ISR_1:
+   \   0000006A   0020               MOVS     R0,#+0
+   \   0000006C   ........           BL       Set_Tone
+    114             }  
+    115            
+    116            }
+    117          }
+   \                     ??TIM4_ISR_0:
+   \   00000070   31BD               POP      {R0,R4,R5,PC}    ;; return
+    118          
+    119          
+    120          /*******************************************************************************
+    121          * Function Name  : TIM5_IRQHandler
+    122          * Description    : This function handles TIM5 global interrupt request.
+    123          * Input          : None
+    124          * Output         : None
+    125          * Return         : None
+    126          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+    127          void TIM5_ISR(void)
+    128          {
+   \                     TIM5_ISR:
+   \   00000000   38B5               PUSH     {R3-R5,LR}
+    129            if (TIM_GetITStatus(TIM5, TIM_IT_CC1) != RESET)
+   \   00000002   ....               LDR.N    R4,??DataTable13  ;; 0x40000c00
+   \   00000004   0221               MOVS     R1,#+2
+   \   00000006   2000               MOVS     R0,R4
+   \   00000008   ........           BL       TIM_GetITStatus
+   \   0000000C   E8B1               CBZ      R0,??TIM5_ISR_0
+    130            {
+    131              TIM_ClearITPendingBit(TIM5, TIM_IT_CC1);
+   \   0000000E   0221               MOVS     R1,#+2
+   \   00000010   2000               MOVS     R0,R4
+   \   00000012   ........           BL       TIM_ClearITPendingBit
+    132          
+    133              /* Pin PC.06 toggling with frequency = 73.24 Hz */
+    134          //    GPIO_WriteBit(GPIOC, GPIO_Pin_6, (BitAction)(1 - GPIO_ReadOutputDataBit(GPIOC, GPIO_Pin_6)));
+    135              GPIO_WriteBit(GPIOF, GPIO_Pin_10, (BitAction)(1 - GPIO_ReadOutputDataBit(GPIOF, GPIO_Pin_10)));    
+   \   00000016   0D4D               LDR.N    R5,??TIM5_ISR_1  ;; 0x40011c00
+   \   00000018   4FF48061           MOV      R1,#+1024
+   \   0000001C   2800               MOVS     R0,R5
+   \   0000001E   ........           BL       GPIO_ReadOutputDataBit
+   \   00000022   C0F10102           RSB      R2,R0,#+1
+   \   00000026   52B2               SXTB     R2,R2
+   \   00000028   4FF48061           MOV      R1,#+1024
+   \   0000002C   2800               MOVS     R0,R5
+   \   0000002E   ........           BL       GPIO_WriteBit
+    136              capture = TIM_GetCapture1(TIM5);
+   \   00000032   ....               LDR.N    R5,??DataTable9  ;; capture
+   \   00000034   2000               MOVS     R0,R4
+   \   00000036   ........           BL       TIM_GetCapture1
+   \   0000003A   2880               STRH     R0,[R5, #+0]
+    137              TIM_SetCompare1(TIM5, capture + Tim5_CCR1_Val);
+   \   0000003C   ....               LDR.N    R1,??DataTable11  ;; Tim5_CCR1_Val
+   \   0000003E   0988               LDRH     R1,[R1, #+0]
+   \   00000040   0918               ADDS     R1,R1,R0
+   \   00000042   89B2               UXTH     R1,R1
+   \   00000044   2000               MOVS     R0,R4
+   \   00000046   ........           BL       TIM_SetCompare1
+    138            }
+    139          
+    140          }
+   \                     ??TIM5_ISR_0:
+   \   0000004A   31BD               POP      {R0,R4,R5,PC}    ;; return
+   \                     ??TIM5_ISR_1:
+   \   0000004C   001C0140           DC32     0x40011c00
+    141          
+
+   \                                 In section .text, align 4, keep-with-next
+    142          void Set_Tone(vu16 Tone_Tim5_CCR1_Val)
+    143          {
+   \                     Set_Tone:
+   \   00000000   11B5               PUSH     {R0,R4,LR}
+   \   00000002   81B0               SUB      SP,SP,#+4
+    144            /* ---------------------------------------------------------------
+    145              TIM2 Configuration: Output Compare Timing Mode:
+    146              TIM2CLK = 36 MHz, Prescaler = 4, TIM2 counter clock = 7.2 MHz
+    147              CC1 update rate = TIM2 counter clock / CCR1_Val = 146.48 Hz
+    148              CC2 update rate = TIM2 counter clock / CCR2_Val = 219.7 Hz
+    149              CC3 update rate = TIM2 counter clock / CCR3_Val = 439.4 Hz
+    150              CC4 update rate = TIM2 counter clock / CCR4_Val =  878.9 Hz
+    151            --------------------------------------------------------------- */
+    152          Tim5_CCR1_Val=Tone_Tim5_CCR1_Val;
+   \   00000004   ....               LDR.N    R0,??DataTable11  ;; Tim5_CCR1_Val
+   \   00000006   BDF80410           LDRH     R1,[SP, #+4]
+   \   0000000A   0180               STRH     R1,[R0, #+0]
+    153            /* Time base configuration */
+    154            TIM_TimeBaseStructure.TIM_Period = 65535;
+   \   0000000C   ....               LDR.N    R1,??DataTable16  ;; TIM_TimeBaseStructure
+   \   0000000E   4FF6FF70           MOVW     R0,#+65535
+   \   00000012   8880               STRH     R0,[R1, #+4]
+    155            TIM_TimeBaseStructure.TIM_Prescaler = 0;
+   \   00000014   0020               MOVS     R0,#+0
+   \   00000016   0880               STRH     R0,[R1, #+0]
+    156            TIM_TimeBaseStructure.TIM_ClockDivision = 0;
+   \   00000018   C880               STRH     R0,[R1, #+6]
+    157            TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
+   \   0000001A   4880               STRH     R0,[R1, #+2]
+    158          
+    159            TIM_TimeBaseInit(TIM5, &TIM_TimeBaseStructure);
+   \   0000001C   ....               LDR.N    R4,??DataTable13  ;; 0x40000c00
+   \   0000001E   2000               MOVS     R0,R4
+   \   00000020   ........           BL       TIM_TimeBaseInit
+    160          
+    161            /* Prescaler configuration */
+    162            TIM_PrescalerConfig(TIM5,72, TIM_PSCReloadMode_Immediate);
+   \   00000024   0122               MOVS     R2,#+1
+   \   00000026   4821               MOVS     R1,#+72
+   \   00000028   2000               MOVS     R0,R4
+   \   0000002A   ........           BL       TIM_PrescalerConfig
+    163          
+    164            /* Output Compare Timing Mode configuration: Channel1 */
+    165            TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_Timing;
+   \   0000002E   ....               LDR.N    R1,??DataTable18  ;; TIM_OCInitStructure
+   \   00000030   0020               MOVS     R0,#+0
+   \   00000032   0880               STRH     R0,[R1, #+0]
+    166            TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
+   \   00000034   0120               MOVS     R0,#+1
+   \   00000036   4880               STRH     R0,[R1, #+2]
+    167            TIM_OCInitStructure.TIM_Pulse = Tone_Tim5_CCR1_Val;
+   \   00000038   BDF80400           LDRH     R0,[SP, #+4]
+   \   0000003C   C880               STRH     R0,[R1, #+6]
+    168            TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
+   \   0000003E   0020               MOVS     R0,#+0
+   \   00000040   0881               STRH     R0,[R1, #+8]
+    169          
+    170            TIM_OC1Init(TIM5, &TIM_OCInitStructure);
+   \   00000042   2000               MOVS     R0,R4
+   \   00000044   ........           BL       TIM_OC1Init
+    171          
+    172            TIM_OC1PreloadConfig(TIM5, TIM_OCPreload_Disable);
+   \   00000048   0021               MOVS     R1,#+0
+   \   0000004A   2000               MOVS     R0,R4
+   \   0000004C   ........           BL       TIM_OC1PreloadConfig
+    173          
+    174            if (Tone_Tim5_CCR1_Val==0)
+   \   00000050   BDF80400           LDRH     R0,[SP, #+4]
+   \   00000054   30B9               CBNZ     R0,??Set_Tone_0
+    175            {
+    176                /* TIM IT enable */
+    177            TIM_ITConfig(TIM5, TIM_IT_CC1 , DISABLE);
+   \   00000056   0022               MOVS     R2,#+0
+   \   00000058   0221               MOVS     R1,#+2
+   \   0000005A   2000               MOVS     R0,R4
+   \   0000005C   ........           BL       TIM_ITConfig
+    178          
+    179            /* TIM2 enable counter */
+    180            TIM_Cmd(TIM5, DISABLE);
+   \   00000060   0021               MOVS     R1,#+0
+   \   00000062   05E0               B.N      ??Set_Tone_1
+    181            }
+    182            else
+    183            {
+    184            
+    185            /* TIM IT enable */
+    186            TIM_ITConfig(TIM5, TIM_IT_CC1 , ENABLE);
+   \                     ??Set_Tone_0:
+   \   00000064   0122               MOVS     R2,#+1
+   \   00000066   0221               MOVS     R1,#+2
+   \   00000068   2000               MOVS     R0,R4
+   \   0000006A   ........           BL       TIM_ITConfig
+    187          
+    188            /* TIM2 enable counter */
+    189            TIM_Cmd(TIM5, ENABLE);
+   \   0000006E   0121               MOVS     R1,#+1
+   \                     ??Set_Tone_1:
+   \   00000070   2000               MOVS     R0,R4
+   \   00000072   ........           BL       TIM_Cmd
+    190            }
+    191          } 
+   \   00000076   13BD               POP      {R0,R1,R4,PC}    ;; return
+    192          
+
+   \                                 In section .text, align 4, keep-with-next
+    193          void Set_Beat(vu16 Beat_Tim4_CCR1_Val) 
+    194          
+    195          {
+   \                     Set_Beat:
+   \   00000000   31B5               PUSH     {R0,R4,R5,LR}
+    196            /* ---------------------------------------------------------------
+    197              TIM2 Configuration: Output Compare Timing Mode:
+    198              TIM2CLK = 36 MHz, Prescaler = 4, TIM2 counter clock = 7.2 MHz
+    199              CC1 update rate = TIM2 counter clock / CCR1_Val = 146.48 Hz
+    200              CC2 update rate = TIM2 counter clock / CCR2_Val = 219.7 Hz
+    201              CC3 update rate = TIM2 counter clock / CCR3_Val = 439.4 Hz
+    202              CC4 update rate = TIM2 counter clock / CCR4_Val =  878.9 Hz
+    203            --------------------------------------------------------------- */
+    204            Tim4_CCR1_Val=Beat_Tim4_CCR1_Val;
+   \   00000002   ....               LDR.N    R4,??DataTable15  ;; Tim4_CCR1_Val
+   \   00000004   BDF80000           LDRH     R0,[SP, #+0]
+   \   00000008   2080               STRH     R0,[R4, #+0]
+    205             
+    206            /* Time base configuration */
+    207            TIM_TimeBaseStructure.TIM_Period = 65535;
+   \   0000000A   ....               LDR.N    R1,??DataTable16  ;; TIM_TimeBaseStructure
+   \   0000000C   4FF6FF70           MOVW     R0,#+65535
+   \   00000010   8880               STRH     R0,[R1, #+4]
+    208            TIM_TimeBaseStructure.TIM_Prescaler = 0;
+   \   00000012   0020               MOVS     R0,#+0
+   \   00000014   0880               STRH     R0,[R1, #+0]
+    209            TIM_TimeBaseStructure.TIM_ClockDivision = 0;
+   \   00000016   C880               STRH     R0,[R1, #+6]
+    210            TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
+   \   00000018   4880               STRH     R0,[R1, #+2]
+    211          
+    212            TIM_TimeBaseInit(TIM4, &TIM_TimeBaseStructure);
+   \   0000001A   ....               LDR.N    R5,??DataTable17  ;; 0x40000800
+   \   0000001C   2800               MOVS     R0,R5
+   \   0000001E   ........           BL       TIM_TimeBaseInit
+    213          
+    214            /* Prescaler configuration */
+    215            TIM_PrescalerConfig(TIM4, 45000, TIM_PSCReloadMode_Immediate);
+   \   00000022   0122               MOVS     R2,#+1
+   \   00000024   4AF6C871           MOVW     R1,#+45000
+   \   00000028   2800               MOVS     R0,R5
+   \   0000002A   ........           BL       TIM_PrescalerConfig
+    216          
+    217            /* Output Compare Timing Mode configuration: Channel1 */
+    218            TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_Timing;
+   \   0000002E   ....               LDR.N    R1,??DataTable18  ;; TIM_OCInitStructure
+   \   00000030   0020               MOVS     R0,#+0
+   \   00000032   0880               STRH     R0,[R1, #+0]
+    219            TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
+   \   00000034   0120               MOVS     R0,#+1
+   \   00000036   4880               STRH     R0,[R1, #+2]
+    220            TIM_OCInitStructure.TIM_Pulse = Tim4_CCR1_Val;
+   \   00000038   2088               LDRH     R0,[R4, #+0]
+   \   0000003A   C880               STRH     R0,[R1, #+6]
+    221            TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
+   \   0000003C   0020               MOVS     R0,#+0
+   \   0000003E   0881               STRH     R0,[R1, #+8]
+    222          
+    223            TIM_OC1Init(TIM4, &TIM_OCInitStructure);
+   \   00000040   2800               MOVS     R0,R5
+   \   00000042   ........           BL       TIM_OC1Init
+    224          
+    225            TIM_OC1PreloadConfig(TIM4, TIM_OCPreload_Disable);
+   \   00000046   0021               MOVS     R1,#+0
+   \   00000048   2800               MOVS     R0,R5
+   \   0000004A   ........           BL       TIM_OC1PreloadConfig
+    226          
+    227          
+    228            /* TIM IT enable */
+    229            TIM_ITConfig(TIM4, TIM_IT_CC1 , ENABLE);
+   \   0000004E   0122               MOVS     R2,#+1
+   \   00000050   0221               MOVS     R1,#+2
+   \   00000052   2800               MOVS     R0,R5
+   \   00000054   ........           BL       TIM_ITConfig
+    230          
+    231            /* TIM2 enable counter */
+    232            TIM_Cmd(TIM4, ENABLE);
+   \   00000058   0121               MOVS     R1,#+1
+   \   0000005A   2800               MOVS     R0,R5
+   \   0000005C   BDE83440           POP      {R2,R4,R5,LR}
+   \   00000060   ........           B.W      TIM_Cmd
+    233          }
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable6:
+   \   00000000   ........           DC32     SYS_sec
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable7:
+   \   00000000   ........           DC32     Music_PTR
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable9:
+   \   00000000   ........           DC32     capture
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable11:
+   \   00000000   ........           DC32     Tim5_CCR1_Val
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable13:
+   \   00000000   000C0040           DC32     0x40000c00
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable15:
+   \   00000000   ........           DC32     Tim4_CCR1_Val
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable16:
+   \   00000000   ........           DC32     TIM_TimeBaseStructure
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable17:
+   \   00000000   00080040           DC32     0x40000800
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable18:
+   \   00000000   ........           DC32     TIM_OCInitStructure
+
+   Maximum stack usage in bytes:
+
+     Function          .cstack
+     --------          -------
+     Play_Music             0
+     Set_Beat               0
+     Set_Tone               0
+     TIM3_ISR               0
+     TIM4_ISR               0
+     TIM5_ISR               0
+     beep_vibrate_stop      0
+
+
+   Section sizes:
+
+     Function/Label    Bytes
+     --------------    -----
+     Music_PTR            8
+     POINT
+     beep_vibrate_stop    4
+     Play_Music          30
+     TIM3_ISR            68
+     TIM4_ISR           114
+     TIM5_ISR            80
+     Set_Tone           120
+     Set_Beat           100
+     ??DataTable6         4
+     ??DataTable7         4
+     ??DataTable9         4
+     ??DataTable11        4
+     ??DataTable13        4
+     ??DataTable15        4
+     ??DataTable16        4
+     ??DataTable17        4
+     ??DataTable18        4
+
+ 
+ 552 bytes in section .text
+   8 bytes in section FastDataRAM
+ 
+ 552 bytes of CODE memory
+   8 bytes of DATA memory
+
+Errors: none
+Warnings: none

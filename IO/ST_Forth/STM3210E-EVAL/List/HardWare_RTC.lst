@@ -1,0 +1,928 @@
+###############################################################################
+#                                                                             #
+# IAR ANSI C/C++ Compiler V5.20.0.50892/W32 for ARM     07/Oct/2009  13:03:51 #
+# Copyright 1999-2008 IAR Systems AB.                                         #
+#                                                                             #
+#    Cpu mode     =  thumb                                                    #
+#    Endian       =  little                                                   #
+#    Source file  =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\HardWare_RTC.c     #
+#    Command line =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\HardWare_RTC.c -D  #
+#                    VECT_TAB_FLASH -lC F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth #
+#                    \STM3210E-EVAL\List\ -o F:\CoLtd\Forth\MCU\STM32F10x\ST_ #
+#                    Forth\STM3210E-EVAL\Obj\ --debug --endian=little         #
+#                    --cpu=Cortex-M3 -e --char_is_signed                      #
+#                    --require_prototypes --fpu=None --dlib_config            #
+#                    "C:\Program Files\IAR Systems\Embedded Workbench         #
+#                    5.0\ARM\INC\DLib_Config_Full.h" -I                       #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\ -I                #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\library\inc\ -I    #
+#                    "C:\Program Files\IAR Systems\Embedded Workbench         #
+#                    5.0\ARM\INC\" -Ohz                                       #
+#    List file    =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\List #
+#                    \HardWare_RTC.lst                                        #
+#    Object file  =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\ #
+#                    HardWare_RTC.o                                           #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\HardWare_RTC.c
+      1          #include "stm32f10x_lib.h"
+      2          #include "ioReFlex.h"
+      3          
+      4          struct RTCState{
+      5            int Err;
+      6            int Value;
+      7          };
+      8          
+      9          extern struct RTCState Data;
+     10          
+     11          extern struct RTCState RTC_read1(unsigned char Addr);
+     12          extern unsigned char RTC_write1(unsigned char Addr,unsigned char Data);
+     13          
+     14          
+     15          struct {
+     16            u8 YearL;
+     17            u8 YearH;
+     18            u8 MonthL;
+     19            u8 MonthH;  
+     20            u8 DayL;
+     21            u8 DayH;
+     22            u8 HourL;
+     23            u8 HourH; 
+     24            u8 MinuteL;
+     25            u8 MinuteH;
+     26            u8 SecondL;
+     27            u8 SecondH;  
+     28            u32 SumSecond;
+
+   \                                 In section .data, align 4
+     29           }DateTime;
+   \                     DateTime:
+   \   00000000   000000000000       DC8 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+   \              000000000000
+   \              00000000    
+     30          
+     31          
+     32          u16 MonthsTable[4][12]=
+     33          {
+     34            {0,31,60,91,121,152,182,213,244,274,305,335},
+     35            {0,31,59,90,120,151,181,212,243,273,304,334},
+     36            {0,31,59,90,120,151,181,212,243,273,304,334},
+     37            {0,31,59,90,120,151,181,212,243,273,304,334}  
+     38          };
+     39          
+     40          u16 FourYesrDaysTable[4]=
+   \                     FourYesrDaysTable:
+   \   00000010   00006E01DB02       DC16 0, 366, 731, 1096
+   \              4804        
+
+   \                                 In section .data, align 4
+   \                     MonthsTable:
+   \   00000000   00001F003C00       DC16 0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335, 0, 31, 59
+   \              5B0079009800
+   \              B600D500F400
+   \              120131014F01
+   \              00001F003B00
+   \   0000001E   5A0078009700       DC16 90, 120, 151, 181, 212, 243, 273, 304, 334, 0, 31, 59, 90, 120
+   \              B500D400F300
+   \              110130014E01
+   \              00001F003B00
+   \              5A007800    
+   \   0000003A   9700B500D400       DC16 151, 181, 212, 243, 273, 304, 334, 0, 31, 59, 90, 120, 151, 181
+   \              F30011013001
+   \              4E0100001F00
+   \              3B005A007800
+   \              9700B500    
+   \   00000056   D400F3001101       DC16 212, 243, 273, 304, 334
+   \              30014E01    
+     41          {
+     42            0,366,731,1096
+     43          };
+     44          
+     45          void RTC_ISR(void);
+     46          void Sec_To_HMS(u32 SumSec);
+     47          void Day_To_YMD(u32 SunDay);  
+     48          void tDay_To_YMD(u32 SunDay);
+     49          void DateTime_To_SumSecond(void);
+     50          
+     51          
+     52          
+
+   \                                 In section .text, align 4, keep-with-next
+     53          void Sec_To_HMS(u32 TimeVar)
+     54          {    
+   \                     Sec_To_HMS:
+   \   00000000   10B5               PUSH     {R4,LR}
+     55            u8 Hours,Minutes,Seconds;    
+     56            /* Compute  hours */
+     57            Hours =(TimeVar / 3600)%24; 
+   \   00000002   4FF46161           MOV      R1,#+3600
+   \   00000006   B0FBF1F1           UDIV     R1,R0,R1
+   \   0000000A   1822               MOVS     R2,#+24
+   \   0000000C   0B00               MOVS     R3,R1
+   \   0000000E   B1FBF2F1           UDIV     R1,R1,R2
+   \   00000012   01FB1233           MLS      R3,R1,R2,R3
+   \   00000016   DBB2               UXTB     R3,R3
+     58            DateTime.HourH = Hours/10 ;
+   \   00000018   0A21               MOVS     R1,#+10
+   \   0000001A   93FBF1FC           SDIV     R12,R3,R1
+   \   0000001E   ........           LDR.W    R2,??DataTable5  ;; DateTime
+   \   00000022   82F807C0           STRB     R12,[R2, #+7]
+     59            DateTime.HourL = Hours%10;  
+   \   00000026   0CFB1133           MLS      R3,R12,R1,R3
+   \   0000002A   9371               STRB     R3,[R2, #+6]
+     60            /* Compute minutes */
+     61            Minutes  =  (TimeVar/60)%60;
+   \   0000002C   3C23               MOVS     R3,#+60
+   \   0000002E   B0FBF3FC           UDIV     R12,R0,R3
+   \   00000032   E646               MOV      LR,R12
+   \   00000034   BCFBF3F4           UDIV     R4,R12,R3
+   \   00000038   04FB13EE           MLS      LR,R4,R3,LR
+   \   0000003C   5FFA8EFE           UXTB     LR,LR
+     62            DateTime.MinuteH = Minutes/10;
+   \   00000040   9EFBF1F4           SDIV     R4,LR,R1
+   \   00000044   5472               STRB     R4,[R2, #+9]
+     63            DateTime.MinuteL = Minutes%10;
+   \   00000046   04FB11EE           MLS      LR,R4,R1,LR
+   \   0000004A   82F808E0           STRB     LR,[R2, #+8]
+     64            /* Compute seconds */  
+     65            Seconds =TimeVar % 60;    
+   \   0000004E   0CFB1300           MLS      R0,R12,R3,R0
+   \   00000052   C0B2               UXTB     R0,R0
+     66            DateTime.SecondH=Seconds/10;   
+   \   00000054   90FBF1F3           SDIV     R3,R0,R1
+   \   00000058   D372               STRB     R3,[R2, #+11]
+     67            DateTime.SecondL=Seconds%10;
+   \   0000005A   03FB1100           MLS      R0,R3,R1,R0
+   \   0000005E   9072               STRB     R0,[R2, #+10]
+     68          } 
+   \   00000060   10BD               POP      {R4,PC}          ;; return
+     69          
+
+   \                                 In section .text, align 4, keep-with-next
+     70          void Day_To_YMD( u32 DayVar)
+     71          {
+   \                     Day_To_YMD:
+   \   00000000   80B5               PUSH     {R7,LR}
+     72          
+     73            u8 Years,Months,Days;  
+     74            u8 bissextile;
+     75            u32 FourYesrDaysVar;
+     76            
+     77             Years=((DayVar-1)/(365*4+1));
+     78             Years=Years *4; 
+   \   00000002   411E               SUBS     R1,R0,#+1
+   \   00000004   40F2B552           MOVW     R2,#+1461
+   \   00000008   B1FBF2F3           UDIV     R3,R1,R2
+   \   0000000C   D8B2               UXTB     R0,R3
+   \   0000000E   8006               LSLS     R0,R0,#+26
+   \   00000010   000E               LSRS     R0,R0,#+24
+     79          
+     80            
+     81            
+     82              FourYesrDaysVar=((DayVar-1)%(365*4+1)); 
+   \   00000012   03FB1213           MLS      R3,R3,R2,R1
+     83                if (FourYesrDaysVar>1095)Years=Years+3;
+   \   00000016   B3F5896F           CMP      R3,#+1096
+   \   0000001A   01D3               BCC.N    ??Day_To_YMD_0
+   \   0000001C   C01C               ADDS     R0,R0,#+3
+   \   0000001E   09E0               B.N      ??Day_To_YMD_1
+     84                else if (FourYesrDaysVar>730)Years=Years+2; 
+   \                     ??Day_To_YMD_0:
+   \   00000020   40F2DB2C           MOVW     R12,#+731
+   \   00000024   6345               CMP      R3,R12
+   \   00000026   01D3               BCC.N    ??Day_To_YMD_2
+   \   00000028   801C               ADDS     R0,R0,#+2
+   \   0000002A   03E0               B.N      ??Day_To_YMD_1
+     85                else if (FourYesrDaysVar>365)Years=Years+1;
+   \                     ??Day_To_YMD_2:
+   \   0000002C   B3F5B77F           CMP      R3,#+366
+   \   00000030   01D3               BCC.N    ??Day_To_YMD_3
+   \   00000032   401C               ADDS     R0,R0,#+1
+   \                     ??Day_To_YMD_1:
+   \   00000034   C0B2               UXTB     R0,R0
+     86          
+     87          
+     88             bissextile=Years%4;       
+   \                     ??Day_To_YMD_3:
+   \   00000036   8446               MOV      R12,R0
+   \   00000038   4FEA8C5C           LSL      R12,R12,#+22
+   \   0000003C   4FEA1C6C           LSR      R12,R12,#+24
+   \   00000040   A0EB8C0C           SUB      R12,R0,R12, LSL #+2
+   \   00000044   5FFA8CFC           UXTB     R12,R12
+     89            DayVar=(DayVar-1)%(365*4+1)+1-FourYesrDaysTable[bissextile];
+   \   00000048   ....               LDR.N    R2,??DataTable5  ;; DateTime
+   \   0000004A   5B1C               ADDS     R3,R3,#+1
+   \   0000004C   02EB4C0E           ADD      LR,R2,R12, LSL #+1
+   \   00000050   BEF810E0           LDRH     LR,[LR, #+16]
+   \   00000054   A3EB0E03           SUB      R3,R3,LR
+     90            
+     91          if (bissextile==0)
+   \   00000058   BCF1000F           CMP      R12,#+0
+   \   0000005C   3BD1               BNE.N    ??Day_To_YMD_4
+     92          {
+     93             if (DayVar>182 )   
+   \   0000005E   B72B               CMP      R3,#+183
+   \   00000060   1ED3               BCC.N    ??Day_To_YMD_5
+     94             { 
+     95               if (DayVar>274)
+   \   00000062   B3F5897F           CMP      R3,#+274
+   \   00000066   0ED9               BLS.N    ??Day_To_YMD_6
+     96               {
+     97                  if(DayVar>335)
+   \   00000068   B3F5A87F           CMP      R3,#+336
+   \   0000006C   02D3               BCC.N    ??Day_To_YMD_7
+     98                  {
+     99                    Months=12;Days=DayVar-335;
+   \   0000006E   0C21               MOVS     R1,#+12
+   \   00000070   4F3B               SUBS     R3,R3,#+79
+   \   00000072   64E0               B.N      ??Day_To_YMD_8
+    100                  }
+    101                  else
+    102                  {
+    103                    if (DayVar>305)
+   \                     ??Day_To_YMD_7:
+   \   00000074   B3F5997F           CMP      R3,#+306
+   \   00000078   02D3               BCC.N    ??Day_To_YMD_9
+    104                    {
+    105                      Months=11;Days=DayVar-305;
+   \   0000007A   0B21               MOVS     R1,#+11
+   \   0000007C   313B               SUBS     R3,R3,#+49
+   \   0000007E   5EE0               B.N      ??Day_To_YMD_8
+    106                    }
+    107                    else
+    108                    {
+    109                      Months=10;Days=DayVar-274;            
+   \                     ??Day_To_YMD_9:
+   \   00000080   0A21               MOVS     R1,#+10
+   \   00000082   123B               SUBS     R3,R3,#+18
+   \   00000084   5BE0               B.N      ??Day_To_YMD_8
+    110                    }
+    111                  }
+    112               }
+    113               else
+    114               {
+    115                 if (DayVar>244)
+   \                     ??Day_To_YMD_6:
+   \   00000086   F52B               CMP      R3,#+245
+   \   00000088   02D3               BCC.N    ??Day_To_YMD_10
+    116                 {          
+    117                       Months=9;Days=DayVar-244;      
+   \   0000008A   0921               MOVS     R1,#+9
+   \   0000008C   0C33               ADDS     R3,R3,#+12
+   \   0000008E   56E0               B.N      ??Day_To_YMD_8
+    118                 }
+    119                 else
+    120                 {
+    121                   if (DayVar>213)
+   \                     ??Day_To_YMD_10:
+   \   00000090   D62B               CMP      R3,#+214
+   \   00000092   02D3               BCC.N    ??Day_To_YMD_11
+    122                   {
+    123                       Months=8;Days=DayVar-213; 
+   \   00000094   0821               MOVS     R1,#+8
+   \   00000096   2B33               ADDS     R3,R3,#+43
+   \   00000098   51E0               B.N      ??Day_To_YMD_8
+    124                   }
+    125                   else
+    126                   {
+    127                       Months=7;Days=DayVar-182;          
+   \                     ??Day_To_YMD_11:
+   \   0000009A   0721               MOVS     R1,#+7
+   \   0000009C   4A33               ADDS     R3,R3,#+74
+   \   0000009E   4EE0               B.N      ??Day_To_YMD_8
+    128                   }
+    129                 }       
+    130               }
+    131             }  
+    132             else 
+    133             {
+    134               if (DayVar>91)
+   \                     ??Day_To_YMD_5:
+   \   000000A0   5C2B               CMP      R3,#+92
+   \   000000A2   0CD3               BCC.N    ??Day_To_YMD_12
+    135               {
+    136                  if (DayVar>152)
+   \   000000A4   992B               CMP      R3,#+153
+   \   000000A6   02D3               BCC.N    ??Day_To_YMD_13
+    137                  {
+    138                       Months=6;Days=DayVar-152;           
+   \   000000A8   0621               MOVS     R1,#+6
+   \   000000AA   6833               ADDS     R3,R3,#+104
+   \   000000AC   47E0               B.N      ??Day_To_YMD_8
+    139                  }
+    140                  else
+    141                  {
+    142                    if(DayVar>121)
+   \                     ??Day_To_YMD_13:
+   \   000000AE   7A2B               CMP      R3,#+122
+   \   000000B0   02D3               BCC.N    ??Day_To_YMD_14
+    143                    {
+    144                       Months=5;Days=DayVar-121;             
+   \   000000B2   0521               MOVS     R1,#+5
+   \   000000B4   793B               SUBS     R3,R3,#+121
+   \   000000B6   42E0               B.N      ??Day_To_YMD_8
+    145                    }
+    146                    else
+    147                    {
+    148                       Months=4;Days=DayVar-91;            
+   \                     ??Day_To_YMD_14:
+   \   000000B8   0421               MOVS     R1,#+4
+   \   000000BA   5B3B               SUBS     R3,R3,#+91
+   \   000000BC   3FE0               B.N      ??Day_To_YMD_8
+    149                    }
+    150                  }
+    151               }
+    152               else
+    153               {
+    154                 if (DayVar>60)
+   \                     ??Day_To_YMD_12:
+   \   000000BE   3D2B               CMP      R3,#+61
+   \   000000C0   02D3               BCC.N    ??Day_To_YMD_15
+    155                 {
+    156                    Months=3;Days=DayVar-60;  
+   \   000000C2   0321               MOVS     R1,#+3
+   \   000000C4   3C3B               SUBS     R3,R3,#+60
+   \   000000C6   3AE0               B.N      ??Day_To_YMD_8
+    157                 }
+    158                 else
+    159                 {
+    160                   if(DayVar>31)
+   \                     ??Day_To_YMD_15:
+   \   000000C8   202B               CMP      R3,#+32
+   \   000000CA   02D3               BCC.N    ??Day_To_YMD_16
+    161                   {
+    162                      Months=2;Days=DayVar-31;           
+   \   000000CC   0221               MOVS     R1,#+2
+   \   000000CE   1F3B               SUBS     R3,R3,#+31
+   \   000000D0   35E0               B.N      ??Day_To_YMD_8
+    163                   }
+    164                   else
+    165                   {
+    166                      Months=1;Days=DayVar;        
+   \                     ??Day_To_YMD_16:
+   \   000000D2   0121               MOVS     R1,#+1
+   \   000000D4   33E0               B.N      ??Day_To_YMD_8
+    167                   }
+    168                 }
+    169               }
+    170             }
+    171          }  
+    172          else
+    173          {
+    174             if (DayVar>181 )   
+   \                     ??Day_To_YMD_4:
+   \   000000D6   B62B               CMP      R3,#+182
+   \   000000D8   1ED3               BCC.N    ??Day_To_YMD_17
+    175             { 
+    176               if (DayVar>273)
+   \   000000DA   B3F5897F           CMP      R3,#+274
+   \   000000DE   0ED3               BCC.N    ??Day_To_YMD_18
+    177               {
+    178                  if(DayVar>334)
+   \   000000E0   B3F5A77F           CMP      R3,#+334
+   \   000000E4   02D9               BLS.N    ??Day_To_YMD_19
+    179                  {
+    180                    Months=12;Days=DayVar-334;
+   \   000000E6   0C21               MOVS     R1,#+12
+   \   000000E8   4E3B               SUBS     R3,R3,#+78
+   \   000000EA   28E0               B.N      ??Day_To_YMD_8
+    181                  }
+    182                  else
+    183                  {
+    184                    if (DayVar>304)
+   \                     ??Day_To_YMD_19:
+   \   000000EC   B3F5987F           CMP      R3,#+304
+   \   000000F0   02D9               BLS.N    ??Day_To_YMD_20
+    185                    {
+    186                      Months=11;Days=DayVar-304;
+   \   000000F2   0B21               MOVS     R1,#+11
+   \   000000F4   303B               SUBS     R3,R3,#+48
+   \   000000F6   22E0               B.N      ??Day_To_YMD_8
+    187                    }
+    188                    else
+    189                    {
+    190                      Months=10;Days=DayVar-273;            
+   \                     ??Day_To_YMD_20:
+   \   000000F8   0A21               MOVS     R1,#+10
+   \   000000FA   113B               SUBS     R3,R3,#+17
+   \   000000FC   1FE0               B.N      ??Day_To_YMD_8
+    191                    }
+    192                  }
+    193               }
+    194               else
+    195               {
+    196                 if (DayVar>243)
+   \                     ??Day_To_YMD_18:
+   \   000000FE   F42B               CMP      R3,#+244
+   \   00000100   02D3               BCC.N    ??Day_To_YMD_21
+    197                 {          
+    198                       Months=9;Days=DayVar-243;      
+   \   00000102   0921               MOVS     R1,#+9
+   \   00000104   0D33               ADDS     R3,R3,#+13
+   \   00000106   1AE0               B.N      ??Day_To_YMD_8
+    199                 }
+    200                 else
+    201                 {
+    202                   if (DayVar>212)
+   \                     ??Day_To_YMD_21:
+   \   00000108   D52B               CMP      R3,#+213
+   \   0000010A   02D3               BCC.N    ??Day_To_YMD_22
+    203                   {
+    204                       Months=8;Days=DayVar-212; 
+   \   0000010C   0821               MOVS     R1,#+8
+   \   0000010E   2C33               ADDS     R3,R3,#+44
+   \   00000110   15E0               B.N      ??Day_To_YMD_8
+    205                   }
+    206                   else
+    207                   {
+    208                       Months=7;Days=DayVar-181;          
+   \                     ??Day_To_YMD_22:
+   \   00000112   0721               MOVS     R1,#+7
+   \   00000114   4B33               ADDS     R3,R3,#+75
+   \   00000116   12E0               B.N      ??Day_To_YMD_8
+    209                   }
+    210                 }       
+    211               }
+    212             }
+    213             else 
+    214             {
+    215               if (DayVar>90)
+   \                     ??Day_To_YMD_17:
+   \   00000118   5B2B               CMP      R3,#+91
+   \   0000011A   0CD3               BCC.N    ??Day_To_YMD_23
+    216               {
+    217                  if (DayVar>151)
+   \   0000011C   982B               CMP      R3,#+152
+   \   0000011E   02D3               BCC.N    ??Day_To_YMD_24
+    218                  {
+    219                       Months=6;Days=DayVar-151;           
+   \   00000120   0621               MOVS     R1,#+6
+   \   00000122   6933               ADDS     R3,R3,#+105
+   \   00000124   0BE0               B.N      ??Day_To_YMD_8
+    220                  }
+    221                  else
+    222                  {
+    223                    if(DayVar>120)
+   \                     ??Day_To_YMD_24:
+   \   00000126   792B               CMP      R3,#+121
+   \   00000128   02D3               BCC.N    ??Day_To_YMD_25
+    224                    {
+    225                       Months=5;Days=DayVar-120;             
+   \   0000012A   0521               MOVS     R1,#+5
+   \   0000012C   783B               SUBS     R3,R3,#+120
+   \   0000012E   06E0               B.N      ??Day_To_YMD_8
+    226                    }
+    227                    else
+    228                    {
+    229                       Months=4;Days=DayVar-90;            
+   \                     ??Day_To_YMD_25:
+   \   00000130   0421               MOVS     R1,#+4
+   \   00000132   5A3B               SUBS     R3,R3,#+90
+   \   00000134   03E0               B.N      ??Day_To_YMD_8
+    230                    }
+    231                  }
+    232               }
+    233               else
+    234               {
+    235                 if (DayVar>59)
+   \                     ??Day_To_YMD_23:
+   \   00000136   3C2B               CMP      R3,#+60
+   \   00000138   C6D3               BCC.N    ??Day_To_YMD_15
+    236                 {
+    237                    Months=3;Days=DayVar-59;  
+   \   0000013A   0321               MOVS     R1,#+3
+   \   0000013C   3B3B               SUBS     R3,R3,#+59
+    238                 }
+    239                 else
+    240                 {
+    241                   if(DayVar>31)
+    242                   {
+    243                      Months=2;Days=DayVar-31;           
+    244                   }
+    245                   else
+    246                   {
+    247                      Months=1;Days=DayVar;        
+    248                   }
+    249                 }
+    250               }
+    251             }
+    252          }   
+    253                	DateTime.DayH=Days/10;
+   \                     ??Day_To_YMD_8:
+   \   0000013E   DBB2               UXTB     R3,R3
+   \   00000140   4FF00A0C           MOV      R12,#+10
+   \   00000144   93FBFCFE           SDIV     LR,R3,R12
+   \   00000148   82F805E0           STRB     LR,[R2, #+5]
+    254                	DateTime.DayL=Days%10;        
+   \   0000014C   0EFB1C33           MLS      R3,LR,R12,R3
+   \   00000150   1371               STRB     R3,[R2, #+4]
+    255                	DateTime.MonthH=Months/10;
+   \   00000152   91FBFCF3           SDIV     R3,R1,R12
+   \   00000156   D370               STRB     R3,[R2, #+3]
+    256                	DateTime.MonthL=Months%10;        
+   \   00000158   03FB1C11           MLS      R1,R3,R12,R1
+   \   0000015C   9170               STRB     R1,[R2, #+2]
+    257                  DateTime.YearH=Years/10;
+   \   0000015E   90FBFCF1           SDIV     R1,R0,R12
+   \   00000162   5170               STRB     R1,[R2, #+1]
+    258                  DateTime.YearL=Years%10;         
+   \   00000164   01FB1C00           MLS      R0,R1,R12,R0
+   \   00000168   1070               STRB     R0,[R2, #+0]
+    259          }
+   \   0000016A   01BD               POP      {R0,PC}          ;; return
+    260          
+
+   \                                 In section .text, align 4, keep-with-next
+    261          void tDay_To_YMD( u32 DayVar)
+    262          {
+   \                     tDay_To_YMD:
+   \   00000000   80B5               PUSH     {R7,LR}
+    263            u8 Years,Months,Days;
+    264          
+    265            Years=DayVar/360;
+   \   00000002   4FF4B472           MOV      R2,#+360
+   \   00000006   B0FBF2F3           UDIV     R3,R0,R2
+   \   0000000A   D9B2               UXTB     R1,R3
+    266            Months=(DayVar%360)/30;
+   \   0000000C   4FF01E0C           MOV      R12,#+30
+   \   00000010   03FB1202           MLS      R2,R3,R2,R0
+   \   00000014   B2FBFCF2           UDIV     R2,R2,R12
+   \   00000018   D2B2               UXTB     R2,R2
+    267            Days= DayVar%30; 
+   \   0000001A   0300               MOVS     R3,R0
+   \   0000001C   B0FBFCF0           UDIV     R0,R0,R12
+   \   00000020   00FB1C30           MLS      R0,R0,R12,R3
+   \   00000024   C0B2               UXTB     R0,R0
+    268          
+    269                	DateTime.DayH=Days/10;
+   \   00000026   0A23               MOVS     R3,#+10
+   \   00000028   90FBF3FC           SDIV     R12,R0,R3
+   \   0000002C   ........           LDR.W    LR,??DataTable5  ;; DateTime
+   \   00000030   8EF805C0           STRB     R12,[LR, #+5]
+    270                	DateTime.DayL=Days%10;        
+   \   00000034   0CFB1300           MLS      R0,R12,R3,R0
+   \   00000038   8EF80400           STRB     R0,[LR, #+4]
+    271                	DateTime.MonthH=Months/10;
+   \   0000003C   92FBF3F0           SDIV     R0,R2,R3
+   \   00000040   8EF80300           STRB     R0,[LR, #+3]
+    272                	DateTime.MonthL=Months%10;        
+   \   00000044   00FB1320           MLS      R0,R0,R3,R2
+   \   00000048   8EF80200           STRB     R0,[LR, #+2]
+    273                  DateTime.YearH=Years/10;
+   \   0000004C   91FBF3F0           SDIV     R0,R1,R3
+   \   00000050   8EF80100           STRB     R0,[LR, #+1]
+    274                  DateTime.YearL=Years%10;         
+   \   00000054   00FB1310           MLS      R0,R0,R3,R1
+   \   00000058   8EF80000           STRB     R0,[LR, #+0]
+    275          }
+   \   0000005C   01BD               POP      {R0,PC}          ;; return
+    276          
+
+   \                                 In section .text, align 4, keep-with-next
+    277          void DateTime_To_SumSecond(void)
+    278          {
+   \                     DateTime_To_SumSecond:
+   \   00000000   2DE9F843           PUSH     {R3-R9,LR}
+    279            u8 Years,Months,Days;
+    280            u8 Hours,Minutes,Seconds;   
+    281            u8 bissextile;
+                      ^
+Warning[Pe177]: variable "bissextile" was declared but never referenced
+    282            Years=DateTime.YearH*10+DateTime.YearL;
+   \   00000004   4FF00A0E           MOV      LR,#+10
+   \   00000008   ....               LDR.N    R0,??DataTable5  ;; DateTime
+   \   0000000A   4178               LDRB     R1,[R0, #+1]
+   \   0000000C   0A22               MOVS     R2,#+10
+   \   0000000E   0378               LDRB     R3,[R0, #+0]
+   \   00000010   01FB0233           MLA      R3,R1,R2,R3
+   \   00000014   DBB2               UXTB     R3,R3
+    283            Months=DateTime.MonthH*10+DateTime.MonthL;
+   \   00000016   C178               LDRB     R1,[R0, #+3]
+   \   00000018   90F802C0           LDRB     R12,[R0, #+2]
+   \   0000001C   01FB02CC           MLA      R12,R1,R2,R12
+   \   00000020   5FFA8CFC           UXTB     R12,R12
+    284            Days=DateTime.DayH*10+DateTime.DayL;    
+   \   00000024   4179               LDRB     R1,[R0, #+5]
+   \   00000026   0479               LDRB     R4,[R0, #+4]
+   \   00000028   01FB0244           MLA      R4,R1,R2,R4
+   \   0000002C   E4B2               UXTB     R4,R4
+    285            Hours=DateTime.HourH*10+DateTime.HourL;
+   \   0000002E   C179               LDRB     R1,[R0, #+7]
+   \   00000030   8579               LDRB     R5,[R0, #+6]
+   \   00000032   01FB0252           MLA      R2,R1,R2,R5
+   \   00000036   D2B2               UXTB     R2,R2
+    286            Minutes=DateTime.MinuteH*10+DateTime.MinuteL;
+   \   00000038   417A               LDRB     R1,[R0, #+9]
+   \   0000003A   067A               LDRB     R6,[R0, #+8]
+   \   0000003C   01FB0E61           MLA      R1,R1,LR,R6
+   \   00000040   C9B2               UXTB     R1,R1
+    287            Seconds=DateTime.SecondH*10+DateTime.SecondL;    
+   \   00000042   C57A               LDRB     R5,[R0, #+11]
+   \   00000044   867A               LDRB     R6,[R0, #+10]
+   \   00000046   05FB0E65           MLA      R5,R5,LR,R6
+   \   0000004A   EDB2               UXTB     R5,R5
+   \   0000004C   1E00               MOVS     R6,R3
+   \   0000004E   4FF0180E           MOV      LR,#+24
+   \   00000052   9F08               LSRS     R7,R3,#+2
+   \   00000054   A6EB8703           SUB      R3,R6,R7, LSL #+2
+   \   00000058   40F2B558           MOVW     R8,#+1461
+   \   0000005C   40F26D19           MOVW     R9,#+365
+   \   00000060   03FB09F9           MUL      R9,R3,R9
+   \   00000064   07FB0897           MLA      R7,R7,R8,R9
+   \   00000068   4FEAA608           ASR      R8,R6,#+2
+   \   0000006C   A6EB8806           SUB      R6,R6,R8, LSL #+2
+   \   00000070   DFF83880           LDR.W    R8,??DateTime_To_SumSecond_0  ;; MonthsTable
+   \   00000074   06FB0E86           MLA      R6,R6,LR,R8
+   \   00000078   06EB4C0C           ADD      R12,R6,R12, LSL #+1
+   \   0000007C   3CF802CC           LDRH     R12,[R12, #-2]
+   \   00000080   BC44               ADD      R12,R12,R7
+   \   00000082   A444               ADD      R12,R4,R12
+   \   00000084   3C24               MOVS     R4,#+60
+   \   00000086   33B9               CBNZ     R3,??DateTime_To_SumSecond_1
+    288            if ((Years%4)==0)
+    289            DateTime.SumSecond=((((Years/4*1461)+(Years%4)*365+MonthsTable[Years%4][Months-1]+Days)*24+Hours)*60 +Minutes)*60 +Seconds;     
+   \   00000088   0CFB0E22           MLA      R2,R12,LR,R2
+   \   0000008C   02FB0411           MLA      R1,R2,R4,R1
+   \   00000090   01FB0451           MLA      R1,R1,R4,R5
+   \   00000094   07E0               B.N      ??DateTime_To_SumSecond_2
+    290            else
+    291            DateTime.SumSecond=((((Years/4*1461)+(Years%4)*365+1+MonthsTable[Years%4][Months-1]+Days)*24+Hours)*60 +Minutes)*60 +Seconds;  
+   \                     ??DateTime_To_SumSecond_1:
+   \   00000096   0CF10103           ADD      R3,R12,#+1
+   \   0000009A   03FB0E22           MLA      R2,R3,LR,R2
+   \   0000009E   02FB0411           MLA      R1,R2,R4,R1
+   \   000000A2   01FB0451           MLA      R1,R1,R4,R5
+   \                     ??DateTime_To_SumSecond_2:
+   \   000000A6   C160               STR      R1,[R0, #+12]
+    292          }
+   \   000000A8   BDE8F183           POP      {R0,R4-R9,PC}    ;; return
+   \                     ??DateTime_To_SumSecond_0:
+   \   000000AC   ........           DC32     MonthsTable
+    293          
+    294          
+    295                                      
+    296                                     
+
+   \                                 In section .text, align 4, keep-with-next
+    297          struct RTCState RTC_read1(unsigned char Addr)
+    298          {
+   \                     RTC_read1:
+   \   00000000   70B5               PUSH     {R4-R6,LR}
+   \   00000002   0500               MOVS     R5,R0
+   \   00000004   0C00               MOVS     R4,R1
+    299            u32 TimeVar;
+    300            
+    301            TimeVar=RTC_GetCounter();
+   \   00000006   ........           BL       RTC_GetCounter
+    302            Sec_To_HMS(TimeVar%86400);
+   \   0000000A   1D49               LDR.N    R1,??RTC_read1_1  ;; 0x15180
+   \   0000000C   B0FBF1F6           UDIV     R6,R0,R1
+   \   00000010   06FB1100           MLS      R0,R6,R1,R0
+   \   00000014   ........           BL       Sec_To_HMS
+    303            Day_To_YMD(TimeVar/86400);   
+   \   00000018   3000               MOVS     R0,R6
+   \   0000001A   ........           BL       Day_To_YMD
+    304          //  tDay_To_YMD(TimeVar/86400);  
+    305            Data.Err=0;
+   \   0000001E   1948               LDR.N    R0,??RTC_read1_1+0x4  ;; `Data`
+   \   00000020   0021               MOVS     R1,#+0
+   \   00000022   0160               STR      R1,[R0, #+0]
+    306            Data.Value=0;
+   \   00000024   4160               STR      R1,[R0, #+4]
+    307            switch (Addr){
+   \   00000026   ....               LDR.N    R1,??DataTable5  ;; DateTime
+   \   00000028   E4B2               UXTB     R4,R4
+   \   0000002A   062C               CMP      R4,#+6
+   \   0000002C   23D8               BHI.N    ??RTC_read1_2
+   \   0000002E   DFE804F0           TBB      [PC, R4]
+   \                     ??RTC_read1_0:
+   \   00000032   04090E22           DC8      +4,+9,+14,+34
+   \   00000036   13181D00           DC8      +19,+24,+29,+0
+    308              case RTCSecond:
+    309                 	Data.Value = DateTime.SecondH*16+DateTime.SecondL;
+   \                     ??RTC_read1_3:
+   \   0000003A   CA7A               LDRB     R2,[R1, #+11]
+   \   0000003C   897A               LDRB     R1,[R1, #+10]
+   \   0000003E   01EB0211           ADD      R1,R1,R2, LSL #+4
+   \   00000042   17E0               B.N      ??RTC_read1_4
+    310                 	break;
+    311              case RTCMinute:
+    312                	Data.Value = DateTime.MinuteH*16+DateTime.MinuteL;
+   \                     ??RTC_read1_5:
+   \   00000044   4A7A               LDRB     R2,[R1, #+9]
+   \   00000046   097A               LDRB     R1,[R1, #+8]
+   \   00000048   01EB0211           ADD      R1,R1,R2, LSL #+4
+   \   0000004C   12E0               B.N      ??RTC_read1_4
+    313              	break;
+    314              case RTCHour:
+    315                	Data.Value = DateTime.HourH*16+DateTime.HourL;
+   \                     ??RTC_read1_6:
+   \   0000004E   CA79               LDRB     R2,[R1, #+7]
+   \   00000050   8979               LDRB     R1,[R1, #+6]
+   \   00000052   01EB0211           ADD      R1,R1,R2, LSL #+4
+   \   00000056   0DE0               B.N      ??RTC_read1_4
+    316              	break;
+    317              case RTCDay:
+    318                	Data.Value = DateTime.DayH*16+DateTime.DayL;
+   \                     ??RTC_read1_7:
+   \   00000058   4A79               LDRB     R2,[R1, #+5]
+   \   0000005A   0979               LDRB     R1,[R1, #+4]
+   \   0000005C   01EB0211           ADD      R1,R1,R2, LSL #+4
+   \   00000060   08E0               B.N      ??RTC_read1_4
+    319              	break;
+    320              case RTCMonth:
+    321                	Data.Value =DateTime.MonthH*16+DateTime.MonthL;
+   \                     ??RTC_read1_8:
+   \   00000062   CA78               LDRB     R2,[R1, #+3]
+   \   00000064   8978               LDRB     R1,[R1, #+2]
+   \   00000066   01EB0211           ADD      R1,R1,R2, LSL #+4
+   \   0000006A   03E0               B.N      ??RTC_read1_4
+    322              	break;
+    323              case RTCYear:
+    324                	Data.Value =DateTime.YearH*16+DateTime.YearL;
+   \                     ??RTC_read1_9:
+   \   0000006C   4A78               LDRB     R2,[R1, #+1]
+   \   0000006E   0978               LDRB     R1,[R1, #+0]
+   \   00000070   01EB0211           ADD      R1,R1,R2, LSL #+4
+   \                     ??RTC_read1_4:
+   \   00000074   4160               STR      R1,[R0, #+4]
+    325                  break;
+    326            }    
+    327            return Data;
+   \                     ??RTC_read1_2:
+   \   00000076   D0E90001           LDRD     R0,R1,[R0, #+0]
+   \   0000007A   C5E90001           STRD     R0,R1,[R5, #+0]
+   \   0000007E   70BD               POP      {R4-R6,PC}       ;; return
+   \                     ??RTC_read1_1:
+   \   00000080   80510100           DC32     0x15180
+   \   00000084   ........           DC32     `Data`
+    328          }
+    329          
+
+   \                                 In section .text, align 4, keep-with-next
+    330          unsigned char RTC_write1(unsigned char Addr,unsigned char Data)
+    331          {
+   \                     RTC_write1:
+   \   00000000   38B5               PUSH     {R3-R5,LR}
+   \   00000002   0500               MOVS     R5,R0
+   \   00000004   0C00               MOVS     R4,R1
+    332              /* Wait until last write operation on RTC registers has finished */
+    333            RTC_WaitForLastTask();
+   \   00000006   ........           BL       RTC_WaitForLastTask
+    334            /* Change the current time */
+    335            switch (Addr){
+   \   0000000A   04F00F00           AND      R0,R4,#0xF
+   \   0000000E   2109               LSRS     R1,R4,#+4
+   \   00000010   ....               LDR.N    R4,??DataTable5  ;; DateTime
+   \   00000012   062D               CMP      R5,#+6
+   \   00000014   16D8               BHI.N    ??RTC_write1_1
+   \   00000016   DFE805F0           TBB      [PC, R5]
+   \                     ??RTC_write1_0:
+   \   0000001A   04070A15           DC8      +4,+7,+10,+21
+   \   0000001E   0D101300           DC8      +13,+16,+19,+0
+    336              case RTCSecond:
+    337                  DateTime.SecondH=Data/0x10;
+   \                     ??RTC_write1_2:
+   \   00000022   E172               STRB     R1,[R4, #+11]
+    338                  DateTime.SecondL=Data&0xf;        
+   \   00000024   A072               STRB     R0,[R4, #+10]
+   \   00000026   0DE0               B.N      ??RTC_write1_1
+    339                 	break;
+    340              case RTCMinute:
+    341                	DateTime.MinuteH=Data/0x10;
+   \                     ??RTC_write1_3:
+   \   00000028   6172               STRB     R1,[R4, #+9]
+    342                	DateTime.MinuteL=Data&0xf;        
+   \   0000002A   2072               STRB     R0,[R4, #+8]
+   \   0000002C   0AE0               B.N      ??RTC_write1_1
+    343              	break;
+    344              case RTCHour:
+    345                	DateTime.HourH=Data/0x10;
+   \                     ??RTC_write1_4:
+   \   0000002E   E171               STRB     R1,[R4, #+7]
+    346                	DateTime.HourL=Data&0xf;        
+   \   00000030   A071               STRB     R0,[R4, #+6]
+   \   00000032   07E0               B.N      ??RTC_write1_1
+    347              	break;
+    348              case RTCDay:
+    349                	DateTime.DayH=Data/0x10;
+   \                     ??RTC_write1_5:
+   \   00000034   6171               STRB     R1,[R4, #+5]
+    350                	DateTime.DayL=Data&0xf;        
+   \   00000036   2071               STRB     R0,[R4, #+4]
+   \   00000038   04E0               B.N      ??RTC_write1_1
+    351              	break;
+    352              case RTCMonth:
+    353                	DateTime.MonthH=Data/0x10;
+   \                     ??RTC_write1_6:
+   \   0000003A   E170               STRB     R1,[R4, #+3]
+    354                	DateTime.MonthL=Data&0xf;        
+   \   0000003C   A070               STRB     R0,[R4, #+2]
+   \   0000003E   01E0               B.N      ??RTC_write1_1
+    355              	break;
+    356              case RTCYear:
+    357                  DateTime.YearH=Data/0x10;
+   \                     ??RTC_write1_7:
+   \   00000040   6170               STRB     R1,[R4, #+1]
+    358                  DateTime.YearL=Data&0xf;        
+   \   00000042   2070               STRB     R0,[R4, #+0]
+    359                  break;
+    360           }
+    361           
+    362             DateTime_To_SumSecond(); 
+   \                     ??RTC_write1_1:
+   \   00000044   ........           BL       DateTime_To_SumSecond
+    363             RTC_SetCounter(DateTime.SumSecond);
+   \   00000048   E068               LDR      R0,[R4, #+12]
+   \   0000004A   ........           BL       RTC_SetCounter
+    364            
+    365            /* Wait until last write operation on RTC registers has finished */
+    366            RTC_WaitForLastTask();
+   \   0000004E   ........           BL       RTC_WaitForLastTask
+    367                 return 0;
+   \   00000052   0020               MOVS     R0,#+0
+   \   00000054   32BD               POP      {R1,R4,R5,PC}    ;; return
+    368          }
+    369          
+    370          
+
+   \                                 In section .text, align 4, keep-with-next
+    371          void RTC_ISR(void)
+    372          {
+   \                     RTC_ISR:
+   \   00000000   80B5               PUSH     {R7,LR}
+    373            if (RTC_GetITStatus(RTC_IT_SEC) != RESET)
+   \   00000002   0120               MOVS     R0,#+1
+   \   00000004   ........           BL       RTC_GetITStatus
+   \   00000008   20B1               CBZ      R0,??RTC_ISR_0
+    374            {
+    375              /* Clear the RTC Second interrupt */
+    376              RTC_ClearITPendingBit(RTC_IT_SEC);
+   \   0000000A   0120               MOVS     R0,#+1
+   \   0000000C   ........           BL       RTC_ClearITPendingBit
+    377          
+    378              /* Toggle GPIO_LED pin 6 each 1s */
+    379          
+    380          
+    381              /* Enable time update */
+    382          
+    383          
+    384              /* Wait until last write operation on RTC registers has finished */
+    385              RTC_WaitForLastTask();
+   \   00000010   ........           BL       RTC_WaitForLastTask
+    386              /* Reset RTC Counter when Time is 23:59:59 */
+    387          //    if (RTC_GetCounter() == 0x00015180)
+    388          //    {
+    389          //      RTC_SetCounter(0x0);
+    390                /* Wait until last write operation on RTC registers has finished */
+    391          //      RTC_WaitForLastTask();      
+    392          //    }
+    393            }
+    394          }
+   \                     ??RTC_ISR_0:
+   \   00000014   01BD               POP      {R0,PC}          ;; return
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable5:
+   \   00000000   ........           DC32     DateTime
+
+   Maximum stack usage in bytes:
+
+     Function              .cstack
+     --------              -------
+     DateTime_To_SumSecond      0
+     Day_To_YMD                 0
+     RTC_ISR                    0
+     RTC_read1                  0
+     RTC_write1                 0
+     Sec_To_HMS                 0
+     tDay_To_YMD                0
+
+
+   Section sizes:
+
+     Function/Label        Bytes
+     --------------        -----
+     DateTime                24
+     FourYesrDaysTable
+     MonthsTable             96
+     Sec_To_HMS              98
+     Day_To_YMD             364
+     tDay_To_YMD             94
+     DateTime_To_SumSecond  176
+     RTC_read1              136
+     RTC_write1              86
+     RTC_ISR                 22
+     ??DataTable5             4
+
+ 
+ 120 bytes in section .data
+ 980 bytes in section .text
+ 
+ 980 bytes of CODE memory
+ 120 bytes of DATA memory
+
+Errors: none
+Warnings: 1

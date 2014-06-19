@@ -1,0 +1,174 @@
+###############################################################################
+#                                                                             #
+# IAR ANSI C/C++ Compiler V5.20.0.50892/W32 for ARM     07/Oct/2009  13:03:51 #
+# Copyright 1999-2008 IAR Systems AB.                                         #
+#                                                                             #
+#    Cpu mode     =  thumb                                                    #
+#    Endian       =  little                                                   #
+#    Source file  =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\HardWare_USART.c   #
+#    Command line =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\HardWare_USART.c   #
+#                    -D VECT_TAB_FLASH -lC F:\CoLtd\Forth\MCU\STM32F10x\ST_Fo #
+#                    rth\STM3210E-EVAL\List\ -o F:\CoLtd\Forth\MCU\STM32F10x\ #
+#                    ST_Forth\STM3210E-EVAL\Obj\ --debug --endian=little      #
+#                    --cpu=Cortex-M3 -e --char_is_signed                      #
+#                    --require_prototypes --fpu=None --dlib_config            #
+#                    "C:\Program Files\IAR Systems\Embedded Workbench         #
+#                    5.0\ARM\INC\DLib_Config_Full.h" -I                       #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\ -I                #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\library\inc\ -I    #
+#                    "C:\Program Files\IAR Systems\Embedded Workbench         #
+#                    5.0\ARM\INC\" -Ohz                                       #
+#    List file    =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\List #
+#                    \HardWare_USART.lst                                      #
+#    Object file  =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\ #
+#                    HardWare_USART.o                                         #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\HardWare_USART.c
+      1          #include "stm32f10x_lib.h"
+      2          
+      3          
+      4          //#define RxBufferSize 32
+      5          //#define TxBufferSize 32
+      6          //u8 TxBuffer[] = "USART Example 1: USART - Hyperterminal communication using hardware flow control";
+      7          //u8 RxBuffer[RxBufferSize];
+      8          //u8 NbrOfDataToTransfer = TxBufferSize;
+      9          //u8 NbrOfDataToRead = RxBufferSize;
+     10          //u8 TxCounter = 0;
+     11          //u8 RxCounter = 0;  
+     12          extern ErrorStatus HSEStartUpStatus;
+     13          
+     14          extern unsigned char gUartRecTmp;
+     15          
+     16          
+     17          extern void UART1receive(void);
+     18          
+     19          
+     20          int Host_SendNext(unsigned char *value,int n);
+     21          void Test_USART2(void);
+     22          void USART2_ISR(void);
+     23          
+     24          
+     25          
+
+   \                                 In section .text, align 4, keep-with-next
+     26          int Host_SendNext(unsigned char* TxBuffer,int n)
+     27          {
+   \                     Host_SendNext:
+   \   00000000   F8B5               PUSH     {R3-R7,LR}
+   \   00000002   0400               MOVS     R4,R0
+   \   00000004   0D00               MOVS     R5,R1
+     28            int i;
+     29             for(i=0;i<n;i++)
+   \   00000006   0026               MOVS     R6,#+0
+   \   00000008   ....               LDR.N    R7,??DataTable1  ;; 0x40004400
+   \   0000000A   0AE0               B.N      ??Host_SendNext_0
+     30             {
+     31                USART_SendData(USART2, TxBuffer[i]);
+   \                     ??Host_SendNext_1:
+   \   0000000C   315D               LDRB     R1,[R6, R4]
+   \   0000000E   3800               MOVS     R0,R7
+   \   00000010   ........           BL       USART_SendData
+     32                while(USART_GetFlagStatus(USART2, USART_FLAG_TXE) == RESET); 
+   \                     ??Host_SendNext_2:
+   \   00000014   8021               MOVS     R1,#+128
+   \   00000016   3800               MOVS     R0,R7
+   \   00000018   ........           BL       USART_GetFlagStatus
+   \   0000001C   0028               CMP      R0,#+0
+   \   0000001E   F9D0               BEQ.N    ??Host_SendNext_2
+     33             }
+   \   00000020   761C               ADDS     R6,R6,#+1
+   \                     ??Host_SendNext_0:
+   \   00000022   AE42               CMP      R6,R5
+   \   00000024   F2DB               BLT.N    ??Host_SendNext_1
+     34            return(1);
+   \   00000026   0120               MOVS     R0,#+1
+   \   00000028   F2BD               POP      {R1,R4-R7,PC}    ;; return
+     35          }
+     36          
+     37          
+
+   \                                 In section .text, align 4, keep-with-next
+     38          void USART2_ISR(void)
+     39          {
+   \                     USART2_ISR:
+   \   00000000   38B5               PUSH     {R3-R5,LR}
+     40            if(USART_GetITStatus(USART2, USART_IT_RXNE) != RESET)
+   \   00000002   ....               LDR.N    R5,??DataTable1  ;; 0x40004400
+   \   00000004   40F22554           MOVW     R4,#+1317
+   \   00000008   2100               MOVS     R1,R4
+   \   0000000A   2800               MOVS     R0,R5
+   \   0000000C   ........           BL       USART_GetITStatus
+   \   00000010   50B1               CBZ      R0,??USART2_ISR_0
+     41            {   
+     42              // Read one byte from the receive data register 
+     43              
+     44                gUartRecTmp=USART_ReceiveData(USART2);    
+   \   00000012   2800               MOVS     R0,R5
+   \   00000014   ........           BL       USART_ReceiveData
+   \   00000018   0949               LDR.N    R1,??USART2_ISR_1  ;; gUartRecTmp
+   \   0000001A   0870               STRB     R0,[R1, #+0]
+     45                     
+     46          
+     47                UART1receive();
+   \   0000001C   ........           BL       UART1receive
+     48                    // Clear the USART1 Receive interrupt 
+     49                      USART_ClearITPendingBit(USART2, USART_IT_RXNE);
+   \   00000020   2100               MOVS     R1,R4
+   \   00000022   2800               MOVS     R0,R5
+   \   00000024   ........           BL       USART_ClearITPendingBit
+     50                // receive is end, Disable the USART1 Transmit interrupt       
+     51            }
+     52          
+     53            if(USART_GetITStatus(USART2, USART_IT_TXE) != RESET)
+   \                     ??USART2_ISR_0:
+   \   00000028   40F22774           MOVW     R4,#+1831
+   \   0000002C   2100               MOVS     R1,R4
+   \   0000002E   2800               MOVS     R0,R5
+   \   00000030   ........           BL       USART_GetITStatus
+   \   00000034   18B1               CBZ      R0,??USART2_ISR_2
+     54            {   
+     55              // Write one byte to the transmit data register 
+     56                             
+     57              // Clear the USART1 transmit interrupt 
+     58                USART_ClearITPendingBit(USART2, USART_IT_TXE); 
+   \   00000036   2100               MOVS     R1,R4
+   \   00000038   2800               MOVS     R0,R5
+   \   0000003A   ........           BL       USART_ClearITPendingBit
+     59              // transmit is end ,Disable the USART1 Transmit interrupt     
+     60            }  
+     61          }
+   \                     ??USART2_ISR_2:
+   \   0000003E   31BD               POP      {R0,R4,R5,PC}    ;; return
+   \                     ??USART2_ISR_1:
+   \   00000040   ........           DC32     gUartRecTmp
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable1:
+   \   00000000   00440040           DC32     0x40004400
+
+   Maximum stack usage in bytes:
+
+     Function      .cstack
+     --------      -------
+     Host_SendNext      0
+     USART2_ISR         0
+
+
+   Section sizes:
+
+     Function/Label Bytes
+     -------------- -----
+     Host_SendNext    42
+     USART2_ISR       68
+     ??DataTable1      4
+
+ 
+ 114 bytes in section .text
+ 
+ 114 bytes of CODE memory
+
+Errors: none
+Warnings: none

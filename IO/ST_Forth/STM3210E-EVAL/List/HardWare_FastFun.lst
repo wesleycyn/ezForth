@@ -1,0 +1,161 @@
+###############################################################################
+#                                                                             #
+# IAR ANSI C/C++ Compiler V5.20.0.50892/W32 for ARM     07/Oct/2009  13:03:49 #
+# Copyright 1999-2008 IAR Systems AB.                                         #
+#                                                                             #
+#    Cpu mode     =  thumb                                                    #
+#    Endian       =  little                                                   #
+#    Source file  =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\HardWare_FastFun.c #
+#    Command line =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\HardWare_FastFun.c #
+#                     -D VECT_TAB_FLASH -lC F:\CoLtd\Forth\MCU\STM32F10x\ST_F #
+#                    orth\STM3210E-EVAL\List\ -o                              #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\ #
+#                     --debug --endian=little --cpu=Cortex-M3 -e              #
+#                    --char_is_signed --require_prototypes --fpu=None         #
+#                    --dlib_config "C:\Program Files\IAR Systems\Embedded     #
+#                    Workbench 5.0\ARM\INC\DLib_Config_Full.h" -I             #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\ -I                #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\library\inc\ -I    #
+#                    "C:\Program Files\IAR Systems\Embedded Workbench         #
+#                    5.0\ARM\INC\" -Ohz                                       #
+#    List file    =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\List #
+#                    \HardWare_FastFun.lst                                    #
+#    Object file  =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\ #
+#                    HardWare_FastFun.o                                       #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\HardWare_FastFun.c
+      1          #include "typedef.h"
+      2          
+      3          extern unsigned char *Dest_Adr,*Sour_Adr;
+      4          extern unsigned int Data_Len; 
+      5          
+      6          
+      7          void mCopy(u8* sBuf,u8* dBuf,u32 Legth); //wesley
+      8          void data_copyF(void);
+      9          int RAM_test(void) @"FastProcRAM";
+     10          
+     11          
+     12          
+
+   \                                 In section FastProcRAM, align 4, keep-with-next
+     13          void mCopy(u8* sBuf,u8* dBuf,u32 Legth) @"FastProcRAM"
+     14          {
+     15          	u32 i;
+     16          	for	(i=0;i<Legth;i++)
+   \                     mCopy:
+   \   00000000   0023               MOVS     R3,#+0
+   \   00000002   04E0               B.N      ??mCopy_0
+     17          	{		
+     18          		dBuf[i]=sBuf[i];
+   \                     ??mCopy_1:
+   \   00000004   13F800C0           LDRB     R12,[R3, R0]
+   \   00000008   03F801C0           STRB     R12,[R3, R1]
+     19          	}
+   \   0000000C   5B1C               ADDS     R3,R3,#+1
+   \                     ??mCopy_0:
+   \   0000000E   9342               CMP      R3,R2
+   \   00000010   F8D3               BCC.N    ??mCopy_1
+     20          }
+   \   00000012   7047               BX       LR               ;; return
+     21          
+     22          
+
+   \                                 In section .text, align 4, keep-with-next
+     23          void data_copyF(void)
+     24          {
+     25             mCopy(Sour_Adr,Dest_Adr,Data_Len);
+   \                     data_copyF:
+   \   00000000   0348               LDR.N    R0,??data_copyF_0  ;; Data_Len
+   \   00000002   0268               LDR      R2,[R0, #+0]
+   \   00000004   0348               LDR.N    R0,??data_copyF_0+0x4  ;; Dest_Adr
+   \   00000006   0168               LDR      R1,[R0, #+0]
+   \   00000008   0348               LDR.N    R0,??data_copyF_0+0x8  ;; Sour_Adr
+   \   0000000A   0068               LDR      R0,[R0, #+0]
+   \   0000000C   ........           B.W      mCopy
+   \                     ??data_copyF_0:
+   \   00000010   ........           DC32     Data_Len
+   \   00000014   ........           DC32     Dest_Adr
+   \   00000018   ........           DC32     Sour_Adr
+     26          }
+     27          
+     28          
+     29          
+     30          
+
+   \                                 In section FastProcRAM, align 4, keep-with-next
+     31          int RAM_test(void) @"FastProcRAM"
+     32          {
+     33              #define tRAM  0x68000000
+     34              #define iRAM  0x2000FFFC  
+     35            
+     36            u32 i,TestData;
+     37          
+     38          
+     39            for (i=0;i<0x80000;i=i+4)
+   \                     RAM_test:
+   \   00000000   0021               MOVS     R1,#+0
+   \   00000002   0D4A               LDR.N    R2,??RAM_test_0  ;; 0x2000fffc
+   \                     ??RAM_test_1:
+   \   00000004   01F1D043           ADD      R3,R1,#+1744830464
+   \   00000008   D3F800C0           LDR      R12,[R3, #+0]
+   \   0000000C   C2F800C0           STR      R12,[R2, #+0]
+     40            {  
+     41                M32(iRAM ) =   M32(tRAM + i );      
+     42                M32(tRAM + i )=TestData;      
+   \   00000010   1860               STR      R0,[R3, #+0]
+     43                if ( M32(tRAM + i ) != TestData ) {return -1;}     
+   \   00000012   D3F800C0           LDR      R12,[R3, #+0]
+   \   00000016   8445               CMP      R12,R0
+   \   00000018   02D0               BEQ.N    ??RAM_test_2
+   \   0000001A   4FF0FF30           MOV      R0,#-1
+   \   0000001E   7047               BX       LR
+     44                M32(tRAM + i )=M32(iRAM ) ;
+   \                     ??RAM_test_2:
+   \   00000020   D2F800C0           LDR      R12,[R2, #+0]
+   \   00000024   C3F800C0           STR      R12,[R3, #+0]
+     45                TestData=TestData+1;
+   \   00000028   401C               ADDS     R0,R0,#+1
+     46            } 
+   \   0000002A   091D               ADDS     R1,R1,#+4
+   \   0000002C   B1F5002F           CMP      R1,#+524288
+   \   00000030   E8D3               BCC.N    ??RAM_test_1
+     47          
+     48            return 0;
+   \   00000032   0020               MOVS     R0,#+0
+   \                     ??RAM_test_3:
+   \   00000034   7047               BX       LR               ;; return
+   \   00000036   00BF               Nop      
+   \                     ??RAM_test_0:
+   \   00000038   FCFF0020           DC32     0x2000fffc
+     49          }
+     50          
+     51          
+
+   Maximum stack usage in bytes:
+
+     Function   .cstack
+     --------   -------
+     RAM_test        0
+     data_copyF      0
+     mCopy           0
+
+
+   Section sizes:
+
+     Function/Label Bytes
+     -------------- -----
+     mCopy            20
+     data_copyF       28
+     RAM_test         60
+
+ 
+ 28 bytes in section .text
+ 80 bytes in section FastProcRAM
+ 
+ 108 bytes of CODE memory
+
+Errors: none
+Warnings: none

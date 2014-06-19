@@ -1,0 +1,337 @@
+###############################################################################
+#                                                                             #
+# IAR ANSI C/C++ Compiler V5.20.0.50892/W32 for ARM     07/Oct/2009  13:04:00 #
+# Copyright 1999-2008 IAR Systems AB.                                         #
+#                                                                             #
+#    Cpu mode     =  thumb                                                    #
+#    Endian       =  little                                                   #
+#    Source file  =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\library\src\stm32f #
+#                    10x_systick.c                                            #
+#    Command line =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\library\src\stm32f #
+#                    10x_systick.c -D VECT_TAB_FLASH -lC                      #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\List #
+#                    \ -o F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL #
+#                    \Obj\ --debug --endian=little --cpu=Cortex-M3 -e         #
+#                    --char_is_signed --require_prototypes --fpu=None         #
+#                    --dlib_config "C:\Program Files\IAR Systems\Embedded     #
+#                    Workbench 5.0\ARM\INC\DLib_Config_Full.h" -I             #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\ -I                #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\library\inc\ -I    #
+#                    "C:\Program Files\IAR Systems\Embedded Workbench         #
+#                    5.0\ARM\INC\" -Ohz                                       #
+#    List file    =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\List #
+#                    \stm32f10x_systick.lst                                   #
+#    Object file  =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\ #
+#                    stm32f10x_systick.o                                      #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\library\src\stm32f10x_systick.c
+      1          /******************** (C) COPYRIGHT 2008 STMicroelectronics ********************
+      2          * File Name          : stm32f10x_systick.c
+      3          * Author             : MCD Application Team
+      4          * Version            : V2.0.3
+      5          * Date               : 09/22/2008
+      6          * Description        : This file provides all the SysTick firmware functions.
+      7          ********************************************************************************
+      8          * THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
+      9          * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE TIME.
+     10          * AS A RESULT, STMICROELECTRONICS SHALL NOT BE HELD LIABLE FOR ANY DIRECT,
+     11          * INDIRECT OR CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING FROM THE
+     12          * CONTENT OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE CODING
+     13          * INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
+     14          *******************************************************************************/
+     15          
+     16          /* Includes ------------------------------------------------------------------*/
+     17          #include "stm32f10x_systick.h"
+     18          
+     19          /* Private typedef -----------------------------------------------------------*/
+     20          /* Private define ------------------------------------------------------------*/
+     21          /* ---------------------- SysTick registers bit mask -------------------- */
+     22          /* CTRL TICKINT Mask */
+     23          #define CTRL_TICKINT_Set      ((u32)0x00000002)
+     24          #define CTRL_TICKINT_Reset    ((u32)0xFFFFFFFD)
+     25          
+     26          /* Private macro -------------------------------------------------------------*/
+     27          /* Private variables ---------------------------------------------------------*/
+     28          /* Private function prototypes -----------------------------------------------*/
+     29          /* Private functions ---------------------------------------------------------*/
+     30          
+     31          /*******************************************************************************
+     32          * Function Name  : SysTick_CLKSourceConfig
+     33          * Description    : Configures the SysTick clock source.
+     34          * Input          : - SysTick_CLKSource: specifies the SysTick clock source.
+     35          *                    This parameter can be one of the following values:
+     36          *                       - SysTick_CLKSource_HCLK_Div8: AHB clock divided by 8
+     37          *                         selected as SysTick clock source.
+     38          *                       - SysTick_CLKSource_HCLK: AHB clock selected as
+     39          *                         SysTick clock source.
+     40          * Output         : None
+     41          * Return         : None
+     42          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+     43          void SysTick_CLKSourceConfig(u32 SysTick_CLKSource)
+     44          {
+     45            /* Check the parameters */
+     46            assert_param(IS_SYSTICK_CLK_SOURCE(SysTick_CLKSource));
+     47          
+     48            if (SysTick_CLKSource == SysTick_CLKSource_HCLK)
+   \                     SysTick_CLKSourceConfig:
+   \   00000000   ....               LDR.N    R1,??DataTable4  ;; 0xe000e010
+   \   00000002   0428               CMP      R0,#+4
+   \   00000004   0868               LDR      R0,[R1, #+0]
+   \   00000006   02D1               BNE.N    ??SysTick_CLKSourceConfig_0
+     49            {
+     50              SysTick->CTRL |= SysTick_CLKSource_HCLK;
+   \   00000008   40F00400           ORR      R0,R0,#0x4
+   \   0000000C   01E0               B.N      ??SysTick_CLKSourceConfig_1
+     51            }
+     52            else
+     53            {
+     54              SysTick->CTRL &= SysTick_CLKSource_HCLK_Div8;
+   \                     ??SysTick_CLKSourceConfig_0:
+   \   0000000E   0422               MOVS     R2,#+4
+   \   00000010   9043               BICS     R0,R0,R2
+   \                     ??SysTick_CLKSourceConfig_1:
+   \   00000012   0860               STR      R0,[R1, #+0]
+     55            }
+     56          }
+   \   00000014   7047               BX       LR               ;; return
+     57          
+     58          /*******************************************************************************
+     59          * Function Name  : SysTick_SetReload
+     60          * Description    : Sets SysTick Reload value.
+     61          * Input          : - Reload: SysTick Reload new value.
+     62          *                    This parameter must be a number between 1 and 0xFFFFFF.
+     63          * Output         : None
+     64          * Return         : None
+     65          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+     66          void SysTick_SetReload(u32 Reload)
+     67          {
+     68            /* Check the parameters */
+     69            assert_param(IS_SYSTICK_RELOAD(Reload));
+     70          
+     71            SysTick->LOAD = Reload;
+   \                     SysTick_SetReload:
+   \   00000000   0149               LDR.N    R1,??SysTick_SetReload_0  ;; 0xe000e014
+   \   00000002   0860               STR      R0,[R1, #+0]
+     72          }
+   \   00000004   7047               BX       LR               ;; return
+   \   00000006   00BF               Nop      
+   \                     ??SysTick_SetReload_0:
+   \   00000008   14E000E0           DC32     0xe000e014
+     73          
+     74          /*******************************************************************************
+     75          * Function Name  : SysTick_CounterCmd
+     76          * Description    : Enables or disables the SysTick counter.
+     77          * Input          : - SysTick_Counter: new state of the SysTick counter.
+     78          *                    This parameter can be one of the following values:
+     79          *                       - SysTick_Counter_Disable: Disable counter
+     80          *                       - SysTick_Counter_Enable: Enable counter
+     81          *                       - SysTick_Counter_Clear: Clear counter value to 0
+     82          * Output         : None
+     83          * Return         : None
+     84          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+     85          void SysTick_CounterCmd(u32 SysTick_Counter)
+     86          {
+     87            /* Check the parameters */
+     88            assert_param(IS_SYSTICK_COUNTER(SysTick_Counter));
+     89          
+     90            if (SysTick_Counter == SysTick_Counter_Enable)
+   \                     SysTick_CounterCmd:
+   \   00000000   ....               LDR.N    R1,??DataTable4  ;; 0xe000e010
+   \   00000002   0128               CMP      R0,#+1
+   \   00000004   04D1               BNE.N    ??SysTick_CounterCmd_0
+     91            {
+     92              SysTick->CTRL |= SysTick_Counter_Enable;
+   \   00000006   0868               LDR      R0,[R1, #+0]
+   \   00000008   40F00100           ORR      R0,R0,#0x1
+   \                     ??SysTick_CounterCmd_1:
+   \   0000000C   0860               STR      R0,[R1, #+0]
+   \   0000000E   7047               BX       LR
+     93            }
+     94            else if (SysTick_Counter == SysTick_Counter_Disable) 
+   \                     ??SysTick_CounterCmd_0:
+   \   00000010   6FF00102           MVN      R2,#+1
+   \   00000014   9042               CMP      R0,R2
+   \   00000016   03D1               BNE.N    ??SysTick_CounterCmd_2
+     95            {
+     96              SysTick->CTRL &= SysTick_Counter_Disable;
+   \   00000018   0868               LDR      R0,[R1, #+0]
+   \   0000001A   0122               MOVS     R2,#+1
+   \   0000001C   9043               BICS     R0,R0,R2
+   \   0000001E   F5E7               B.N      ??SysTick_CounterCmd_1
+     97            }
+     98            else /* SysTick_Counter == SysTick_Counter_Clear */
+     99            {
+    100              SysTick->VAL = SysTick_Counter_Clear;
+   \                     ??SysTick_CounterCmd_2:
+   \   00000020   0846               MOV      R0,R1
+   \   00000022   0021               MOVS     R1,#+0
+   \   00000024   8160               STR      R1,[R0, #+8]
+    101            }    
+    102          }
+   \                     ??SysTick_CounterCmd_3:
+   \   00000026   7047               BX       LR               ;; return
+    103          
+    104          /*******************************************************************************
+    105          * Function Name  : SysTick_ITConfig
+    106          * Description    : Enables or disables the SysTick Interrupt.
+    107          * Input          : - NewState: new state of the SysTick Interrupt.
+    108          *                    This parameter can be: ENABLE or DISABLE.
+    109          * Output         : None
+    110          * Return         : None
+    111          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+    112          void SysTick_ITConfig(FunctionalState NewState)
+    113          {
+    114            /* Check the parameters */
+    115            assert_param(IS_FUNCTIONAL_STATE(NewState));
+    116          
+    117            if (NewState != DISABLE)
+   \                     SysTick_ITConfig:
+   \   00000000   ....               LDR.N    R1,??DataTable4  ;; 0xe000e010
+   \   00000002   0028               CMP      R0,#+0
+   \   00000004   0868               LDR      R0,[R1, #+0]
+   \   00000006   02D0               BEQ.N    ??SysTick_ITConfig_0
+    118            {
+    119              SysTick->CTRL |= CTRL_TICKINT_Set;
+   \   00000008   40F00200           ORR      R0,R0,#0x2
+   \   0000000C   01E0               B.N      ??SysTick_ITConfig_1
+    120            }
+    121            else
+    122            {
+    123              SysTick->CTRL &= CTRL_TICKINT_Reset;
+   \                     ??SysTick_ITConfig_0:
+   \   0000000E   0222               MOVS     R2,#+2
+   \   00000010   9043               BICS     R0,R0,R2
+   \                     ??SysTick_ITConfig_1:
+   \   00000012   0860               STR      R0,[R1, #+0]
+    124            }
+    125          }
+   \   00000014   7047               BX       LR               ;; return
+    126          
+    127          /*******************************************************************************
+    128          * Function Name  : SysTick_GetCounter
+    129          * Description    : Gets SysTick counter value.
+    130          * Input          : None
+    131          * Output         : None
+    132          * Return         : SysTick current value
+    133          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+    134          u32 SysTick_GetCounter(void)
+    135          {
+    136            return(SysTick->VAL);
+   \                     SysTick_GetCounter:
+   \   00000000   0148               LDR.N    R0,??SysTick_GetCounter_0  ;; 0xe000e018
+   \   00000002   0068               LDR      R0,[R0, #+0]
+   \   00000004   7047               BX       LR               ;; return
+   \   00000006   00BF               Nop      
+   \                     ??SysTick_GetCounter_0:
+   \   00000008   18E000E0           DC32     0xe000e018
+    137          }
+    138          
+    139          /*******************************************************************************
+    140          * Function Name  : SysTick_GetFlagStatus
+    141          * Description    : Checks whether the specified SysTick flag is set or not.
+    142          * Input          : - SysTick_FLAG: specifies the flag to check.
+    143          *                    This parameter can be one of the following values:
+    144          *                       - SysTick_FLAG_COUNT
+    145          *                       - SysTick_FLAG_SKEW
+    146          *                       - SysTick_FLAG_NOREF
+    147          * Output         : None
+    148          * Return         : None
+    149          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+    150          FlagStatus SysTick_GetFlagStatus(u8 SysTick_FLAG)
+    151          {
+    152            u32 statusreg = 0, tmp = 0 ;
+    153            FlagStatus bitstatus = RESET;
+    154          
+    155            /* Check the parameters */
+    156            assert_param(IS_SYSTICK_FLAG(SysTick_FLAG));
+    157          
+    158            /* Get the SysTick register index */
+    159            tmp = SysTick_FLAG >> 3;
+    160          
+    161            if (tmp == 2) /* The flag to check is in CTRL register */
+   \                     SysTick_GetFlagStatus:
+   \   00000000   C108               LSRS     R1,R0,#+3
+   \   00000002   0229               CMP      R1,#+2
+   \   00000004   19BF               ITTEE    NE 
+   \   00000006   ....               LDRNE.N  R1,??DataTable4  ;; 0xe000e010
+   \   00000008   C968               LDRNE    R1,[R1, #+12]
+    162            {
+    163              statusreg = SysTick->CTRL;
+   \   0000000A   ....               LDREQ.N  R1,??DataTable4  ;; 0xe000e010
+   \   0000000C   0968               LDREQ    R1,[R1, #+0]
+    164            }
+    165            else          /* The flag to check is in CALIB register */
+    166            {
+    167              statusreg = SysTick->CALIB;
+    168            }
+    169          
+    170            if ((statusreg & ((u32)1 << SysTick_FLAG)) != (u32)RESET)
+   \   0000000E   0122               MOVS     R2,#+1
+   \   00000010   02FA00F0           LSL      R0,R2,R0
+   \   00000014   0840               ANDS     R0,R0,R1
+   \   00000016   18BF               IT       NE 
+   \   00000018   0120               MOVNE    R0,#+1
+    171            {
+    172              bitstatus = SET;
+    173            }
+    174            else
+    175            {
+    176              bitstatus = RESET;
+    177            }
+    178            return bitstatus;
+   \   0000001A   40B2               SXTB     R0,R0
+   \   0000001C   7047               BX       LR               ;; return
+    179          }
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable4:
+   \   00000000   10E000E0           DC32     0xe000e010
+    180          
+    181          /******************* (C) COPYRIGHT 2008 STMicroelectronics *****END OF FILE****/
+
+   Maximum stack usage in bytes:
+
+     Function                .cstack
+     --------                -------
+     SysTick_CLKSourceConfig      0
+     SysTick_CounterCmd           0
+     SysTick_GetCounter           0
+     SysTick_GetFlagStatus        0
+     SysTick_ITConfig             0
+     SysTick_SetReload            0
+
+
+   Section sizes:
+
+     Function/Label          Bytes
+     --------------          -----
+     SysTick_CLKSourceConfig   22
+     SysTick_SetReload         12
+     SysTick_CounterCmd        40
+     SysTick_ITConfig          22
+     SysTick_GetCounter        12
+     SysTick_GetFlagStatus     30
+     ??DataTable4               4
+
+ 
+ 142 bytes in section .text
+ 
+ 142 bytes of CODE memory
+
+Errors: none
+Warnings: none

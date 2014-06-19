@@ -1,0 +1,432 @@
+###############################################################################
+#                                                                             #
+# IAR ANSI C/C++ Compiler V5.20.0.50892/W32 for ARM     07/Oct/2009  13:03:55 #
+# Copyright 1999-2008 IAR Systems AB.                                         #
+#                                                                             #
+#    Cpu mode     =  thumb                                                    #
+#    Endian       =  little                                                   #
+#    Source file  =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\library\src\stm32f #
+#                    10x_exti.c                                               #
+#    Command line =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\library\src\stm32f #
+#                    10x_exti.c -D VECT_TAB_FLASH -lC                         #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\List #
+#                    \ -o F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL #
+#                    \Obj\ --debug --endian=little --cpu=Cortex-M3 -e         #
+#                    --char_is_signed --require_prototypes --fpu=None         #
+#                    --dlib_config "C:\Program Files\IAR Systems\Embedded     #
+#                    Workbench 5.0\ARM\INC\DLib_Config_Full.h" -I             #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\ -I                #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\library\inc\ -I    #
+#                    "C:\Program Files\IAR Systems\Embedded Workbench         #
+#                    5.0\ARM\INC\" -Ohz                                       #
+#    List file    =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\List #
+#                    \stm32f10x_exti.lst                                      #
+#    Object file  =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\ #
+#                    stm32f10x_exti.o                                         #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\library\src\stm32f10x_exti.c
+      1          /******************** (C) COPYRIGHT 2008 STMicroelectronics ********************
+      2          * File Name          : stm32f10x_exti.c
+      3          * Author             : MCD Application Team
+      4          * Version            : V2.0.3
+      5          * Date               : 09/22/2008
+      6          * Description        : This file provides all the EXTI firmware functions.
+      7          ********************************************************************************
+      8          * THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
+      9          * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE TIME.
+     10          * AS A RESULT, STMICROELECTRONICS SHALL NOT BE HELD LIABLE FOR ANY DIRECT,
+     11          * INDIRECT OR CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING FROM THE
+     12          * CONTENT OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE CODING
+     13          * INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
+     14          *******************************************************************************/
+     15          
+     16          /* Includes ------------------------------------------------------------------*/
+     17          #include "stm32f10x_exti.h"
+     18          
+     19          /* Private typedef -----------------------------------------------------------*/
+     20          /* Private define ------------------------------------------------------------*/
+     21          #define EXTI_LineNone    ((u32)0x00000)  /* No interrupt selected */
+     22          
+     23          /* Private macro -------------------------------------------------------------*/
+     24          /* Private variables ---------------------------------------------------------*/
+     25          /* Private function prototypes -----------------------------------------------*/
+     26          /* Private functions ---------------------------------------------------------*/
+     27          
+     28          /*******************************************************************************
+     29          * Function Name  : EXTI_DeInit
+     30          * Description    : Deinitializes the EXTI peripheral registers to their default 
+     31          *                  reset values.
+     32          * Input          : None
+     33          * Output         : None
+     34          * Return         : None
+     35          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+     36          void EXTI_DeInit(void)
+     37          {
+     38            EXTI->IMR = 0x00000000;
+   \                     EXTI_DeInit:
+   \   00000000   ....               LDR.N    R0,??DataTable6  ;; 0x40010400
+   \   00000002   0021               MOVS     R1,#+0
+   \   00000004   0160               STR      R1,[R0, #+0]
+     39            EXTI->EMR = 0x00000000;
+   \   00000006   4160               STR      R1,[R0, #+4]
+     40            EXTI->RTSR = 0x00000000; 
+   \   00000008   8160               STR      R1,[R0, #+8]
+     41            EXTI->FTSR = 0x00000000; 
+   \   0000000A   C160               STR      R1,[R0, #+12]
+     42            EXTI->PR = 0x0007FFFF;
+   \   0000000C   0149               LDR.N    R1,??EXTI_DeInit_0  ;; 0x7ffff
+   \   0000000E   4161               STR      R1,[R0, #+20]
+     43          }
+   \   00000010   7047               BX       LR               ;; return
+   \   00000012   00BF               Nop      
+   \                     ??EXTI_DeInit_0:
+   \   00000014   FFFF0700           DC32     0x7ffff
+     44          
+     45          /*******************************************************************************
+     46          * Function Name  : EXTI_Init
+     47          * Description    : Initializes the EXTI peripheral according to the specified
+     48          *                  parameters in the EXTI_InitStruct.
+     49          * Input          : - EXTI_InitStruct: pointer to a EXTI_InitTypeDef structure
+     50          *                    that contains the configuration information for the EXTI
+     51          *                    peripheral.
+     52          * Output         : None
+     53          * Return         : None
+     54          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+     55          void EXTI_Init(EXTI_InitTypeDef* EXTI_InitStruct)
+     56          {
+     57            /* Check the parameters */
+     58            assert_param(IS_EXTI_MODE(EXTI_InitStruct->EXTI_Mode));
+     59            assert_param(IS_EXTI_TRIGGER(EXTI_InitStruct->EXTI_Trigger));
+     60            assert_param(IS_EXTI_LINE(EXTI_InitStruct->EXTI_Line));  
+     61            assert_param(IS_FUNCTIONAL_STATE(EXTI_InitStruct->EXTI_LineCmd));
+     62               
+     63            if (EXTI_InitStruct->EXTI_LineCmd != DISABLE)
+   \                     EXTI_Init:
+   \   00000000   0168               LDR      R1,[R0, #+0]
+   \   00000002   CA43               MVNS     R2,R1
+   \   00000004   ....               LDR.N    R1,??DataTable6  ;; 0x40010400
+   \   00000006   90F90630           LDRSB    R3,[R0, #+6]
+   \   0000000A   002B               CMP      R3,#+0
+   \   0000000C   2ED0               BEQ.N    ??EXTI_Init_0
+     64            {
+     65              /* Clear EXTI line configuration */
+     66              EXTI->IMR &= ~EXTI_InitStruct->EXTI_Line;
+   \   0000000E   D1F800C0           LDR      R12,[R1, #+0]
+   \   00000012   02EA0C02           AND      R2,R2,R12
+   \   00000016   0A60               STR      R2,[R1, #+0]
+     67              EXTI->EMR &= ~EXTI_InitStruct->EXTI_Line;
+   \   00000018   4A68               LDR      R2,[R1, #+4]
+   \   0000001A   0368               LDR      R3,[R0, #+0]
+   \   0000001C   DB43               MVNS     R3,R3
+   \   0000001E   1A40               ANDS     R2,R3,R2
+   \   00000020   4A60               STR      R2,[R1, #+4]
+     68              
+     69              *(vu32 *)(EXTI_BASE + (u32)EXTI_InitStruct->EXTI_Mode)|= EXTI_InitStruct->EXTI_Line;
+   \   00000022   90F90420           LDRSB    R2,[R0, #+4]
+   \   00000026   8A18               ADDS     R2,R1,R2
+   \   00000028   1368               LDR      R3,[R2, #+0]
+   \   0000002A   D0F800C0           LDR      R12,[R0, #+0]
+   \   0000002E   4CEA0303           ORR      R3,R12,R3
+   \   00000032   1360               STR      R3,[R2, #+0]
+     70          
+     71              /* Clear Rising Falling edge configuration */
+     72              EXTI->RTSR &= ~EXTI_InitStruct->EXTI_Line;
+   \   00000034   8A68               LDR      R2,[R1, #+8]
+   \   00000036   0368               LDR      R3,[R0, #+0]
+   \   00000038   DB43               MVNS     R3,R3
+   \   0000003A   1A40               ANDS     R2,R3,R2
+   \   0000003C   8A60               STR      R2,[R1, #+8]
+     73              EXTI->FTSR &= ~EXTI_InitStruct->EXTI_Line;
+   \   0000003E   CA68               LDR      R2,[R1, #+12]
+   \   00000040   0368               LDR      R3,[R0, #+0]
+   \   00000042   DB43               MVNS     R3,R3
+   \   00000044   1A40               ANDS     R2,R3,R2
+   \   00000046   CA60               STR      R2,[R1, #+12]
+     74              
+     75              /* Select the trigger for the selected external interrupts */
+     76              if (EXTI_InitStruct->EXTI_Trigger == EXTI_Trigger_Rising_Falling)
+   \   00000048   90F90520           LDRSB    R2,[R0, #+5]
+   \   0000004C   0368               LDR      R3,[R0, #+0]
+   \   0000004E   102A               CMP      R2,#+16
+   \   00000050   08D1               BNE.N    ??EXTI_Init_1
+     77              {
+     78                /* Rising Falling edge */
+     79                EXTI->RTSR |= EXTI_InitStruct->EXTI_Line;
+   \   00000052   8968               LDR      R1,[R1, #+8]
+   \   00000054   1943               ORRS     R1,R3,R1
+   \   00000056   ....               LDR.N    R2,??DataTable6  ;; 0x40010400
+   \   00000058   9160               STR      R1,[R2, #+8]
+     80                EXTI->FTSR |= EXTI_InitStruct->EXTI_Line;
+   \   0000005A   D168               LDR      R1,[R2, #+12]
+   \   0000005C   0068               LDR      R0,[R0, #+0]
+   \   0000005E   0843               ORRS     R0,R0,R1
+   \   00000060   D060               STR      R0,[R2, #+12]
+   \   00000062   7047               BX       LR
+     81              }
+     82              else
+     83              {
+     84                *(vu32 *)(EXTI_BASE + (u32)EXTI_InitStruct->EXTI_Trigger)|= EXTI_InitStruct->EXTI_Line;
+   \                     ??EXTI_Init_1:
+   \   00000064   8818               ADDS     R0,R1,R2
+   \   00000066   0168               LDR      R1,[R0, #+0]
+   \   00000068   1943               ORRS     R1,R3,R1
+   \   0000006A   04E0               B.N      ??EXTI_Init_2
+     85              }
+     86            }
+     87            else
+     88            {
+     89              /* Disable the selected external lines */
+     90              *(vu32 *)(EXTI_BASE + (u32)EXTI_InitStruct->EXTI_Mode)&= ~EXTI_InitStruct->EXTI_Line;
+   \                     ??EXTI_Init_0:
+   \   0000006C   90F90400           LDRSB    R0,[R0, #+4]
+   \   00000070   0818               ADDS     R0,R1,R0
+   \   00000072   0168               LDR      R1,[R0, #+0]
+   \   00000074   1140               ANDS     R1,R2,R1
+   \                     ??EXTI_Init_2:
+   \   00000076   0160               STR      R1,[R0, #+0]
+     91            }
+     92          }
+   \                     ??EXTI_Init_3:
+   \   00000078   7047               BX       LR               ;; return
+     93          
+     94          /*******************************************************************************
+     95          * Function Name  : EXTI_StructInit
+     96          * Description    : Fills each EXTI_InitStruct member with its reset value.
+     97          * Input          : - EXTI_InitStruct: pointer to a EXTI_InitTypeDef structure
+     98          *                    which will be initialized.
+     99          * Output         : None
+    100          * Return         : None
+    101          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+    102          void EXTI_StructInit(EXTI_InitTypeDef* EXTI_InitStruct)
+    103          {
+    104            EXTI_InitStruct->EXTI_Line = EXTI_LineNone;
+   \                     EXTI_StructInit:
+   \   00000000   0021               MOVS     R1,#+0
+   \   00000002   0160               STR      R1,[R0, #+0]
+    105            EXTI_InitStruct->EXTI_Mode = EXTI_Mode_Interrupt;
+   \   00000004   0171               STRB     R1,[R0, #+4]
+    106            EXTI_InitStruct->EXTI_Trigger = EXTI_Trigger_Falling;
+   \   00000006   0C21               MOVS     R1,#+12
+   \   00000008   4171               STRB     R1,[R0, #+5]
+    107            EXTI_InitStruct->EXTI_LineCmd = DISABLE;
+   \   0000000A   0021               MOVS     R1,#+0
+   \   0000000C   8171               STRB     R1,[R0, #+6]
+    108          }
+   \   0000000E   7047               BX       LR               ;; return
+    109          
+    110          /*******************************************************************************
+    111          * Function Name  : EXTI_GenerateSWInterrupt
+    112          * Description    : Generates a Software interrupt.
+    113          * Input          : - EXTI_Line: specifies the EXTI lines to be enabled or
+    114          *                    disabled.
+    115          *                    This parameter can be any combination of EXTI_Linex where 
+    116          *                    x can be (0..18).
+    117          * Output         : None
+    118          * Return         : None
+    119          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+    120          void EXTI_GenerateSWInterrupt(u32 EXTI_Line)
+    121          {
+    122            /* Check the parameters */
+    123            assert_param(IS_EXTI_LINE(EXTI_Line));
+    124            
+    125            EXTI->SWIER |= EXTI_Line;
+   \                     EXTI_GenerateSWInterrupt:
+   \   00000000   0249               LDR.N    R1,??EXTI_GenerateSWInterrupt_0  ;; 0x40010410
+   \   00000002   0A68               LDR      R2,[R1, #+0]
+   \   00000004   1043               ORRS     R0,R0,R2
+   \   00000006   0860               STR      R0,[R1, #+0]
+    126          }
+   \   00000008   7047               BX       LR               ;; return
+   \   0000000A   00BF               Nop      
+   \                     ??EXTI_GenerateSWInterrupt_0:
+   \   0000000C   10040140           DC32     0x40010410
+    127          
+    128          /*******************************************************************************
+    129          * Function Name  : EXTI_GetFlagStatus
+    130          * Description    : Checks whether the specified EXTI line flag is set or not.
+    131          * Input          : - EXTI_Line: specifies the EXTI line flag to check.
+    132          *                    This parameter can be:
+    133          *                       - EXTI_Linex: External interrupt line x where x(0..18)
+    134          * Output         : None
+    135          * Return         : The new state of EXTI_Line (SET or RESET).
+    136          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+    137          FlagStatus EXTI_GetFlagStatus(u32 EXTI_Line)
+    138          {
+    139            FlagStatus bitstatus = RESET;
+    140          
+    141            /* Check the parameters */
+    142            assert_param(IS_GET_EXTI_LINE(EXTI_Line));
+    143            
+    144            if ((EXTI->PR & EXTI_Line) != (u32)RESET)
+   \                     EXTI_GetFlagStatus:
+   \   00000000   ....               LDR.N    R1,??DataTable7  ;; 0x40010414
+   \   00000002   0968               LDR      R1,[R1, #+0]
+   \   00000004   0840               ANDS     R0,R0,R1
+   \   00000006   18BF               IT       NE 
+   \   00000008   0120               MOVNE    R0,#+1
+    145            {
+    146              bitstatus = SET;
+    147            }
+    148            else
+    149            {
+    150              bitstatus = RESET;
+    151            }
+    152            return bitstatus;
+   \   0000000A   40B2               SXTB     R0,R0
+   \   0000000C   7047               BX       LR               ;; return
+    153          }
+    154          
+    155          /*******************************************************************************
+    156          * Function Name  : EXTI_ClearFlag
+    157          * Description    : Clears the EXTI’s line pending flags.
+    158          * Input          : - EXTI_Line: specifies the EXTI lines flags to clear.
+    159          *                    This parameter can be any combination of EXTI_Linex where 
+    160          *                    x can be (0..18).
+    161          * Output         : None
+    162          * Return         : None
+    163          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+    164          void EXTI_ClearFlag(u32 EXTI_Line)
+    165          {
+    166            /* Check the parameters */
+    167            assert_param(IS_EXTI_LINE(EXTI_Line));
+    168            
+    169            EXTI->PR = EXTI_Line;
+   \                     EXTI_ClearFlag:
+   \   00000000   ....               LDR.N    R1,??DataTable7  ;; 0x40010414
+   \   00000002   0860               STR      R0,[R1, #+0]
+    170          }
+   \   00000004   7047               BX       LR               ;; return
+    171          
+    172          /*******************************************************************************
+    173          * Function Name  : EXTI_GetITStatus
+    174          * Description    : Checks whether the specified EXTI line is asserted or not.
+    175          * Input          : - EXTI_Line: specifies the EXTI line to check.
+    176          *                    This parameter can be:
+    177          *                       - EXTI_Linex: External interrupt line x where x(0..18)
+    178          * Output         : None
+    179          * Return         : The new state of EXTI_Line (SET or RESET).
+    180          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+    181          ITStatus EXTI_GetITStatus(u32 EXTI_Line)
+    182          {
+    183            ITStatus bitstatus = RESET;
+    184            u32 enablestatus = 0;
+    185          
+    186            /* Check the parameters */
+    187            assert_param(IS_GET_EXTI_LINE(EXTI_Line));
+    188            
+    189            enablestatus =  EXTI->IMR & EXTI_Line;
+   \                     EXTI_GetITStatus:
+   \   00000000   ....               LDR.N    R1,??DataTable6  ;; 0x40010400
+   \   00000002   0968               LDR      R1,[R1, #+0]
+   \   00000004   0140               ANDS     R1,R0,R1
+    190          
+    191            if (((EXTI->PR & EXTI_Line) != (u32)RESET) && (enablestatus != (u32)RESET))
+   \   00000006   ....               LDR.N    R2,??DataTable6  ;; 0x40010400
+   \   00000008   5269               LDR      R2,[R2, #+20]
+   \   0000000A   1042               TST      R0,R2
+   \   0000000C   03D0               BEQ.N    ??EXTI_GetITStatus_0
+   \   0000000E   0800               MOVS     R0,R1
+   \   00000010   02D0               BEQ.N    ??EXTI_GetITStatus_1
+   \   00000012   0120               MOVS     R0,#+1
+   \   00000014   00E0               B.N      ??EXTI_GetITStatus_1
+    192            {
+    193              bitstatus = SET;
+    194            }
+    195            else
+    196            {
+    197              bitstatus = RESET;
+   \                     ??EXTI_GetITStatus_0:
+   \   00000016   0020               MOVS     R0,#+0
+    198            }
+    199            return bitstatus;
+   \                     ??EXTI_GetITStatus_1:
+   \   00000018   40B2               SXTB     R0,R0
+   \   0000001A   7047               BX       LR               ;; return
+    200          }
+    201          
+    202          /*******************************************************************************
+    203          * Function Name  : EXTI_ClearITPendingBit
+    204          * Description    : Clears the EXTI’s line pending bits.
+    205          * Input          : - EXTI_Line: specifies the EXTI lines to clear.
+    206          *                    This parameter can be any combination of EXTI_Linex where 
+    207          *                    x can be (0..18).
+    208          * Output         : None
+    209          * Return         : None
+    210          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+    211          void EXTI_ClearITPendingBit(u32 EXTI_Line)
+    212          {
+    213            /* Check the parameters */
+    214            assert_param(IS_EXTI_LINE(EXTI_Line));
+    215            
+    216            EXTI->PR = EXTI_Line;
+   \                     EXTI_ClearITPendingBit:
+   \   00000000   ....               LDR.N    R1,??DataTable7  ;; 0x40010414
+   \   00000002   0860               STR      R0,[R1, #+0]
+    217          }
+   \   00000004   7047               BX       LR               ;; return
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable6:
+   \   00000000   00040140           DC32     0x40010400
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable7:
+   \   00000000   14040140           DC32     0x40010414
+    218          
+    219          /******************* (C) COPYRIGHT 2008 STMicroelectronics *****END OF FILE****/
+
+   Maximum stack usage in bytes:
+
+     Function                 .cstack
+     --------                 -------
+     EXTI_ClearFlag                0
+     EXTI_ClearITPendingBit        0
+     EXTI_DeInit                   0
+     EXTI_GenerateSWInterrupt      0
+     EXTI_GetFlagStatus            0
+     EXTI_GetITStatus              0
+     EXTI_Init                     0
+     EXTI_StructInit               0
+
+
+   Section sizes:
+
+     Function/Label           Bytes
+     --------------           -----
+     EXTI_DeInit                24
+     EXTI_Init                 122
+     EXTI_StructInit            16
+     EXTI_GenerateSWInterrupt   16
+     EXTI_GetFlagStatus         14
+     EXTI_ClearFlag              6
+     EXTI_GetITStatus           28
+     EXTI_ClearITPendingBit      6
+     ??DataTable6                4
+     ??DataTable7                4
+
+ 
+ 240 bytes in section .text
+ 
+ 240 bytes of CODE memory
+
+Errors: none
+Warnings: none

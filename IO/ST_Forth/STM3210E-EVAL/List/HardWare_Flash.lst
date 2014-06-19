@@ -1,0 +1,365 @@
+###############################################################################
+#                                                                             #
+# IAR ANSI C/C++ Compiler V5.20.0.50892/W32 for ARM     07/Oct/2009  13:03:49 #
+# Copyright 1999-2008 IAR Systems AB.                                         #
+#                                                                             #
+#    Cpu mode     =  thumb                                                    #
+#    Endian       =  little                                                   #
+#    Source file  =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\HardWare_Flash.c   #
+#    Command line =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\HardWare_Flash.c   #
+#                    -D VECT_TAB_FLASH -lC F:\CoLtd\Forth\MCU\STM32F10x\ST_Fo #
+#                    rth\STM3210E-EVAL\List\ -o F:\CoLtd\Forth\MCU\STM32F10x\ #
+#                    ST_Forth\STM3210E-EVAL\Obj\ --debug --endian=little      #
+#                    --cpu=Cortex-M3 -e --char_is_signed                      #
+#                    --require_prototypes --fpu=None --dlib_config            #
+#                    "C:\Program Files\IAR Systems\Embedded Workbench         #
+#                    5.0\ARM\INC\DLib_Config_Full.h" -I                       #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\ -I                #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\library\inc\ -I    #
+#                    "C:\Program Files\IAR Systems\Embedded Workbench         #
+#                    5.0\ARM\INC\" -Ohz                                       #
+#    List file    =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\List #
+#                    \HardWare_Flash.lst                                      #
+#    Object file  =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\ #
+#                    HardWare_Flash.o                                         #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\HardWare_Flash.c
+      1          #include "stm32f10x_lib.h"
+      2          #include "platform_config.h"
+      3          
+      4          #include "stm32f10x.h"
+      5          
+      6          
+      7          
+      8          /* Private typedef -----------------------------------------------------------*/
+      9          typedef enum {FAILED = 0, PASSED = !FAILED} TestStatus;
+     10          
+     11          /* Private define ------------------------------------------------------------*/
+     12          #define BootStartAddr     ((u32)0x08000000)
+     13          #define BootEndAddr       ((u32)0x08010000)
+     14          #define UpgradeStartAddr  ((u32)0x08010000)
+     15          #define UpgradeEndAddr    ((u32)0x08020000)
+     16          
+     17          
+     18          
+     19          /* Private macro -------------------------------------------------------------*/
+     20          /* Private variables ---------------------------------------------------------*/  
+
+   \                                 In section .bss, align 4
+     21          u32 EraseCounter = 0x00, Address = 0x00;
+     22          
+     23          vu32 NbrOfPage = 0x00;
+     24          volatile FLASH_Status FLASHStatus;
+   \                     FLASHStatus:
+   \   00000000                      DS8 1
+     25          volatile TestStatus MemoryProgramStatus;
+   \                     MemoryProgramStatus:
+   \   00000001                      DS8 1
+   \   00000002                      DS8 2
+   \                     EraseCounter:
+   \   00000004                      DS8 4
+   \                     Address:
+   \   00000008                      DS8 4
+   \                     NbrOfPage:
+   \   0000000C                      DS8 4
+     26          extern ErrorStatus HSEStartUpStatus;
+     27          
+     28          
+     29          extern unsigned char RevBuff[];
+     30          extern unsigned char  UnZipBuf[];
+     31          extern unsigned char TestMode;
+     32          extern unsigned char FlashMark[10];
+     33          
+     34          
+     35          extern void __iar_program_start( void );
+     36          
+     37          
+     38          void UG(void) @"FastProcRAM";
+     39          void FlashMemRead(unsigned char *Dest,unsigned char *Source,unsigned long Length);
+     40          unsigned char Flash_Erase(unsigned char Sector);
+     41          
+     42          void UG1(void)  @"FastProcRAM" ;
+     43          
+     44          
+     45          
+     46          
+     47          
+
+   \                                 In section .text, align 4, keep-with-next
+     48          void FlashMemRead(unsigned char *Dest,unsigned char *Source,unsigned long Length)
+     49          {
+     50            unsigned long i;
+     51            for(i=0;i<Length;i++)
+   \                     FlashMemRead:
+   \   00000000   0023               MOVS     R3,#+0
+   \   00000002   04E0               B.N      ??FlashMemRead_0
+     52              Dest[i]=Source[i] ;
+   \                     ??FlashMemRead_1:
+   \   00000004   13F801C0           LDRB     R12,[R3, R1]
+   \   00000008   03F800C0           STRB     R12,[R3, R0]
+   \   0000000C   5B1C               ADDS     R3,R3,#+1
+   \                     ??FlashMemRead_0:
+   \   0000000E   9342               CMP      R3,R2
+   \   00000010   F8D3               BCC.N    ??FlashMemRead_1
+     53          }
+   \   00000012   7047               BX       LR               ;; return
+     54          
+     55          
+
+   \                                 In section .text, align 4, keep-with-next
+     56          unsigned char Flash_Erase(unsigned char Sector)
+     57          {
+     58          
+     59            //unsigned char Pass;
+     60            
+     61            /*Dest_Adr = ((char*)0x80000+Sector*0x10000) ;
+     62            
+     63            Dest_char = 0x00 ; // byte write for clear
+     64            disable_interrupt();
+     65            //Flash_Wr() ;
+     66            asm("jsr.a 06000H");
+     67            enable_interrupt();
+     68            
+     69            Dest_char = Sector ; 
+     70            
+     71            //Flash_Sec_Erase();
+     72            asm("jsr.a 06100H");
+     73            
+     74            dly_ms(5) ;
+     75            
+     76            // check the erase data is OK or not 
+     77            if( *Dest_Adr != 0xFF ){ 
+     78              Pass = 0 ;
+     79              FlashWriFlg=100; //Try Only By Lee    
+     80            }else
+     81              Pass = 1 ;*/	
+     82            return(1);
+   \                     Flash_Erase:
+   \   00000000   0120               MOVS     R0,#+1
+   \   00000002   7047               BX       LR               ;; return
+     83          
+     84          }/*END Flash_Erase function*/
+     85          
+
+   \                                 In section FastProcRAM, align 4, keep-with-next
+     86          void UG(void) @"FastProcRAM"
+     87          {
+   \                     UG:
+   \   00000000   F8B5               PUSH     {R3-R7,LR}
+     88            unsigned long i;
+     89            FLASHStatus = FLASH_COMPLETE;
+   \   00000002   364C               LDR.N    R4,??UG_0        ;; FLASHStatus
+   \   00000004   0420               MOVS     R0,#+4
+   \   00000006   2070               STRB     R0,[R4, #+0]
+     90            MemoryProgramStatus = PASSED;
+   \   00000008   0120               MOVS     R0,#+1
+   \   0000000A   6070               STRB     R0,[R4, #+1]
+     91            
+     92            if (TestMode==1)
+   \   0000000C   344E               LDR.N    R6,??UG_0+0x4    ;; 0x8010000
+   \   0000000E   354D               LDR.N    R5,??UG_0+0x8    ;; UnZipBuf
+   \   00000010   3548               LDR.N    R0,??UG_0+0xC    ;; TestMode
+   \   00000012   0078               LDRB     R0,[R0, #+0]
+   \   00000014   0128               CMP      R0,#+1
+   \   00000016   2ED1               BNE.N    ??UG_1
+     93            {  
+     94            	
+     95          //	EraseSector(0x10000);
+     96          //	ProgramPage(0x10000,65536,(u16*)UnZipBuf);    
+     97            /* Unlock the Flash Program Erase controller */
+     98              FLASH_Unlock();
+   \   00000018   ........           BL       FLASH_Unlock
+     99            /* Define the number of page to be erased */
+    100              NbrOfPage = (UpgradeEndAddr - UpgradeStartAddr) / FLASH_PAGE_SIZE;
+   \   0000001C   2020               MOVS     R0,#+32
+   \   0000001E   E060               STR      R0,[R4, #+12]
+    101            /* Clear All pending flags */
+    102              FLASH_ClearFlag(FLASH_FLAG_BSY | FLASH_FLAG_EOP | FLASH_FLAG_PGERR | FLASH_FLAG_WRPRTERR);	
+   \   00000020   3520               MOVS     R0,#+53
+   \   00000022   ........           BL       FLASH_ClearFlag
+    103            /* Erase the FLASH pages */
+    104              for(EraseCounter = 0; (EraseCounter < NbrOfPage) && (FLASHStatus == FLASH_COMPLETE); EraseCounter++)
+   \   00000026   0020               MOVS     R0,#+0
+   \   00000028   09E0               B.N      ??UG_2
+    105              {
+    106                FLASHStatus = FLASH_ErasePage(UpgradeStartAddr + (FLASH_PAGE_SIZE * EraseCounter));    
+   \                     ??UG_3:
+   \   0000002A   06EBC020           ADD      R0,R6,R0, LSL #+11
+   \   0000002E   ........           BL       FLASH_ErasePage
+   \   00000032   2070               STRB     R0,[R4, #+0]
+    107                FLASH_ClearFlag(FLASH_FLAG_BSY | FLASH_FLAG_EOP | FLASH_FLAG_PGERR | FLASH_FLAG_WRPRTERR);	
+   \   00000034   3520               MOVS     R0,#+53
+   \   00000036   ........           BL       FLASH_ClearFlag
+    108              }    
+   \   0000003A   6068               LDR      R0,[R4, #+4]
+   \   0000003C   401C               ADDS     R0,R0,#+1
+   \                     ??UG_2:
+   \   0000003E   6060               STR      R0,[R4, #+4]
+   \   00000040   6068               LDR      R0,[R4, #+4]
+   \   00000042   E168               LDR      R1,[R4, #+12]
+   \   00000044   8842               CMP      R0,R1
+   \   00000046   03D2               BCS.N    ??UG_4
+   \   00000048   94F90010           LDRSB    R1,[R4, #+0]
+   \   0000004C   0429               CMP      R1,#+4
+   \   0000004E   ECD0               BEQ.N    ??UG_3
+    109          // Program
+    110              Address = UpgradeStartAddr;
+   \                     ??UG_4:
+   \   00000050   A660               STR      R6,[R4, #+8]
+    111              i=0;
+   \   00000052   0027               MOVS     R7,#+0
+   \                     ??UG_5:
+   \   00000054   94F90000           LDRSB    R0,[R4, #+0]
+   \   00000058   0428               CMP      R0,#+4
+   \   0000005A   3CD1               BNE.N    ??UG_6
+    112              while((Address < UpgradeEndAddr) && (FLASHStatus == FLASH_COMPLETE))
+    113              {
+    114                FLASHStatus = FLASH_ProgramWord(Address,*((u32 *)(UnZipBuf+i)));
+   \   0000005C   7959               LDR      R1,[R7, R5]
+   \   0000005E   A068               LDR      R0,[R4, #+8]
+   \   00000060   ........           BL       FLASH_ProgramWord
+   \   00000064   2070               STRB     R0,[R4, #+0]
+    115                Address = Address + 4;
+   \   00000066   A068               LDR      R0,[R4, #+8]
+   \   00000068   001D               ADDS     R0,R0,#+4
+   \   0000006A   A060               STR      R0,[R4, #+8]
+    116                i=i+4;
+   \   0000006C   3F1D               ADDS     R7,R7,#+4
+    117              }      
+   \   0000006E   1F49               LDR.N    R1,??UG_0+0x10   ;; 0x8020000
+   \   00000070   8842               CMP      R0,R1
+   \   00000072   30D2               BCS.N    ??UG_6
+   \   00000074   EEE7               B.N      ??UG_5
+    118            }	
+    119            else
+    120            {
+    121          //    EraseSector(0x10000);    
+    122          //	EraseSector(0x00000);
+    123            /* Unlock the Flash Program Erase controller */
+    124              FLASH_Unlock();
+   \                     ??UG_1:
+   \   00000076   ........           BL       FLASH_Unlock
+    125            /* Define the number of page to be erased */
+    126              NbrOfPage = (UpgradeEndAddr - BootStartAddr) / FLASH_PAGE_SIZE;
+   \   0000007A   4020               MOVS     R0,#+64
+   \   0000007C   E060               STR      R0,[R4, #+12]
+    127            /* Clear All pending flags */
+    128              FLASH_ClearFlag(FLASH_FLAG_BSY | FLASH_FLAG_EOP | FLASH_FLAG_PGERR | FLASH_FLAG_WRPRTERR);	
+   \   0000007E   3520               MOVS     R0,#+53
+   \   00000080   ........           BL       FLASH_ClearFlag
+    129            /* Erase the FLASH pages */
+    130              for(EraseCounter = 0; (EraseCounter < NbrOfPage) && (FLASHStatus == FLASH_COMPLETE); EraseCounter++)
+   \   00000084   0020               MOVS     R0,#+0
+   \   00000086   0AE0               B.N      ??UG_7
+    131              {
+    132                FLASHStatus = FLASH_ErasePage(BootStartAddr + (FLASH_PAGE_SIZE * EraseCounter));    
+   \                     ??UG_8:
+   \   00000088   C002               LSLS     R0,R0,#+11
+   \   0000008A   00F10060           ADD      R0,R0,#+134217728
+   \   0000008E   ........           BL       FLASH_ErasePage
+   \   00000092   2070               STRB     R0,[R4, #+0]
+    133                FLASH_ClearFlag(FLASH_FLAG_BSY | FLASH_FLAG_EOP | FLASH_FLAG_PGERR | FLASH_FLAG_WRPRTERR);	
+   \   00000094   3520               MOVS     R0,#+53
+   \   00000096   ........           BL       FLASH_ClearFlag
+    134              }    
+   \   0000009A   6068               LDR      R0,[R4, #+4]
+   \   0000009C   401C               ADDS     R0,R0,#+1
+   \                     ??UG_7:
+   \   0000009E   6060               STR      R0,[R4, #+4]
+   \   000000A0   6068               LDR      R0,[R4, #+4]
+   \   000000A2   E168               LDR      R1,[R4, #+12]
+   \   000000A4   8842               CMP      R0,R1
+   \   000000A6   03D2               BCS.N    ??UG_9
+   \   000000A8   94F90010           LDRSB    R1,[R4, #+0]
+   \   000000AC   0429               CMP      R1,#+4
+   \   000000AE   EBD0               BEQ.N    ??UG_8
+    135           
+    136          //	ProgramPage(0x00000,65536,(u16*)UnZipBuf);    
+    137          // Program
+    138              Address = BootStartAddr;
+   \                     ??UG_9:
+   \   000000B0   4FF00060           MOV      R0,#+134217728
+   \   000000B4   A060               STR      R0,[R4, #+8]
+    139              i=0;
+   \   000000B6   0027               MOVS     R7,#+0
+   \                     ??UG_10:
+   \   000000B8   94F90000           LDRSB    R0,[R4, #+0]
+   \   000000BC   0428               CMP      R0,#+4
+   \   000000BE   0AD1               BNE.N    ??UG_6
+    140              while((Address < BootEndAddr) && (FLASHStatus == FLASH_COMPLETE))
+    141              {
+    142                FLASHStatus = FLASH_ProgramWord(Address,*((u32 *)(UnZipBuf+i)));
+   \   000000C0   7959               LDR      R1,[R7, R5]
+   \   000000C2   A068               LDR      R0,[R4, #+8]
+   \   000000C4   ........           BL       FLASH_ProgramWord
+   \   000000C8   2070               STRB     R0,[R4, #+0]
+    143                Address = Address + 4;
+   \   000000CA   A068               LDR      R0,[R4, #+8]
+   \   000000CC   001D               ADDS     R0,R0,#+4
+   \   000000CE   A060               STR      R0,[R4, #+8]
+    144                i=i+4;
+   \   000000D0   3F1D               ADDS     R7,R7,#+4
+    145              }      
+   \   000000D2   B042               CMP      R0,R6
+   \   000000D4   F0D3               BCC.N    ??UG_10
+    146            }
+    147            
+    148          // Clear ExtSRAM  
+    149          //	for(i=0x81008000;i<0x8107ffff;i++)
+    150          //        {
+    151          //          M8( i ) =0;
+    152          //        }	
+    153            
+    154          // Reset ST_ArmCore
+    155              NVIC_GenerateCoreReset();  
+   \                     ??UG_6:
+   \   000000D6   ........           BL       NVIC_GenerateCoreReset
+    156                while(1);
+   \                     ??UG_11:
+   \   000000DA   FEE7               B.N      ??UG_11
+   \                     ??UG_0:
+   \   000000DC   ........           DC32     FLASHStatus
+   \   000000E0   00000108           DC32     0x8010000
+   \   000000E4   ........           DC32     UnZipBuf
+   \   000000E8   ........           DC32     TestMode
+   \   000000EC   00000208           DC32     0x8020000
+    157          }
+    158          
+    159          
+    160          
+
+   Maximum stack usage in bytes:
+
+     Function     .cstack
+     --------     -------
+     FlashMemRead      0
+     Flash_Erase       0
+     UG                0
+
+
+   Section sizes:
+
+     Function/Label      Bytes
+     --------------      -----
+     FLASHStatus           16
+     MemoryProgramStatus
+     EraseCounter
+     Address
+     NbrOfPage
+     FlashMemRead          20
+     Flash_Erase            4
+     UG                   240
+
+ 
+  16 bytes in section .bss
+  24 bytes in section .text
+ 240 bytes in section FastProcRAM
+ 
+ 264 bytes of CODE memory
+  16 bytes of DATA memory
+
+Errors: none
+Warnings: none

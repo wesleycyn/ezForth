@@ -1,0 +1,165 @@
+###############################################################################
+#                                                                             #
+# IAR ANSI C/C++ Compiler V5.20.0.50892/W32 for ARM     07/Oct/2009  13:03:48 #
+# Copyright 1999-2008 IAR Systems AB.                                         #
+#                                                                             #
+#    Cpu mode     =  thumb                                                    #
+#    Endian       =  little                                                   #
+#    Source file  =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\Configuration_RTC. #
+#                    c                                                        #
+#    Command line =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\Configuration_RTC. #
+#                    c -D VECT_TAB_FLASH -lC F:\CoLtd\Forth\MCU\STM32F10x\ST_ #
+#                    Forth\STM3210E-EVAL\List\ -o                             #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\ #
+#                     --debug --endian=little --cpu=Cortex-M3 -e              #
+#                    --char_is_signed --require_prototypes --fpu=None         #
+#                    --dlib_config "C:\Program Files\IAR Systems\Embedded     #
+#                    Workbench 5.0\ARM\INC\DLib_Config_Full.h" -I             #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\ -I                #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\library\inc\ -I    #
+#                    "C:\Program Files\IAR Systems\Embedded Workbench         #
+#                    5.0\ARM\INC\" -Ohz                                       #
+#    List file    =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\List #
+#                    \Configuration_RTC.lst                                   #
+#    Object file  =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\ #
+#                    Configuration_RTC.o                                      #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\Configuration_RTC.c
+      1          #include "stm32f10x_lib.h"
+      2          void RTC_Configuration(void);
+      3          
+      4          /*******************************************************************************
+      5          * Function Name  : RTC_Configuration
+      6          * Description    : Configures the RTC.
+      7          * Input          : None
+      8          * Output         : None
+      9          * Return         : None
+     10          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+     11          void RTC_Configuration(void)
+     12          {
+   \                     RTC_Configuration:
+   \   00000000   10B5               PUSH     {R4,LR}
+     13            
+     14              u32 TimeVar;
+     15              
+     16              
+     17            /* Enable PWR and BKP clocks */
+     18            RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR | RCC_APB1Periph_BKP, ENABLE);
+   \   00000002   0121               MOVS     R1,#+1
+   \   00000004   4FF0C050           MOV      R0,#+402653184
+   \   00000008   ........           BL       RCC_APB1PeriphClockCmd
+     19          
+     20            /* Allow access to BKP Domain */
+     21            PWR_BackupAccessCmd(ENABLE);
+   \   0000000C   0120               MOVS     R0,#+1
+   \   0000000E   ........           BL       PWR_BackupAccessCmd
+     22          
+     23            /* Reset Backup Domain */
+     24            BKP_DeInit();
+   \   00000012   ........           BL       BKP_DeInit
+     25          
+     26            /* Enable LSE */
+     27            RCC_LSEConfig(RCC_LSE_ON);
+   \   00000016   0120               MOVS     R0,#+1
+   \   00000018   ........           BL       RCC_LSEConfig
+     28            /* Wait till LSE is ready */
+     29            while (RCC_GetFlagStatus(RCC_FLAG_LSERDY) == RESET)
+   \                     ??RTC_Configuration_0:
+   \   0000001C   4120               MOVS     R0,#+65
+   \   0000001E   ........           BL       RCC_GetFlagStatus
+   \   00000022   0028               CMP      R0,#+0
+   \   00000024   FAD0               BEQ.N    ??RTC_Configuration_0
+     30            {}
+     31          
+     32            
+     33          
+     34            
+     35            TimeVar=RTC_GetCounter();  
+   \   00000026   ........           BL       RTC_GetCounter
+   \   0000002A   0400               MOVS     R4,R0
+     36            
+     37            
+     38            /* Select LSE as RTC Clock Source */
+     39            RCC_RTCCLKConfig(RCC_RTCCLKSource_LSE);
+   \   0000002C   4FF48070           MOV      R0,#+256
+   \   00000030   ........           BL       RCC_RTCCLKConfig
+     40          
+     41            /* Enable RTC Clock */
+     42            RCC_RTCCLKCmd(ENABLE);
+   \   00000034   0120               MOVS     R0,#+1
+   \   00000036   ........           BL       RCC_RTCCLKCmd
+     43          
+     44            
+     45          
+     46            
+     47            
+     48            /* Wait for RTC registers synchronization */
+     49            RTC_WaitForSynchro();
+   \   0000003A   ........           BL       RTC_WaitForSynchro
+     50          
+     51            /* Wait until last write operation on RTC registers has finished */
+     52            RTC_WaitForLastTask();
+   \   0000003E   ........           BL       RTC_WaitForLastTask
+     53          
+     54            
+     55            
+     56             RTC_SetCounter(TimeVar);
+   \   00000042   2000               MOVS     R0,R4
+   \   00000044   ........           BL       RTC_SetCounter
+     57            
+     58            /* Wait until last write operation on RTC registers has finished */
+     59            RTC_WaitForLastTask();    
+   \   00000048   ........           BL       RTC_WaitForLastTask
+     60            
+     61            
+     62            
+     63            /* Enable the RTC Second */
+     64            RTC_ITConfig(RTC_IT_SEC, ENABLE);
+   \   0000004C   0121               MOVS     R1,#+1
+   \   0000004E   0120               MOVS     R0,#+1
+   \   00000050   ........           BL       RTC_ITConfig
+     65          
+     66            /* Wait until last write operation on RTC registers has finished */
+     67            RTC_WaitForLastTask();
+   \   00000054   ........           BL       RTC_WaitForLastTask
+     68          
+     69            /* Set RTC prescaler: set RTC period to 1sec */
+     70            RTC_SetPrescaler(32767); /* RTC period = RTCCLK/RTC_PR = (32.768 KHz)/(32767+1) */
+   \   00000058   47F6FF70           MOVW     R0,#+32767
+   \   0000005C   ........           BL       RTC_SetPrescaler
+     71          
+     72            /* Wait until last write operation on RTC registers has finished */
+     73            RTC_WaitForLastTask();
+   \   00000060   BDE81040           POP      {R4,LR}
+   \   00000064   ........           B.W      RTC_WaitForLastTask
+     74            
+     75            
+     76            
+     77            
+     78          }
+
+   Maximum stack usage in bytes:
+
+     Function          .cstack
+     --------          -------
+     RTC_Configuration      0
+
+
+   Section sizes:
+
+     Function/Label    Bytes
+     --------------    -----
+     RTC_Configuration  104
+
+ 
+ 104 bytes in section .text
+ 
+ 104 bytes of CODE memory
+
+Errors: none
+Warnings: none

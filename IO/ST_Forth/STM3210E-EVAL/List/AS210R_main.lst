@@ -1,0 +1,447 @@
+###############################################################################
+#                                                                             #
+# IAR ANSI C/C++ Compiler V5.20.0.50892/W32 for ARM     05/May/2009  18:27:44 #
+# Copyright 1999-2008 IAR Systems AB.                                         #
+#                                                                             #
+#    Cpu mode     =  thumb                                                    #
+#    Endian       =  little                                                   #
+#    Source file  =  D:\wesley\AS210R_ST\AS210R_main.c                        #
+#    Command line =  D:\wesley\AS210R_ST\AS210R_main.c -D VECT_TAB_FLASH -lC  #
+#                    D:\wesley\AS210R_ST\STM3210E-EVAL\List\ -o               #
+#                    D:\wesley\AS210R_ST\STM3210E-EVAL\Obj\ --no_cse          #
+#                    --no_unroll --no_inline --no_code_motion --no_tbaa       #
+#                    --no_clustering --no_scheduling --debug --endian=little  #
+#                    --cpu=Cortex-M3 -e --char_is_signed                      #
+#                    --require_prototypes --fpu=None --dlib_config            #
+#                    "C:\Program Files\IAR Systems\Embedded Workbench         #
+#                    5.0\ARM\INC\DLib_Config_Full.h" -I D:\wesley\AS210R_ST\  #
+#                    -I D:\wesley\AS210R_ST\library\inc\ -I "C:\Program       #
+#                    Files\IAR Systems\Embedded Workbench 5.0\ARM\INC\" -On   #
+#    List file    =  D:\wesley\AS210R_ST\STM3210E-EVAL\List\AS210R_main.lst   #
+#    Object file  =  D:\wesley\AS210R_ST\STM3210E-EVAL\Obj\AS210R_main.o      #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+D:\wesley\AS210R_ST\AS210R_main.c
+      1          
+      2          
+      3          
+      4          
+      5          #include <intrinsics.h>
+      6          #include "stm32f10x_lib.h"
+      7          
+      8          
+      9          
+     10          
+     11          #include <string.h>
+     12          
+     13          #include <stdio.h>
+     14          
+     15          #include "typedef.h"
+
+  typedef unsigned char u8;
+                        ^
+"D:\wesley\AS210R_ST\typedef.h",1  Warning[Pe301]: typedef name has already
+          been declared (with same type)
+
+  typedef unsigned short u16;
+                         ^
+"D:\wesley\AS210R_ST\typedef.h",3  Warning[Pe301]: typedef name has already
+          been declared (with same type)
+
+  typedef unsigned long u32;
+                        ^
+"D:\wesley\AS210R_ST\typedef.h",5  Warning[Pe301]: typedef name has already
+          been declared (with same type)
+     16          #include "ioReFlex.h"
+     17          #include "Upgrade.h"
+     18          #include "LED_Effect.h"
+     19          
+     20          
+     21          
+     22          
+     23          
+     24          
+     25          
+     26          
+     27          
+     28          
+     29          extern void SelfTest(void);
+     30          extern void self_test_entry(void); 
+     31          extern void HardWare_Init(void);
+     32          extern unsigned long  Decompression(unsigned char *Source,unsigned char *Dest,unsigned long SourceSize);
+     33          extern void HardWare_Init(void);
+     34          extern void self_test_2(void);
+     35          extern  void UG(void) ;
+     36          extern void  LED_OFF(void);
+     37          
+
+   \                                 In section .data, align 4
+     38          unsigned char* UpgradeROM     =(unsigned char*)		0x08010000;
+   \                     UpgradeROM:
+   \   00000000   00000108           DC32 8010000H
+
+   \                                 In section .bss, align 4
+     39          u8 UnZipBuf[65536*2];
+   \                     UnZipBuf:
+   \   00000000                      DS8 131072
+     40          extern const char ID_Str[];
+     41          
+     42          
+     43          
+     44          
+     45          
+     46          
+     47          
+     48          int chk_update(void);
+     49          void main_Func (void);
+     50          
+     51          extern void Test_USART2(void);
+     52          
+     53          
+     54          //
+     55          #define ITM_Port8(n)    (*((volatile unsigned char *)(0xE0000000+4*n)))
+     56          #define ITM_Port16(n)   (*((volatile unsigned short*)(0xE0000000+4*n)))
+     57          #define ITM_Port32(n)   (*((volatile unsigned long *)(0xE0000000+4*n)))
+     58          
+     59          #define DEMCR           (*((volatile unsigned long *)(0xE000EDFC)))
+     60          #define TRCENA          0x01000000
+     61          
+     62          struct __FILE { int handle; /* Add whatever you need here */ };
+
+   \                                 In section .bss, align 4
+     63          FILE __stdout;
+   \                     __stdout:
+   \   00000000                      DS8 4
+
+   \                                 In section .bss, align 4
+     64          FILE __stdin;
+   \                     __stdin:
+   \   00000000                      DS8 4
+     65          
+
+   \                                 In section .text, align 4, keep-with-next
+     66          int fputc(int ch, FILE *f) {
+     67            if (DEMCR & TRCENA) {
+   \                     fputc:
+   \   00000000   054A               LDR.N    R2,??fputc_0     ;; 0xe000edfc
+   \   00000002   1268               LDR      R2,[R2, #+0]
+   \   00000004   12F0807F           TST      R2,#0x1000000
+   \   00000008   05D0               BEQ.N    ??fputc_1
+     68              while (ITM_Port32(1) == 0);
+   \                     ??fputc_2:
+   \   0000000A   044A               LDR.N    R2,??fputc_0+0x4  ;; 0xe0000004
+   \   0000000C   1268               LDR      R2,[R2, #+0]
+   \   0000000E   002A               CMP      R2,#+0
+   \   00000010   FBD0               BEQ.N    ??fputc_2
+     69              ITM_Port8(1) = ch;
+   \   00000012   024A               LDR.N    R2,??fputc_0+0x4  ;; 0xe0000004
+   \   00000014   1070               STRB     R0,[R2, #+0]
+     70            }
+     71            return(ch);
+   \                     ??fputc_1:
+   \   00000016   7047               BX       LR               ;; return
+   \                     ??fputc_0:
+   \   00000018   FCED00E0           DC32     0xe000edfc
+   \   0000001C   040000E0           DC32     0xe0000004
+     72          }
+     73          // ITM End
+     74          
+     75          
+
+   \                                 In section .text, align 4, keep-with-next
+     76          int main (void){
+   \                     main:
+   \   00000000   80B5               PUSH     {R7,LR}
+     77            
+     78            
+     79          printf("ITM Output Debug Trace message%d\n",101);  
+   \   00000002   6521               MOVS     R1,#+101
+   \   00000004   0348               LDR.N    R0,??main_0      ;; `?<Constant "ITM Output Debug Trac...">`
+   \   00000006   ........           BL       printf
+     80            
+     81           // HardWare_Init();
+     82           main_Func();
+   \   0000000A   ........           BL       main_Func
+     83           
+     84           
+     85           
+     86          }
+   \   0000000E   0020               MOVS     R0,#+0
+   \   00000010   02BD               POP      {R1,PC}          ;; return
+   \   00000012   00BF               Nop      
+   \                     ??main_0:
+   \   00000014   ........           DC32     `?<Constant "ITM Output Debug Trac...">`
+     87          
+     88          
+     89          #pragma optimize=none
+
+   \                                 In section .text, align 4, keep-with-next
+     90          int chk_update(void) 
+     91          {
+   \                     chk_update:
+   \   00000000   2DE9F041           PUSH     {R4-R8,LR}
+     92          
+     93            unsigned char *addr;
+     94            unsigned short chksum,versum;
+     95            unsigned long i;
+     96            int flag;
+     97           
+     98            SYS_sec = 0;
+   \   00000004   1B48               LDR.N    R0,??chk_update_0  ;; SYS_sec
+   \   00000006   0021               MOVS     R1,#+0
+   \   00000008   0160               STR      R1,[R0, #+0]
+     99            
+    100            if ( memcmp(ID_Str,"GApollo LED Sign",16) != 0 )
+   \   0000000A   1022               MOVS     R2,#+16
+   \   0000000C   1A49               LDR.N    R1,??chk_update_0+0x4  ;; `?<Constant "GApollo LED Sign">`
+   \   0000000E   1B48               LDR.N    R0,??chk_update_0+0x8  ;; ID_Str
+   \   00000010   ........           BL       memcmp
+   \   00000014   0028               CMP      R0,#+0
+   \   00000016   01D0               BEQ.N    ??chk_update_1
+    101              return ( 0 );
+   \   00000018   0020               MOVS     R0,#+0
+   \   0000001A   28E0               B.N      ??chk_update_2
+    102            addr = (unsigned char *)0x08010000;
+   \                     ??chk_update_1:
+   \   0000001C   1848               LDR.N    R0,??chk_update_0+0xC  ;; 0x8010000
+   \   0000001E   0400               MOVS     R4,R0
+    103            for( chksum = 0 , flag = 0 , i = 0 ; i < 0xFFFEL ; i++ ){
+   \   00000020   0020               MOVS     R0,#+0
+   \   00000022   0500               MOVS     R5,R0
+   \   00000024   0020               MOVS     R0,#+0
+   \   00000026   8046               MOV      R8,R0
+   \   00000028   0020               MOVS     R0,#+0
+   \   0000002A   0700               MOVS     R7,R0
+   \                     ??chk_update_3:
+   \   0000002C   4FF6FE70           MOVW     R0,#+65534
+   \   00000030   8742               CMP      R7,R0
+   \   00000032   08D2               BCS.N    ??chk_update_4
+    104              if ( addr[i] != 0 ) flag = 1; 
+   \   00000034   385D               LDRB     R0,[R7, R4]
+   \   00000036   0028               CMP      R0,#+0
+   \   00000038   01D0               BEQ.N    ??chk_update_5
+   \   0000003A   0120               MOVS     R0,#+1
+   \   0000003C   8046               MOV      R8,R0
+    105              chksum = chksum + ( addr[i] & 0xFFFFL );
+   \                     ??chk_update_5:
+   \   0000003E   385D               LDRB     R0,[R7, R4]
+   \   00000040   4519               ADDS     R5,R0,R5
+    106            } 
+   \   00000042   7F1C               ADDS     R7,R7,#+1
+   \   00000044   F2E7               B.N      ??chk_update_3
+    107            versum = addr[0xFFFEL];
+   \                     ??chk_update_4:
+   \   00000046   4FF6FE70           MOVW     R0,#+65534
+   \   0000004A   005D               LDRB     R0,[R0, R4]
+   \   0000004C   0600               MOVS     R6,R0
+    108            versum = ( versum << 8 ) + addr[0xFFFFL];
+   \   0000004E   B6B2               UXTH     R6,R6            ;; ZeroExt  R6,R6,#+16,#+16
+   \   00000050   4FF6FF70           MOVW     R0,#+65535
+   \   00000054   005D               LDRB     R0,[R0, R4]
+   \   00000056   10EB0626           ADDS     R6,R0,R6, LSL #+8
+    109            if ( ( chksum == versum ) && ( flag == 1) )
+   \   0000005A   ADB2               UXTH     R5,R5            ;; ZeroExt  R5,R5,#+16,#+16
+   \   0000005C   B6B2               UXTH     R6,R6            ;; ZeroExt  R6,R6,#+16,#+16
+   \   0000005E   B542               CMP      R5,R6
+   \   00000060   04D1               BNE.N    ??chk_update_6
+   \   00000062   B8F1010F           CMP      R8,#+1
+   \   00000066   01D1               BNE.N    ??chk_update_6
+    110              return ( 1 );
+   \   00000068   0120               MOVS     R0,#+1
+   \   0000006A   00E0               B.N      ??chk_update_2
+    111            else  
+    112             
+    113            return ( 0 );
+   \                     ??chk_update_6:
+   \   0000006C   0020               MOVS     R0,#+0
+   \                     ??chk_update_2:
+   \   0000006E   BDE8F081           POP      {R4-R8,PC}       ;; return
+   \   00000072   00BF               Nop      
+   \                     ??chk_update_0:
+   \   00000074   ........           DC32     SYS_sec
+   \   00000078   ........           DC32     `?<Constant "GApollo LED Sign">`
+   \   0000007C   ........           DC32     ID_Str
+   \   00000080   00000108           DC32     0x8010000
+    114          }
+    115          
+
+   \                                 In section .text, align 4, keep-with-next
+    116          void main_Func (void)
+    117          {        
+   \                     main_Func:
+   \   00000000   80B5               PUSH     {R7,LR}
+    118              
+    119          //UG1();
+    120          //   init_UART() ;
+    121          LED_change=0;
+   \   00000002   1748               LDR.N    R0,??main_Func_0  ;; LED_change
+   \   00000004   0021               MOVS     R1,#+0
+   \   00000006   0170               STRB     R1,[R0, #+0]
+    122            flg_ESC = 0 ;
+   \   00000008   1648               LDR.N    R0,??main_Func_0+0x4  ;; flg_ESC
+   \   0000000A   0021               MOVS     R1,#+0
+   \   0000000C   0170               STRB     R1,[R0, #+0]
+    123             RTS_flg = 0 ;
+   \   0000000E   1648               LDR.N    R0,??main_Func_0+0x8  ;; RTS_flg
+   \   00000010   0021               MOVS     R1,#+0
+   \   00000012   0170               STRB     R1,[R0, #+0]
+    124             
+    125          //   P0 = 0x01 ;
+    126          //  Flash_Sub_2_RAM() ;
+    127          //   enable_interrupt();          // enable all maskable interrupts.   
+    128             //LED_ON_flag = 1;   
+    129               __enable_interrupt();  
+   \   00000014   62B6               CPSIE    I
+    130               
+    131             
+    132             HardWare_Init(); 
+   \   00000016   ........           BL       HardWare_Init
+    133          //   printf("ITM Output Debug Trace message : HardWare_Init");
+    134           //   for(;;){
+    135           //  Test_USART2();
+    136           //   }
+    137             
+    138          //     __enable_interrupt();       
+    139             
+    140             for(;;){
+    141           //    RTC_Initial();        
+    142               LED_ON_flag = 1; 
+   \                     ??main_Func_1:
+   \   0000001A   1448               LDR.N    R0,??main_Func_0+0xC  ;; LED_ON_flag
+   \   0000001C   0121               MOVS     R1,#+1
+   \   0000001E   0170               STRB     R1,[R0, #+0]
+    143          //     SYS_sec = 500 ;  // ms
+    144               MUS_timeout = 1 ;
+   \   00000020   1348               LDR.N    R0,??main_Func_0+0x10  ;; MUS_timeout
+   \   00000022   0121               MOVS     R1,#+1
+   \   00000024   0170               STRB     R1,[R0, #+0]
+    145          //     beep_vibrate( 4 ) ;
+    146               RTC_flag = 1; //RTC_Initial();     
+   \   00000026   1348               LDR.N    R0,??main_Func_0+0x14  ;; RTC_flag
+   \   00000028   0121               MOVS     R1,#+1
+   \   0000002A   0170               STRB     R1,[R0, #+0]
+    147          
+    148               if ( chk_update() == 1 )
+   \   0000002C   ........           BL       chk_update
+   \   00000030   0128               CMP      R0,#+1
+   \   00000032   05D1               BNE.N    ??main_Func_2
+    149                
+    150                 {
+    151          //       String_disp("E-Block : ");   
+    152                  UpdateFlg=1;
+   \   00000034   1048               LDR.N    R0,??main_Func_0+0x18  ;; UpdateFlg
+   \   00000036   0121               MOVS     R1,#+1
+   \   00000038   0170               STRB     R1,[R0, #+0]
+    153                      // self_test_2();
+    154                  self_test_entry();//new version
+   \   0000003A   ........           BL       self_test_entry
+   \   0000003E   04E0               B.N      ??main_Func_3
+    155               }
+    156               else
+    157               {
+    158           //     String_disp("Bt-Block : ");     
+    159                 UpdateFlg=0;
+   \                     ??main_Func_2:
+   \   00000040   0D48               LDR.N    R0,??main_Func_0+0x18  ;; UpdateFlg
+   \   00000042   0021               MOVS     R1,#+0
+   \   00000044   0170               STRB     R1,[R0, #+0]
+    160                 SelfTest();  // old version 
+   \   00000046   ........           BL       SelfTest
+    161               }
+    162                
+    163                Decompression(RevBuff,UnZipBuf,Cmd3Length);         
+   \                     ??main_Func_3:
+   \   0000004A   0C48               LDR.N    R0,??main_Func_0+0x1C  ;; Cmd3Length
+   \   0000004C   0268               LDR      R2,[R0, #+0]
+   \   0000004E   0C49               LDR.N    R1,??main_Func_0+0x20  ;; UnZipBuf
+   \   00000050   0C48               LDR.N    R0,??main_Func_0+0x24  ;; RevBuff
+   \   00000052   ........           BL       Decompression
+    164            __disable_interrupt();           
+   \   00000056   72B6               CPSID    I
+    165          
+    166          //        LED_OFF();
+    167                  
+    168              UG();               // ROM更新後熱開機
+   \   00000058   ........           BL       UG
+   \   0000005C   DDE7               B.N      ??main_Func_1
+   \   0000005E   00BF               Nop      
+   \                     ??main_Func_0:
+   \   00000060   ........           DC32     LED_change
+   \   00000064   ........           DC32     flg_ESC
+   \   00000068   ........           DC32     RTS_flg
+   \   0000006C   ........           DC32     LED_ON_flag
+   \   00000070   ........           DC32     MUS_timeout
+   \   00000074   ........           DC32     RTC_flag
+   \   00000078   ........           DC32     UpdateFlg
+   \   0000007C   ........           DC32     Cmd3Length
+   \   00000080   ........           DC32     UnZipBuf
+   \   00000084   ........           DC32     RevBuff
+    169             }
+    170          } 
+
+   \                                 In section .rodata, align 4
+   \                     `?<Constant "ITM Output Debug Trac...">`:
+   \   00000000   49544D204F75       DC8 "ITM Output Debug Trace message%d\012"
+   \              747075742044
+   \              656275672054
+   \              72616365206D
+   \              657373616765
+   \              25640A00    
+   \   00000022   0000               DC8 0, 0
+
+   \                                 In section .rodata, align 4
+   \                     `?<Constant "GApollo LED Sign">`:
+   \   00000000   4741706F6C6C       DC8 "GApollo LED Sign"
+   \              6F204C454420
+   \              5369676E00  
+   \   00000011   000000             DC8 0, 0, 0
+    171          
+    172          // USART  
+    173          #define TxBufferSize   (countof(TxBuffer) - 1)
+    174          #define RxBufferSize   0xFF
+    175          
+    176          /* Private macro -------------------------------------------------------------*/
+    177          #define countof(a)   (sizeof(a) / sizeof(*(a)))
+    178          
+    179          /* Private variables ---------------------------------------------------------*/
+    180          
+
+   Maximum stack usage in bytes:
+
+     Function   .cstack
+     --------   -------
+     chk_update      0
+     fputc           0
+     main            0
+     main_Func       0
+
+
+   Section sizes:
+
+     Function/Label                         Bytes
+     --------------                         -----
+     UpgradeROM                                  4
+     UnZipBuf                               131072
+     __stdout                                    4
+     __stdin                                     4
+     fputc                                      32
+     main                                       24
+     chk_update                                132
+     main_Func                                 136
+     ?<Constant "ITM Output Debug Trac...">     36
+     ?<Constant "GApollo LED Sign">             20
+
+ 
+ 131 080 bytes in section .bss
+       4 bytes in section .data
+      56 bytes in section .rodata
+     324 bytes in section .text
+ 
+     324 bytes of CODE  memory
+      56 bytes of CONST memory
+ 131 084 bytes of DATA  memory
+
+Errors: none
+Warnings: 3

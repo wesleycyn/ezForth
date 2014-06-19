@@ -1,0 +1,272 @@
+###############################################################################
+#                                                                             #
+# IAR ANSI C/C++ Compiler V5.20.0.50892/W32 for ARM     07/Oct/2009  13:03:47 #
+# Copyright 1999-2008 IAR Systems AB.                                         #
+#                                                                             #
+#    Cpu mode     =  thumb                                                    #
+#    Endian       =  little                                                   #
+#    Source file  =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\Configuration_GPIO #
+#                    .c                                                       #
+#    Command line =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\Configuration_GPIO #
+#                    .c -D VECT_TAB_FLASH -lC F:\CoLtd\Forth\MCU\STM32F10x\ST #
+#                    _Forth\STM3210E-EVAL\List\ -o                            #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\ #
+#                     --debug --endian=little --cpu=Cortex-M3 -e              #
+#                    --char_is_signed --require_prototypes --fpu=None         #
+#                    --dlib_config "C:\Program Files\IAR Systems\Embedded     #
+#                    Workbench 5.0\ARM\INC\DLib_Config_Full.h" -I             #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\ -I                #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\library\inc\ -I    #
+#                    "C:\Program Files\IAR Systems\Embedded Workbench         #
+#                    5.0\ARM\INC\" -Ohz                                       #
+#    List file    =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\List #
+#                    \Configuration_GPIO.lst                                  #
+#    Object file  =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\ #
+#                    Configuration_GPIO.o                                     #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\Configuration_GPIO.c
+      1          #include "platform_config.h"
+      2                                                                                                                                                    
+      3          #include "stm32f10x_lib.h"
+      4          
+
+   \                                 In section FastDataRAM, align 4
+      5          GPIO_InitTypeDef GPIO_InitStructure @"FastDataRAM";
+   \                     GPIO_InitStructure:
+   \   00000000                      DS8 4
+      6          void GPIO_Configuration(void);
+
+   \                                 In section .text, align 4, keep-with-next
+      7          void GPIO_Configuration(void)
+      8          {
+   \                     GPIO_Configuration:
+   \   00000000   2DE9F041           PUSH     {R4-R8,LR}
+      9          
+     10          
+     11          
+     12          
+     13          
+     14            
+     15          //Output Mode  
+     16            /* Configure GPIO_LED Pin 6, Pin 7, Pin 8 and Pin 9 as Output push-pull ----*/
+     17            GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6 | GPIO_Pin_7 | GPIO_Pin_8 | GPIO_Pin_9;
+   \   00000004   384C               LDR.N    R4,??GPIO_Configuration_0  ;; GPIO_InitStructure
+   \   00000006   4FF47070           MOV      R0,#+960
+   \   0000000A   2080               STRH     R0,[R4, #+0]
+     18            GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+   \   0000000C   0320               MOVS     R0,#+3
+   \   0000000E   A070               STRB     R0,[R4, #+2]
+     19            GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+   \   00000010   1020               MOVS     R0,#+16
+   \   00000012   E070               STRB     R0,[R4, #+3]
+     20            GPIO_Init(GPIO_LED, &GPIO_InitStructure);
+   \   00000014   354D               LDR.N    R5,??GPIO_Configuration_0+0x4  ;; 0x40011c00
+   \   00000016   2100               MOVS     R1,R4
+   \   00000018   2800               MOVS     R0,R5
+   \   0000001A   ........           BL       GPIO_Init
+     21          
+     22            RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA |
+     23                                   RCC_APB2Periph_GPIOB |
+     24                                   RCC_APB2Periph_GPIOC,
+     25                                   ENABLE);
+   \   0000001E   0121               MOVS     R1,#+1
+   \   00000020   1C20               MOVS     R0,#+28
+   \   00000022   ........           BL       RCC_APB2PeriphClockCmd
+     26            RCC_APB2PeriphResetCmd(RCC_APB2Periph_GPIOA |
+     27                                   RCC_APB2Periph_GPIOB |
+     28                                   RCC_APB2Periph_GPIOC,
+     29                                   DISABLE);
+   \   00000026   0021               MOVS     R1,#+0
+   \   00000028   1C20               MOVS     R0,#+28
+   \   0000002A   ........           BL       RCC_APB2PeriphResetCmd
+     30          
+     31            // Assign PA4, PA5, PA6, PA7, PA9, PA10, PB6, PB7, PB10, PB11, PB12, PB13,
+     32            // PB14, PB15, PC6, PC7 to LEDs
+     33            GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+   \   0000002E   0320               MOVS     R0,#+3
+   \   00000030   A070               STRB     R0,[R4, #+2]
+     34            GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+   \   00000032   1020               MOVS     R0,#+16
+   \   00000034   E070               STRB     R0,[R4, #+3]
+     35          //
+     36            GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_6 |GPIO_Pin_7 ;
+   \   00000036   F020               MOVS     R0,#+240
+   \   00000038   2080               STRH     R0,[R4, #+0]
+     37            GPIO_Init(GPIOA, &GPIO_InitStructure);
+   \   0000003A   2D4E               LDR.N    R6,??GPIO_Configuration_0+0x8  ;; 0x40010800
+   \   0000003C   2100               MOVS     R1,R4
+   \   0000003E   3000               MOVS     R0,R6
+   \   00000040   ........           BL       GPIO_Init
+     38          //
+     39            GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6 | GPIO_Pin_7 | GPIO_Pin_12|
+     40                                          GPIO_Pin_10| GPIO_Pin_11| GPIO_Pin_13|
+     41                                          GPIO_Pin_14| GPIO_Pin_15;
+   \   00000044   4FF6C040           MOVW     R0,#+64704
+   \   00000048   2080               STRH     R0,[R4, #+0]
+     42            GPIO_Init(GPIOB, &GPIO_InitStructure);
+   \   0000004A   2A4F               LDR.N    R7,??GPIO_Configuration_0+0xC  ;; 0x40010c00
+   \   0000004C   2100               MOVS     R1,R4
+   \   0000004E   3800               MOVS     R0,R7
+   \   00000050   ........           BL       GPIO_Init
+     43          //
+     44            GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6 | GPIO_Pin_7;
+   \   00000054   C020               MOVS     R0,#+192
+   \   00000056   2080               STRH     R0,[R4, #+0]
+     45            GPIO_Init(GPIOC, &GPIO_InitStructure);  
+   \   00000058   DFF89C80           LDR.W    R8,??GPIO_Configuration_0+0x10  ;; 0x40011000
+   \   0000005C   2100               MOVS     R1,R4
+   \   0000005E   4046               MOV      R0,R8
+   \   00000060   ........           BL       GPIO_Init
+     46          
+     47          //
+     48            GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6 | GPIO_Pin_7 | GPIO_Pin_8| GPIO_Pin_9 | GPIO_Pin_10;
+   \   00000064   4FF4F860           MOV      R0,#+1984
+   \   00000068   2080               STRH     R0,[R4, #+0]
+     49            GPIO_Init(GPIOF, &GPIO_InitStructure);  
+   \   0000006A   2100               MOVS     R1,R4
+   \   0000006C   2800               MOVS     R0,R5
+   \   0000006E   ........           BL       GPIO_Init
+     50            
+     51            
+     52            
+     53            
+     54            // PA4  LED_Enable
+     55            // PB12 LED_Latch 
+     56            
+     57            /* Configure SPI1 pins: NSS, SCK, MISO and MOSI ----------------------------*/
+     58            GPIO_InitStructure.GPIO_Pin =  GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_7;
+   \   00000072   E020               MOVS     R0,#+224
+   \   00000074   2080               STRH     R0,[R4, #+0]
+     59            GPIO_InitStructure.GPIO_Speed =GPIO_Speed_10MHz;// GPIO_Speed_50MHz;
+   \   00000076   0120               MOVS     R0,#+1
+   \   00000078   A070               STRB     R0,[R4, #+2]
+     60            GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+   \   0000007A   1820               MOVS     R0,#+24
+   \   0000007C   E070               STRB     R0,[R4, #+3]
+     61            GPIO_Init(GPIOA, &GPIO_InitStructure);
+   \   0000007E   2100               MOVS     R1,R4
+   \   00000080   3000               MOVS     R0,R6
+   \   00000082   ........           BL       GPIO_Init
+     62          
+     63            /* Configure SPI2 pins: NSS, SCK, MISO and MOSI ----------------------------*/
+     64            GPIO_InitStructure.GPIO_Pin =  GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15;
+   \   00000086   4FF46040           MOV      R0,#+57344
+   \   0000008A   2080               STRH     R0,[R4, #+0]
+     65            GPIO_Init(GPIOB, &GPIO_InitStructure);   
+   \   0000008C   2100               MOVS     R1,R4
+   \   0000008E   3800               MOVS     R0,R7
+   \   00000090   ........           BL       GPIO_Init
+     66            
+     67            
+     68            /* GPIOC Configuration:Pin6, 7, 8 and 9 as alternate function push-pull */
+     69            GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6 | GPIO_Pin_7 | GPIO_Pin_8 | GPIO_Pin_9;
+   \   00000094   4FF47070           MOV      R0,#+960
+   \   00000098   2080               STRH     R0,[R4, #+0]
+     70            GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+   \   0000009A   1020               MOVS     R0,#+16
+   \   0000009C   E070               STRB     R0,[R4, #+3]
+     71            GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+   \   0000009E   0320               MOVS     R0,#+3
+   \   000000A0   A070               STRB     R0,[R4, #+2]
+     72            GPIO_Init(GPIOC, &GPIO_InitStructure);  
+   \   000000A2   2100               MOVS     R1,R4
+   \   000000A4   4046               MOV      R0,R8
+   \   000000A6   ........           BL       GPIO_Init
+     73            
+     74            /* Configure USART2 pins:*/  
+     75            //Alternate functions USART2_REMAP = 0 USART2_REMAP = 1
+     76            //  USART2_CTS        PA0             PD3
+     77            //  USART2_RTS        PA1             PD4
+     78            //  USART2_TX         PA2             PD5
+     79            //  USART2_RX         PA3             PD6
+     80            //  USART2_CK         PA4             PD7    
+     81          
+     82          // Remap available only for 100-pin and 144-pin packages.
+     83            /* Enable the USART2 Pins Software Remapping */  
+     84           // GPIO_PinRemapConfig(GPIO_Remap_USART2, ENABLE);
+     85          
+     86            /* Configure USART2 RTS (PD4) and USART2 Tx (PD5) as alternate function push-pull */
+     87            GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1 | GPIO_Pin_2;
+   \   000000AA   0620               MOVS     R0,#+6
+   \   000000AC   2080               STRH     R0,[R4, #+0]
+     88            GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+   \   000000AE   0320               MOVS     R0,#+3
+   \   000000B0   A070               STRB     R0,[R4, #+2]
+     89            GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+   \   000000B2   1820               MOVS     R0,#+24
+   \   000000B4   E070               STRB     R0,[R4, #+3]
+     90            GPIO_Init(GPIOA, &GPIO_InitStructure);
+   \   000000B6   2100               MOVS     R1,R4
+   \   000000B8   3000               MOVS     R0,R6
+   \   000000BA   ........           BL       GPIO_Init
+     91          
+     92            
+     93            
+     94            
+     95            
+     96            /* Configure USART2 CTS (PD3) and USART2 Rx (PD6) as input floating */
+     97            GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3 | GPIO_Pin_0;
+   \   000000BE   0920               MOVS     R0,#+9
+   \   000000C0   2080               STRH     R0,[R4, #+0]
+     98            GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+   \   000000C2   0420               MOVS     R0,#+4
+   \   000000C4   E070               STRB     R0,[R4, #+3]
+     99            GPIO_Init(GPIOA, &GPIO_InitStructure);   
+   \   000000C6   2100               MOVS     R1,R4
+   \   000000C8   3000               MOVS     R0,R6
+   \   000000CA   ........           BL       GPIO_Init
+    100          
+    101          
+    102          
+    103          // Input Mode
+    104            GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+   \   000000CE   0320               MOVS     R0,#+3
+   \   000000D0   A070               STRB     R0,[R4, #+2]
+    105            GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+   \   000000D2   0420               MOVS     R0,#+4
+   \   000000D4   E070               STRB     R0,[R4, #+3]
+    106          //
+    107            GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9 | GPIO_Pin_10 | GPIO_Pin_11 |GPIO_Pin_12 ;
+   \   000000D6   4FF4F050           MOV      R0,#+7680
+   \   000000DA   2080               STRH     R0,[R4, #+0]
+    108            GPIO_Init(GPIOA, &GPIO_InitStructure);
+   \   000000DC   2100               MOVS     R1,R4
+   \   000000DE   3000               MOVS     R0,R6
+   \   000000E0   BDE8F041           POP      {R4-R8,LR}
+   \   000000E4   ........           B.W      GPIO_Init
+   \                     ??GPIO_Configuration_0:
+   \   000000E8   ........           DC32     GPIO_InitStructure
+   \   000000EC   001C0140           DC32     0x40011c00
+   \   000000F0   00080140           DC32     0x40010800
+   \   000000F4   000C0140           DC32     0x40010c00
+   \   000000F8   00100140           DC32     0x40011000
+    109            
+    110            
+    111          }
+
+   Maximum stack usage in bytes:
+
+     Function           .cstack
+     --------           -------
+     GPIO_Configuration      0
+
+
+   Section sizes:
+
+     Function/Label     Bytes
+     --------------     -----
+     GPIO_InitStructure    4
+     GPIO_Configuration  252
+
+ 
+ 252 bytes in section .text
+   4 bytes in section FastDataRAM
+ 
+ 252 bytes of CODE memory
+   4 bytes of DATA memory
+
+Errors: none
+Warnings: none

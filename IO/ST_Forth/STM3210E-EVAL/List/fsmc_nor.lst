@@ -1,0 +1,859 @@
+###############################################################################
+#                                                                             #
+# IAR ANSI C/C++ Compiler V5.20.0.50892/W32 for ARM     07/Oct/2009  13:03:53 #
+# Copyright 1999-2008 IAR Systems AB.                                         #
+#                                                                             #
+#    Cpu mode     =  thumb                                                    #
+#    Endian       =  little                                                   #
+#    Source file  =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\fsmc_nor.c         #
+#    Command line =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\fsmc_nor.c -D      #
+#                    VECT_TAB_FLASH -lC F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth #
+#                    \STM3210E-EVAL\List\ -o F:\CoLtd\Forth\MCU\STM32F10x\ST_ #
+#                    Forth\STM3210E-EVAL\Obj\ --debug --endian=little         #
+#                    --cpu=Cortex-M3 -e --char_is_signed                      #
+#                    --require_prototypes --fpu=None --dlib_config            #
+#                    "C:\Program Files\IAR Systems\Embedded Workbench         #
+#                    5.0\ARM\INC\DLib_Config_Full.h" -I                       #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\ -I                #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\library\inc\ -I    #
+#                    "C:\Program Files\IAR Systems\Embedded Workbench         #
+#                    5.0\ARM\INC\" -Ohz                                       #
+#    List file    =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\List #
+#                    \fsmc_nor.lst                                            #
+#    Object file  =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\ #
+#                    fsmc_nor.o                                               #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\fsmc_nor.c
+      1          /******************** (C) COPYRIGHT 2008 STMicroelectronics ********************
+      2          * File Name          : fsmc_nor.c
+      3          * Author             : MCD Application Team
+      4          * Version            : V2.0.3
+      5          * Date               : 09/22/2008
+      6          * Description        : This file provides a set of functions needed to drive the
+      7          *                      M29W128FL, M29W128GL and S29GL128P NOR memories mounted
+      8          *                      on STM3210E-EVAL board.
+      9          ********************************************************************************
+     10          * THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
+     11          * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE TIME.
+     12          * AS A RESULT, STMICROELECTRONICS SHALL NOT BE HELD LIABLE FOR ANY DIRECT,
+     13          * INDIRECT OR CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING FROM THE
+     14          * CONTENT OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE CODING
+     15          * INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
+     16          *******************************************************************************/
+     17          /* Includes ------------------------------------------------------------------*/
+     18          #include "fsmc_nor.h"
+     19          
+     20          /* Private typedef -----------------------------------------------------------*/
+     21          /* Private define ------------------------------------------------------------*/
+     22          #define Bank1_NOR2_ADDR       ((u32)0x64000000)
+     23          
+     24          /* Delay definition */   
+     25          #define BlockErase_Timeout    ((u32)0x00A00000)
+     26          #define ChipErase_Timeout     ((u32)0x30000000) 
+     27          #define Program_Timeout       ((u32)0x00001400)
+     28          
+     29          /* Private macro -------------------------------------------------------------*/
+     30          #define ADDR_SHIFT(A) (Bank1_NOR2_ADDR + (2 * (A)))
+     31          #define NOR_WRITE(Address, Data)  (*(vu16 *)(Address) = (Data))
+     32          
+     33          /* Private variables ---------------------------------------------------------*/
+     34          /* Private function prototypes -----------------------------------------------*/
+     35          /* Private functions ---------------------------------------------------------*/
+     36          /*******************************************************************************
+     37          * Function Name  : FSMC_NOR_Init
+     38          * Description    : Configures the FSMC and GPIOs to interface with the NOR memory.
+     39          *                  This function must be called before any write/read operation
+     40          *                  on the NOR.
+     41          * Input          : None
+     42          * Output         : None
+     43          * Return         : None
+     44          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+     45          void FSMC_NOR_Init(void)
+     46          {
+   \                     FSMC_NOR_Init:
+   \   00000000   70B5               PUSH     {R4-R6,LR}
+   \   00000002   96B0               SUB      SP,SP,#+88
+     47            FSMC_NORSRAMInitTypeDef  FSMC_NORSRAMInitStructure;
+     48            FSMC_NORSRAMTimingInitTypeDef  p;
+     49            GPIO_InitTypeDef GPIO_InitStructure;
+     50          
+     51            RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOD | RCC_APB2Periph_GPIOE | 
+     52                                   RCC_APB2Periph_GPIOF | RCC_APB2Periph_GPIOG, ENABLE);
+   \   00000004   0121               MOVS     R1,#+1
+   \   00000006   4FF4F070           MOV      R0,#+480
+   \   0000000A   ........           BL       RCC_APB2PeriphClockCmd
+     53          
+     54            /*-- GPIO Configuration ------------------------------------------------------*/
+     55            /* NOR Data lines configuration */
+     56            GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_8 | GPIO_Pin_9 |
+     57                                          GPIO_Pin_10 | GPIO_Pin_14 | GPIO_Pin_15;
+   \   0000000E   4CF20370           MOVW     R0,#+50947
+   \   00000012   ADF80000           STRH     R0,[SP, #+0]
+     58            GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+   \   00000016   1820               MOVS     R0,#+24
+   \   00000018   8DF80300           STRB     R0,[SP, #+3]
+     59            GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+   \   0000001C   0320               MOVS     R0,#+3
+   \   0000001E   8DF80200           STRB     R0,[SP, #+2]
+     60            GPIO_Init(GPIOD, &GPIO_InitStructure);
+   \   00000022   ....               LDR.N    R4,??DataTable17  ;; 0x40011400
+   \   00000024   00A9               ADD      R1,SP,#+0
+   \   00000026   2000               MOVS     R0,R4
+   \   00000028   ........           BL       GPIO_Init
+     61          
+     62            GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7 | GPIO_Pin_8 | GPIO_Pin_9 | GPIO_Pin_10 |
+     63                                          GPIO_Pin_11 | GPIO_Pin_12 | GPIO_Pin_13 |
+     64                                          GPIO_Pin_14 | GPIO_Pin_15;
+   \   0000002C   4FF68070           MOVW     R0,#+65408
+   \   00000030   ADF80000           STRH     R0,[SP, #+0]
+     65            GPIO_Init(GPIOE, &GPIO_InitStructure);
+   \   00000034   2F4D               LDR.N    R5,??FSMC_NOR_Init_0  ;; 0x40011800
+   \   00000036   00A9               ADD      R1,SP,#+0
+   \   00000038   2800               MOVS     R0,R5
+   \   0000003A   ........           BL       GPIO_Init
+     66          
+     67            /* NOR Address lines configuration */
+     68            GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2 | GPIO_Pin_3 |
+     69                                          GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_12 | GPIO_Pin_13 |
+     70                                          GPIO_Pin_14 | GPIO_Pin_15;
+   \   0000003E   4FF23F00           MOVW     R0,#+61503
+   \   00000042   ADF80000           STRH     R0,[SP, #+0]
+     71            GPIO_Init(GPIOF, &GPIO_InitStructure);
+   \   00000046   00A9               ADD      R1,SP,#+0
+   \   00000048   2B48               LDR.N    R0,??FSMC_NOR_Init_0+0x4  ;; 0x40011c00
+   \   0000004A   ........           BL       GPIO_Init
+     72          
+     73            GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2 |
+     74                                          GPIO_Pin_3 | GPIO_Pin_4 | GPIO_Pin_5;                            
+   \   0000004E   3F20               MOVS     R0,#+63
+   \   00000050   ADF80000           STRH     R0,[SP, #+0]
+     75            GPIO_Init(GPIOG, &GPIO_InitStructure);
+   \   00000054   294E               LDR.N    R6,??FSMC_NOR_Init_0+0x8  ;; 0x40012000
+   \   00000056   00A9               ADD      R1,SP,#+0
+   \   00000058   3000               MOVS     R0,R6
+   \   0000005A   ........           BL       GPIO_Init
+     76          
+     77            GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11 | GPIO_Pin_12 | GPIO_Pin_13;
+   \   0000005E   4FF46050           MOV      R0,#+14336
+   \   00000062   ADF80000           STRH     R0,[SP, #+0]
+     78            GPIO_Init(GPIOD, &GPIO_InitStructure);
+   \   00000066   00A9               ADD      R1,SP,#+0
+   \   00000068   2000               MOVS     R0,R4
+   \   0000006A   ........           BL       GPIO_Init
+     79          
+     80            GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3 | GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_6;
+   \   0000006E   7820               MOVS     R0,#+120
+   \   00000070   ADF80000           STRH     R0,[SP, #+0]
+     81            GPIO_Init(GPIOE, &GPIO_InitStructure);
+   \   00000074   00A9               ADD      R1,SP,#+0
+   \   00000076   2800               MOVS     R0,R5
+   \   00000078   ........           BL       GPIO_Init
+     82          
+     83            /* NOE and NWE configuration */
+     84            GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4 | GPIO_Pin_5;
+   \   0000007C   3020               MOVS     R0,#+48
+   \   0000007E   ADF80000           STRH     R0,[SP, #+0]
+     85            GPIO_Init(GPIOD, &GPIO_InitStructure);
+   \   00000082   00A9               ADD      R1,SP,#+0
+   \   00000084   2000               MOVS     R0,R4
+   \   00000086   ........           BL       GPIO_Init
+     86          
+     87            /* NE2 configuration */
+     88            GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9;
+   \   0000008A   4FF40070           MOV      R0,#+512
+   \   0000008E   ADF80000           STRH     R0,[SP, #+0]
+     89            GPIO_Init(GPIOG, &GPIO_InitStructure);
+   \   00000092   00A9               ADD      R1,SP,#+0
+   \   00000094   3000               MOVS     R0,R6
+   \   00000096   ........           BL       GPIO_Init
+     90          
+     91            /*-- FSMC Configuration ----------------------------------------------------*/
+     92            p.FSMC_AddressSetupTime = 0x05;
+   \   0000009A   0520               MOVS     R0,#+5
+   \   0000009C   0F90               STR      R0,[SP, #+60]
+     93            p.FSMC_AddressHoldTime = 0x00;
+   \   0000009E   0020               MOVS     R0,#+0
+   \   000000A0   1090               STR      R0,[SP, #+64]
+     94            p.FSMC_DataSetupTime = 0x07;
+   \   000000A2   0720               MOVS     R0,#+7
+   \   000000A4   1190               STR      R0,[SP, #+68]
+     95            p.FSMC_BusTurnAroundDuration = 0x00;
+   \   000000A6   0020               MOVS     R0,#+0
+   \   000000A8   1290               STR      R0,[SP, #+72]
+     96            p.FSMC_CLKDivision = 0x00;
+   \   000000AA   1390               STR      R0,[SP, #+76]
+     97            p.FSMC_DataLatency = 0x00;
+   \   000000AC   1490               STR      R0,[SP, #+80]
+     98            p.FSMC_AccessMode = FSMC_AccessMode_B;
+   \   000000AE   4FF08050           MOV      R0,#+268435456
+   \   000000B2   1590               STR      R0,[SP, #+84]
+     99          
+    100            FSMC_NORSRAMInitStructure.FSMC_Bank = FSMC_Bank1_NORSRAM2;
+   \   000000B4   0220               MOVS     R0,#+2
+   \   000000B6   0190               STR      R0,[SP, #+4]
+    101            FSMC_NORSRAMInitStructure.FSMC_DataAddressMux = FSMC_DataAddressMux_Disable;
+   \   000000B8   0020               MOVS     R0,#+0
+   \   000000BA   0290               STR      R0,[SP, #+8]
+    102            FSMC_NORSRAMInitStructure.FSMC_MemoryType = FSMC_MemoryType_NOR;
+   \   000000BC   0820               MOVS     R0,#+8
+   \   000000BE   0390               STR      R0,[SP, #+12]
+    103            FSMC_NORSRAMInitStructure.FSMC_MemoryDataWidth = FSMC_MemoryDataWidth_16b;
+   \   000000C0   1020               MOVS     R0,#+16
+   \   000000C2   0490               STR      R0,[SP, #+16]
+    104            FSMC_NORSRAMInitStructure.FSMC_BurstAccessMode = FSMC_BurstAccessMode_Disable;
+   \   000000C4   0020               MOVS     R0,#+0
+   \   000000C6   0590               STR      R0,[SP, #+20]
+    105            FSMC_NORSRAMInitStructure.FSMC_WaitSignalPolarity = FSMC_WaitSignalPolarity_Low;
+   \   000000C8   0690               STR      R0,[SP, #+24]
+    106            FSMC_NORSRAMInitStructure.FSMC_WrapMode = FSMC_WrapMode_Disable;
+   \   000000CA   0790               STR      R0,[SP, #+28]
+    107            FSMC_NORSRAMInitStructure.FSMC_WaitSignalActive = FSMC_WaitSignalActive_BeforeWaitState;
+   \   000000CC   0890               STR      R0,[SP, #+32]
+    108            FSMC_NORSRAMInitStructure.FSMC_WriteOperation = FSMC_WriteOperation_Enable;
+   \   000000CE   4FF48050           MOV      R0,#+4096
+   \   000000D2   0990               STR      R0,[SP, #+36]
+    109            FSMC_NORSRAMInitStructure.FSMC_WaitSignal = FSMC_WaitSignal_Disable;
+   \   000000D4   0020               MOVS     R0,#+0
+   \   000000D6   0A90               STR      R0,[SP, #+40]
+    110            FSMC_NORSRAMInitStructure.FSMC_ExtendedMode = FSMC_ExtendedMode_Disable;
+   \   000000D8   0B90               STR      R0,[SP, #+44]
+    111            FSMC_NORSRAMInitStructure.FSMC_WriteBurst = FSMC_WriteBurst_Disable;
+   \   000000DA   0C90               STR      R0,[SP, #+48]
+    112            FSMC_NORSRAMInitStructure.FSMC_ReadWriteTimingStruct = &p;
+   \   000000DC   0FA8               ADD      R0,SP,#+60
+   \   000000DE   0D90               STR      R0,[SP, #+52]
+    113            FSMC_NORSRAMInitStructure.FSMC_WriteTimingStruct = &p;
+   \   000000E0   0E90               STR      R0,[SP, #+56]
+    114          
+    115            FSMC_NORSRAMInit(&FSMC_NORSRAMInitStructure);
+   \   000000E2   01A8               ADD      R0,SP,#+4
+   \   000000E4   ........           BL       FSMC_NORSRAMInit
+    116          
+    117            /* Enable FSMC Bank1_NOR Bank */
+    118            FSMC_NORSRAMCmd(FSMC_Bank1_NORSRAM2, ENABLE);
+   \   000000E8   0121               MOVS     R1,#+1
+   \   000000EA   0220               MOVS     R0,#+2
+   \   000000EC   ........           BL       FSMC_NORSRAMCmd
+    119          }
+   \   000000F0   16B0               ADD      SP,SP,#+88
+   \   000000F2   70BD               POP      {R4-R6,PC}       ;; return
+   \                     ??FSMC_NOR_Init_0:
+   \   000000F4   00180140           DC32     0x40011800
+   \   000000F8   001C0140           DC32     0x40011c00
+   \   000000FC   00200140           DC32     0x40012000
+    120          
+    121          /******************************************************************************
+    122          * Function Name  : FSMC_NOR_ReadID
+    123          * Description    : Reads NOR memory's Manufacturer and Device Code.
+    124          * Input          : - NOR_ID: pointer to a NOR_IDTypeDef structure which will hold
+    125          *                    the Manufacturer and Device Code.
+    126          * Output         : None
+    127          * Return         : None
+    128          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+    129          void FSMC_NOR_ReadID(NOR_IDTypeDef* NOR_ID)
+    130          {
+    131            NOR_WRITE(ADDR_SHIFT(0x0555), 0x00AA);
+   \                     FSMC_NOR_ReadID:
+   \   00000000   ....               LDR.N    R1,??DataTable15  ;; 0x64000aaa
+   \   00000002   AA22               MOVS     R2,#+170
+   \   00000004   0A80               STRH     R2,[R1, #+0]
+    132            NOR_WRITE(ADDR_SHIFT(0x02AA), 0x0055);
+   \   00000006   ....               LDR.N    R2,??DataTable16  ;; 0x64000554
+   \   00000008   5523               MOVS     R3,#+85
+   \   0000000A   1380               STRH     R3,[R2, #+0]
+    133            NOR_WRITE(ADDR_SHIFT(0x0555), 0x0090);
+   \   0000000C   9022               MOVS     R2,#+144
+   \   0000000E   0A80               STRH     R2,[R1, #+0]
+    134          
+    135            NOR_ID->Manufacturer_Code = *(vu16 *) ADDR_SHIFT(0x0000);
+   \   00000010   4FF0C841           MOV      R1,#+1677721600
+   \   00000014   0988               LDRH     R1,[R1, #+0]
+   \   00000016   0180               STRH     R1,[R0, #+0]
+    136            NOR_ID->Device_Code1 = *(vu16 *) ADDR_SHIFT(0x0001);
+   \   00000018   4FF0C841           MOV      R1,#+1677721600
+   \   0000001C   4988               LDRH     R1,[R1, #+2]
+   \   0000001E   4180               STRH     R1,[R0, #+2]
+    137            NOR_ID->Device_Code2 = *(vu16 *) ADDR_SHIFT(0x000E);
+   \   00000020   4FF0C841           MOV      R1,#+1677721600
+   \   00000024   898B               LDRH     R1,[R1, #+28]
+   \   00000026   8180               STRH     R1,[R0, #+4]
+    138            NOR_ID->Device_Code3 = *(vu16 *) ADDR_SHIFT(0x000F);
+   \   00000028   4FF0C841           MOV      R1,#+1677721600
+   \   0000002C   C98B               LDRH     R1,[R1, #+30]
+   \   0000002E   C180               STRH     R1,[R0, #+6]
+    139          }
+   \   00000030   7047               BX       LR               ;; return
+    140          
+    141          /*******************************************************************************
+    142          * Function Name  : FSMC_NOR_EraseBlock
+    143          * Description    : Erases the specified Nor memory block.
+    144          * Input          : - BlockAddr: address of the block to erase.
+    145          * Output         : None
+    146          * Return         : NOR_Status:The returned value can be: NOR_SUCCESS, NOR_ERROR
+    147          *                  or NOR_TIMEOUT
+    148          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+    149          NOR_Status FSMC_NOR_EraseBlock(u32 BlockAddr)
+    150          {
+    151            NOR_WRITE(ADDR_SHIFT(0x0555), 0x00AA);
+   \                     FSMC_NOR_EraseBlock:
+   \   00000000   ....               LDR.N    R1,??DataTable15  ;; 0x64000aaa
+   \   00000002   AA22               MOVS     R2,#+170
+   \   00000004   0A80               STRH     R2,[R1, #+0]
+    152            NOR_WRITE(ADDR_SHIFT(0x02AA), 0x0055);
+   \   00000006   ....               LDR.N    R2,??DataTable16  ;; 0x64000554
+   \   00000008   5523               MOVS     R3,#+85
+   \   0000000A   1380               STRH     R3,[R2, #+0]
+    153            NOR_WRITE(ADDR_SHIFT(0x0555), 0x0080);
+   \   0000000C   8023               MOVS     R3,#+128
+   \   0000000E   0B80               STRH     R3,[R1, #+0]
+    154            NOR_WRITE(ADDR_SHIFT(0x0555), 0x00AA);
+   \   00000010   AA23               MOVS     R3,#+170
+   \   00000012   0B80               STRH     R3,[R1, #+0]
+    155            NOR_WRITE(ADDR_SHIFT(0x02AA), 0x0055);
+   \   00000014   5521               MOVS     R1,#+85
+   \   00000016   1180               STRH     R1,[R2, #+0]
+    156            NOR_WRITE((Bank1_NOR2_ADDR + BlockAddr), 0x30);
+   \   00000018   00F1C840           ADD      R0,R0,#+1677721600
+   \   0000001C   3021               MOVS     R1,#+48
+   \   0000001E   0180               STRH     R1,[R0, #+0]
+    157          
+    158            return (FSMC_NOR_GetStatus(BlockErase_Timeout));
+   \   00000020   4FF42000           MOV      R0,#+10485760
+   \   00000024   ....               B.N      FSMC_NOR_GetStatus
+    159          }
+    160          
+    161          /*******************************************************************************
+    162          * Function Name  : FSMC_NOR_EraseChip
+    163          * Description    : Erases the entire chip.
+    164          * Input          : None                      
+    165          * Output         : None
+    166          * Return         : NOR_Status:The returned value can be: NOR_SUCCESS, NOR_ERROR
+    167          *                  or NOR_TIMEOUT
+    168          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+    169          NOR_Status FSMC_NOR_EraseChip(void)
+    170          {
+    171            NOR_WRITE(ADDR_SHIFT(0x0555), 0x00AA);
+   \                     FSMC_NOR_EraseChip:
+   \   00000000   ....               LDR.N    R0,??DataTable15  ;; 0x64000aaa
+   \   00000002   AA21               MOVS     R1,#+170
+   \   00000004   0180               STRH     R1,[R0, #+0]
+    172            NOR_WRITE(ADDR_SHIFT(0x02AA), 0x0055);
+   \   00000006   ....               LDR.N    R1,??DataTable16  ;; 0x64000554
+   \   00000008   5522               MOVS     R2,#+85
+   \   0000000A   0A80               STRH     R2,[R1, #+0]
+    173            NOR_WRITE(ADDR_SHIFT(0x0555), 0x0080);
+   \   0000000C   8022               MOVS     R2,#+128
+   \   0000000E   0280               STRH     R2,[R0, #+0]
+    174            NOR_WRITE(ADDR_SHIFT(0x0555), 0x00AA);
+   \   00000010   AA22               MOVS     R2,#+170
+   \   00000012   0280               STRH     R2,[R0, #+0]
+    175            NOR_WRITE(ADDR_SHIFT(0x02AA), 0x0055);
+   \   00000014   5522               MOVS     R2,#+85
+   \   00000016   0A80               STRH     R2,[R1, #+0]
+    176            NOR_WRITE(ADDR_SHIFT(0x0555), 0x0010);
+   \   00000018   1021               MOVS     R1,#+16
+   \   0000001A   0180               STRH     R1,[R0, #+0]
+    177          
+    178            return (FSMC_NOR_GetStatus(ChipErase_Timeout));
+   \   0000001C   4FF04050           MOV      R0,#+805306368
+   \   00000020   ....               B.N      FSMC_NOR_GetStatus
+    179          }
+    180          
+    181          /******************************************************************************
+    182          * Function Name  : FSMC_NOR_WriteHalfWord
+    183          * Description    : Writes a half-word to the NOR memory. 
+    184          * Input          : - WriteAddr : NOR memory internal address to write to.
+    185          *                  - Data : Data to write. 
+    186          * Output         : None
+    187          * Return         : NOR_Status:The returned value can be: NOR_SUCCESS, NOR_ERROR
+    188          *                  or NOR_TIMEOUT
+    189          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+    190          NOR_Status FSMC_NOR_WriteHalfWord(u32 WriteAddr, u16 Data)
+    191          {
+    192            NOR_WRITE(ADDR_SHIFT(0x0555), 0x00AA);
+   \                     FSMC_NOR_WriteHalfWord:
+   \   00000000   ....               LDR.N    R2,??DataTable15  ;; 0x64000aaa
+   \   00000002   AA23               MOVS     R3,#+170
+   \   00000004   1380               STRH     R3,[R2, #+0]
+    193            NOR_WRITE(ADDR_SHIFT(0x02AA), 0x0055);
+   \   00000006   ....               LDR.N    R3,??DataTable16  ;; 0x64000554
+   \   00000008   4FF0550C           MOV      R12,#+85
+   \   0000000C   A3F800C0           STRH     R12,[R3, #+0]
+    194            NOR_WRITE(ADDR_SHIFT(0x0555), 0x00A0);
+   \   00000010   A023               MOVS     R3,#+160
+   \   00000012   1380               STRH     R3,[R2, #+0]
+    195            NOR_WRITE((Bank1_NOR2_ADDR + WriteAddr), Data);
+   \   00000014   00F1C840           ADD      R0,R0,#+1677721600
+   \   00000018   0180               STRH     R1,[R0, #+0]
+    196          
+    197            return (FSMC_NOR_GetStatus(Program_Timeout));
+   \   0000001A   4FF4A050           MOV      R0,#+5120
+   \   0000001E   ....               B.N      FSMC_NOR_GetStatus
+    198          }
+    199          
+    200          /*******************************************************************************
+    201          * Function Name  : FSMC_NOR_WriteBuffer
+    202          * Description    : Writes a half-word buffer to the FSMC NOR memory. 
+    203          * Input          : - pBuffer : pointer to buffer. 
+    204          *                  - WriteAddr : NOR memory internal address from which the data 
+    205          *                    will be written.
+    206          *                  - NumHalfwordToWrite : number of Half words to write. 
+    207          * Output         : None
+    208          * Return         : NOR_Status:The returned value can be: NOR_SUCCESS, NOR_ERROR
+    209          *                  or NOR_TIMEOUT
+    210          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+    211          NOR_Status FSMC_NOR_WriteBuffer(u16* pBuffer, u32 WriteAddr, u32 NumHalfwordToWrite)
+    212          {
+   \                     FSMC_NOR_WriteBuffer:
+   \   00000000   70B5               PUSH     {R4-R6,LR}
+   \   00000002   0500               MOVS     R5,R0
+   \   00000004   0E00               MOVS     R6,R1
+   \   00000006   1400               MOVS     R4,R2
+    213            NOR_Status status = NOR_ONGOING; 
+    214          
+    215            do
+    216            {
+    217              /* Transfer data to the memory */
+    218              status = FSMC_NOR_WriteHalfWord(WriteAddr, *pBuffer++);
+   \                     ??FSMC_NOR_WriteBuffer_0:
+   \   00000008   35F8021B           LDRH     R1,[R5], #+2
+   \   0000000C   3000               MOVS     R0,R6
+   \   0000000E   ........           BL       FSMC_NOR_WriteHalfWord
+    219              WriteAddr = WriteAddr + 2;
+   \   00000012   B61C               ADDS     R6,R6,#+2
+    220              NumHalfwordToWrite--;
+   \   00000014   641E               SUBS     R4,R4,#+1
+    221            }
+    222            while((status == NOR_SUCCESS) && (NumHalfwordToWrite != 0));
+   \   00000016   08B9               CBNZ     R0,??FSMC_NOR_WriteBuffer_1
+   \   00000018   002C               CMP      R4,#+0
+   \   0000001A   F5D1               BNE.N    ??FSMC_NOR_WriteBuffer_0
+    223            
+    224            return (status); 
+   \                     ??FSMC_NOR_WriteBuffer_1:
+   \   0000001C   70BD               POP      {R4-R6,PC}       ;; return
+    225          }
+    226          
+    227          /*******************************************************************************
+    228          * Function Name  : FSMC_NOR_ProgramBuffer
+    229          * Description    : Writes a half-word buffer to the FSMC NOR memory. This function 
+    230          *                  must be used only with S29GL128P NOR memory.
+    231          * Input          : - pBuffer : pointer to buffer. 
+    232          *                  - WriteAddr: NOR memory internal address from which the data 
+    233          *                    will be written.
+    234          *                  - NumHalfwordToWrite: number of Half words to write.
+    235          *                    The maximum allowed value is 32 Half words (64 bytes).
+    236          * Output         : None
+    237          * Return         : NOR_Status:The returned value can be: NOR_SUCCESS, NOR_ERROR
+    238          *                  or NOR_TIMEOUT
+    239          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+    240          NOR_Status FSMC_NOR_ProgramBuffer(u16* pBuffer, u32 WriteAddr, u32 NumHalfwordToWrite)
+    241          {       
+   \                     FSMC_NOR_ProgramBuffer:
+   \   00000000   10B5               PUSH     {R4,LR}
+    242            u32 lastloadedaddress = 0x00;
+    243            u32 currentaddress = 0x00;
+    244            u32 endaddress = 0x00;
+    245          
+    246            /* Initialize variables */
+    247            currentaddress = WriteAddr;
+   \   00000002   0B00               MOVS     R3,R1
+    248            endaddress = WriteAddr + NumHalfwordToWrite - 1;
+   \   00000004   02EB010C           ADD      R12,R2,R1
+   \   00000008   ACF1010C           SUB      R12,R12,#+1
+    249            lastloadedaddress = WriteAddr;
+    250          
+    251            /* Issue unlock command sequence */
+    252            NOR_WRITE(ADDR_SHIFT(0x00555), 0x00AA);
+   \   0000000C   ........           LDR.W    LR,??DataTable15  ;; 0x64000aaa
+   \   00000010   AA24               MOVS     R4,#+170
+   \   00000012   AEF80040           STRH     R4,[LR, #+0]
+    253          
+    254            NOR_WRITE(ADDR_SHIFT(0x02AA), 0x0055);  
+   \   00000016   ........           LDR.W    LR,??DataTable16  ;; 0x64000554
+   \   0000001A   5524               MOVS     R4,#+85
+   \   0000001C   AEF80040           STRH     R4,[LR, #+0]
+    255          
+    256            /* Write Write Buffer Load Command */
+    257            NOR_WRITE(ADDR_SHIFT(WriteAddr), 0x0025);
+   \   00000020   4FEA410E           LSL      LR,R1,#+1
+   \   00000024   0EF1C84E           ADD      LR,LR,#+1677721600
+   \   00000028   2524               MOVS     R4,#+37
+   \   0000002A   AEF80040           STRH     R4,[LR, #+0]
+    258            NOR_WRITE(ADDR_SHIFT(WriteAddr), (NumHalfwordToWrite - 1));
+   \   0000002E   521E               SUBS     R2,R2,#+1
+   \   00000030   AEF80020           STRH     R2,[LR, #+0]
+   \   00000034   4FF0C842           MOV      R2,#+1677721600
+   \   00000038   05E0               B.N      ??FSMC_NOR_ProgramBuffer_0
+    259          
+    260            /* Load Data into NOR Buffer */
+    261            while(currentaddress <= endaddress)
+    262            {
+    263              /* Store last loaded address & data value (for polling) */
+    264              lastloadedaddress = currentaddress;
+   \                     ??FSMC_NOR_ProgramBuffer_1:
+   \   0000003A   1900               MOVS     R1,R3
+    265           
+    266              NOR_WRITE(ADDR_SHIFT(currentaddress), *pBuffer++);
+   \   0000003C   30F802EB           LDRH     LR,[R0], #+2
+   \   00000040   22F813E0           STRH     LR,[R2, R3, LSL #+1]
+    267              currentaddress += 1; 
+   \   00000044   5B1C               ADDS     R3,R3,#+1
+    268            }
+   \                     ??FSMC_NOR_ProgramBuffer_0:
+   \   00000046   9C45               CMP      R12,R3
+   \   00000048   F7D2               BCS.N    ??FSMC_NOR_ProgramBuffer_1
+    269          
+    270            NOR_WRITE(ADDR_SHIFT(lastloadedaddress), 0x29);
+   \   0000004A   1046               MOV      R0,R2
+   \   0000004C   2922               MOVS     R2,#+41
+   \   0000004E   20F81120           STRH     R2,[R0, R1, LSL #+1]
+    271            
+    272            return(FSMC_NOR_GetStatus(Program_Timeout));
+   \   00000052   4FF4A050           MOV      R0,#+5120
+   \   00000056   BDE81040           POP      {R4,LR}
+   \   0000005A   ....               B.N      FSMC_NOR_GetStatus
+    273          }
+    274          
+    275          /******************************************************************************
+    276          * Function Name  : FSMC_NOR_ReadHalfWord
+    277          * Description    : Reads a half-word from the NOR memory. 
+    278          * Input          : - ReadAddr : NOR memory internal address to read from.
+    279          * Output         : None
+    280          * Return         : Half-word read from the NOR memory
+    281          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+    282          u16 FSMC_NOR_ReadHalfWord(u32 ReadAddr)
+    283          {
+    284            NOR_WRITE(ADDR_SHIFT(0x00555), 0x00AA); 
+   \                     FSMC_NOR_ReadHalfWord:
+   \   00000000   ....               LDR.N    R1,??DataTable15  ;; 0x64000aaa
+   \   00000002   AA22               MOVS     R2,#+170
+   \   00000004   0A80               STRH     R2,[R1, #+0]
+    285            NOR_WRITE(ADDR_SHIFT(0x002AA), 0x0055);  
+   \   00000006   ....               LDR.N    R1,??DataTable16  ;; 0x64000554
+   \   00000008   5522               MOVS     R2,#+85
+   \   0000000A   0A80               STRH     R2,[R1, #+0]
+   \   0000000C   00F1C840           ADD      R0,R0,#+1677721600
+   \   00000010   F021               MOVS     R1,#+240
+   \   00000012   0180               STRH     R1,[R0, #+0]
+    286            NOR_WRITE((Bank1_NOR2_ADDR + ReadAddr), 0x00F0 );
+    287          
+    288            return (*(vu16 *)((Bank1_NOR2_ADDR + ReadAddr)));
+   \   00000014   0088               LDRH     R0,[R0, #+0]
+   \   00000016   7047               BX       LR               ;; return
+    289          }
+    290          
+    291          /*******************************************************************************
+    292          * Function Name  : FSMC_NOR_ReadBuffer
+    293          * Description    : Reads a block of data from the FSMC NOR memory.
+    294          * Input          : - pBuffer : pointer to the buffer that receives the data read 
+    295          *                    from the NOR memory.
+    296          *                  - ReadAddr : NOR memory internal address to read from.
+    297          *                  - NumHalfwordToRead : number of Half word to read.
+    298          * Output         : None
+    299          * Return         : None
+    300          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+    301          void FSMC_NOR_ReadBuffer(u16* pBuffer, u32 ReadAddr, u32 NumHalfwordToRead)
+    302          {
+    303            NOR_WRITE(ADDR_SHIFT(0x0555), 0x00AA);
+   \                     FSMC_NOR_ReadBuffer:
+   \   00000000   ....               LDR.N    R3,??DataTable15  ;; 0x64000aaa
+   \   00000002   4FF0AA0C           MOV      R12,#+170
+   \   00000006   A3F800C0           STRH     R12,[R3, #+0]
+    304            NOR_WRITE(ADDR_SHIFT(0x02AA), 0x0055);
+   \   0000000A   ....               LDR.N    R3,??DataTable16  ;; 0x64000554
+   \   0000000C   4FF0550C           MOV      R12,#+85
+   \   00000010   A3F800C0           STRH     R12,[R3, #+0]
+    305            NOR_WRITE((Bank1_NOR2_ADDR + ReadAddr), 0x00F0);
+   \   00000014   01F1C843           ADD      R3,R1,#+1677721600
+   \   00000018   4FF0F00C           MOV      R12,#+240
+   \   0000001C   A3F800C0           STRH     R12,[R3, #+0]
+   \   00000020   002A               CMP      R2,#+0
+   \   00000022   06E0               B.N      ??FSMC_NOR_ReadBuffer_0
+    306          
+    307            for(; NumHalfwordToRead != 0x00; NumHalfwordToRead--) /* while there is data to read */
+    308            {
+    309              /* Read a Halfword from the NOR */
+    310              *pBuffer++ = *(vu16 *)((Bank1_NOR2_ADDR + ReadAddr));
+   \                     ??FSMC_NOR_ReadBuffer_1:
+   \   00000024   01F1C843           ADD      R3,R1,#+1677721600
+   \   00000028   1B88               LDRH     R3,[R3, #+0]
+   \   0000002A   20F8023B           STRH     R3,[R0], #+2
+    311              ReadAddr = ReadAddr + 2; 
+   \   0000002E   891C               ADDS     R1,R1,#+2
+    312            }  
+   \   00000030   521E               SUBS     R2,R2,#+1
+   \                     ??FSMC_NOR_ReadBuffer_0:
+   \   00000032   F7D1               BNE.N    ??FSMC_NOR_ReadBuffer_1
+    313          }
+   \   00000034   7047               BX       LR               ;; return
+    314          
+    315          /******************************************************************************
+    316          * Function Name  : FSMC_NOR_ReturnToReadMode
+    317          * Description    : Returns the NOR memory to Read mode.
+    318          * Input          : None
+    319          * Output         : None
+    320          * Return         : NOR_SUCCESS
+    321          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+    322          NOR_Status FSMC_NOR_ReturnToReadMode(void)
+    323          {
+    324            NOR_WRITE(Bank1_NOR2_ADDR, 0x00F0);
+   \                     FSMC_NOR_ReturnToReadMode:
+   \   00000000   4FF0C840           MOV      R0,#+1677721600
+   \   00000004   ....               B.N      ?Subroutine0
+    325          
+    326            return (NOR_SUCCESS);
+    327          }
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ?Subroutine0:
+   \   00000000   F021               MOVS     R1,#+240
+   \   00000002   0180               STRH     R1,[R0, #+0]
+   \   00000004   0020               MOVS     R0,#+0
+   \   00000006   7047               BX       LR               ;; return
+    328          
+    329          /******************************************************************************
+    330          * Function Name  : FSMC_NOR_Reset
+    331          * Description    : Returns the NOR memory to Read mode and resets the errors in
+    332          *                  the NOR memory Status Register.
+    333          * Input          : None
+    334          * Output         : None
+    335          * Return         : NOR_SUCCESS
+    336          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+    337          NOR_Status FSMC_NOR_Reset(void)
+    338          {
+    339            NOR_WRITE(ADDR_SHIFT(0x00555), 0x00AA); 
+   \                     FSMC_NOR_Reset:
+   \   00000000   ....               LDR.N    R0,??DataTable15  ;; 0x64000aaa
+   \   00000002   AA21               MOVS     R1,#+170
+   \   00000004   0180               STRH     R1,[R0, #+0]
+    340            NOR_WRITE(ADDR_SHIFT(0x002AA), 0x0055); 
+   \   00000006   ....               LDR.N    R0,??DataTable16  ;; 0x64000554
+   \   00000008   5521               MOVS     R1,#+85
+   \   0000000A   0180               STRH     R1,[R0, #+0]
+    341            NOR_WRITE(Bank1_NOR2_ADDR, 0x00F0); 
+   \   0000000C   4FF0C840           MOV      R0,#+1677721600
+   \   00000010                      REQUIRE ?Subroutine0
+   \   00000010                      ;; // Fall through to label ?Subroutine0
+    342          
+    343            return (NOR_SUCCESS);
+    344          }
+    345          
+    346          /******************************************************************************
+    347          * Function Name  : FSMC_NOR_GetStatus
+    348          * Description    : Returns the NOR operation status.
+    349          * Input          : - Timeout: NOR progamming Timeout
+    350          * Output         : None
+    351          * Return         : NOR_Status:The returned value can be: NOR_SUCCESS, NOR_ERROR
+    352          *                  or NOR_TIMEOUT
+    353          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+    354          NOR_Status FSMC_NOR_GetStatus(u32 Timeout)
+    355          { 
+   \                     FSMC_NOR_GetStatus:
+   \   00000000   F8B5               PUSH     {R3-R7,LR}
+   \   00000002   0500               MOVS     R5,R0
+    356            u16 val1 = 0x00, val2 = 0x00;
+    357            NOR_Status status = NOR_ONGOING; 
+   \   00000004   0124               MOVS     R4,#+1
+    358            u32 timeout = Timeout;
+   \   00000006   2E00               MOVS     R6,R5
+   \   00000008   ....               LDR.N    R7,??DataTable17  ;; 0x40011400
+   \   0000000A   00E0               B.N      ??FSMC_NOR_GetStatus_0
+    359          
+    360            /* Poll on NOR memory Ready/Busy signal ------------------------------------*/
+    361            while((GPIO_ReadInputDataBit(GPIOD, GPIO_Pin_6) != RESET) && (timeout > 0)) 
+    362            {
+    363              timeout--;
+   \                     ??FSMC_NOR_GetStatus_1:
+   \   0000000C   761E               SUBS     R6,R6,#+1
+    364            }
+   \                     ??FSMC_NOR_GetStatus_0:
+   \   0000000E   4021               MOVS     R1,#+64
+   \   00000010   3800               MOVS     R0,R7
+   \   00000012   ........           BL       GPIO_ReadInputDataBit
+   \   00000016   08B1               CBZ      R0,??FSMC_NOR_GetStatus_2
+   \   00000018   002E               CMP      R6,#+0
+   \   0000001A   F7D1               BNE.N    ??FSMC_NOR_GetStatus_1
+    365          
+    366            timeout = Timeout;
+   \                     ??FSMC_NOR_GetStatus_2:
+   \   0000001C   2E00               MOVS     R6,R5
+   \   0000001E   00E0               B.N      ??FSMC_NOR_GetStatus_3
+    367            
+    368            while((GPIO_ReadInputDataBit(GPIOD, GPIO_Pin_6) == RESET) && (timeout > 0))   
+    369            {
+    370              timeout--;
+   \                     ??FSMC_NOR_GetStatus_4:
+   \   00000020   761E               SUBS     R6,R6,#+1
+    371            }
+   \                     ??FSMC_NOR_GetStatus_3:
+   \   00000022   4021               MOVS     R1,#+64
+   \   00000024   3800               MOVS     R0,R7
+   \   00000026   ........           BL       GPIO_ReadInputDataBit
+   \   0000002A   08B9               CBNZ     R0,??FSMC_NOR_GetStatus_5
+   \   0000002C   002E               CMP      R6,#+0
+   \   0000002E   F7D1               BNE.N    ??FSMC_NOR_GetStatus_4
+    372            
+    373            /* Get the NOR memory operation status -------------------------------------*/
+    374            while((Timeout != 0x00) && (status != NOR_SUCCESS))
+   \                     ??FSMC_NOR_GetStatus_5:
+   \   00000030   05B3               CBZ      R5,??FSMC_NOR_GetStatus_6
+   \   00000032   04B3               CBZ      R4,??FSMC_NOR_GetStatus_7
+    375            {
+    376              Timeout--;
+   \   00000034   6D1E               SUBS     R5,R5,#+1
+    377          
+    378          	  /* Read DQ6 and DQ5 */
+    379              val1 = *(vu16 *)(Bank1_NOR2_ADDR);
+   \   00000036   4FF0C840           MOV      R0,#+1677721600
+   \   0000003A   0088               LDRH     R0,[R0, #+0]
+    380              val2 = *(vu16 *)(Bank1_NOR2_ADDR);
+   \   0000003C   4FF0C841           MOV      R1,#+1677721600
+   \   00000040   0988               LDRH     R1,[R1, #+0]
+    381          
+    382              /* If DQ6 did not toggle between the two reads then return NOR_Success */
+    383              if((val1 & 0x0040) == (val2 & 0x0040)) 
+   \   00000042   00F04002           AND      R2,R0,#0x40
+   \   00000046   01F04001           AND      R1,R1,#0x40
+   \   0000004A   8A42               CMP      R2,R1
+   \   0000004C   01D1               BNE.N    ??FSMC_NOR_GetStatus_8
+    384              {
+    385                return NOR_SUCCESS;
+   \                     ??FSMC_NOR_GetStatus_9:
+   \   0000004E   0020               MOVS     R0,#+0
+   \   00000050   F2BD               POP      {R1,R4-R7,PC}
+    386              }
+    387          
+    388              if((val1 & 0x0020) != 0x0020)
+    389              {
+    390                status = NOR_ONGOING;
+    391              }
+    392          
+    393              val1 = *(vu16 *)(Bank1_NOR2_ADDR);
+   \                     ??FSMC_NOR_GetStatus_8:
+   \   00000052   4FF0C840           MOV      R0,#+1677721600
+   \   00000056   0088               LDRH     R0,[R0, #+0]
+    394              val2 = *(vu16 *)(Bank1_NOR2_ADDR);
+   \   00000058   4FF0C841           MOV      R1,#+1677721600
+   \   0000005C   0988               LDRH     R1,[R1, #+0]
+    395              
+    396              if((val1 & 0x0040) == (val2 & 0x0040)) 
+   \   0000005E   00F04002           AND      R2,R0,#0x40
+   \   00000062   01F04001           AND      R1,R1,#0x40
+   \   00000066   8A42               CMP      R2,R1
+   \   00000068   F1D0               BEQ.N    ??FSMC_NOR_GetStatus_9
+    397              {
+    398                return NOR_SUCCESS;
+    399              }
+    400              else if((val1 & 0x0020) == 0x0020)
+   \   0000006A   10F0200F           TST      R0,#0x20
+   \   0000006E   DFD0               BEQ.N    ??FSMC_NOR_GetStatus_5
+    401              {
+    402                return NOR_ERROR;
+   \   00000070   0220               MOVS     R0,#+2
+   \   00000072   F2BD               POP      {R1,R4-R7,PC}
+    403              }
+    404            }
+    405          
+    406            if(Timeout == 0x00)
+    407            {
+    408              status = NOR_TIMEOUT;
+   \                     ??FSMC_NOR_GetStatus_6:
+   \   00000074   0324               MOVS     R4,#+3
+    409            } 
+    410          
+    411            /* Return the operation status */
+    412            return (status);
+   \                     ??FSMC_NOR_GetStatus_7:
+   \   00000076   2000               MOVS     R0,R4
+   \                     ??FSMC_NOR_GetStatus_10:
+   \   00000078   F2BD               POP      {R1,R4-R7,PC}    ;; return
+    413          }
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable15:
+   \   00000000   AA0A0064           DC32     0x64000aaa
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable16:
+   \   00000000   54050064           DC32     0x64000554
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable17:
+   \   00000000   00140140           DC32     0x40011400
+    414          
+    415          /******************* (C) COPYRIGHT 2008 STMicroelectronics *****END OF FILE****/
+
+   Maximum stack usage in bytes:
+
+     Function                  .cstack
+     --------                  -------
+     FSMC_NOR_EraseBlock            0
+     FSMC_NOR_EraseChip             0
+     FSMC_NOR_GetStatus             0
+     FSMC_NOR_Init                  0
+     FSMC_NOR_ProgramBuffer         0
+     FSMC_NOR_ReadBuffer            0
+     FSMC_NOR_ReadHalfWord          0
+     FSMC_NOR_ReadID                0
+     FSMC_NOR_Reset                 0
+     FSMC_NOR_ReturnToReadMode      0
+     FSMC_NOR_WriteBuffer           0
+     FSMC_NOR_WriteHalfWord         0
+
+
+   Section sizes:
+
+     Function/Label            Bytes
+     --------------            -----
+     FSMC_NOR_Init              256
+     FSMC_NOR_ReadID             50
+     FSMC_NOR_EraseBlock         38
+     FSMC_NOR_EraseChip          34
+     FSMC_NOR_WriteHalfWord      32
+     FSMC_NOR_WriteBuffer        30
+     FSMC_NOR_ProgramBuffer      92
+     FSMC_NOR_ReadHalfWord       24
+     FSMC_NOR_ReadBuffer         54
+     FSMC_NOR_ReturnToReadMode    6
+     ?Subroutine0                 8
+     FSMC_NOR_Reset              16
+     FSMC_NOR_GetStatus         122
+     ??DataTable15                4
+     ??DataTable16                4
+     ??DataTable17                4
+
+ 
+ 774 bytes in section .text
+ 
+ 774 bytes of CODE memory
+
+Errors: none
+Warnings: none

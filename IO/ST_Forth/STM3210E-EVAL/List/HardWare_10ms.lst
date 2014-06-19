@@ -1,0 +1,228 @@
+###############################################################################
+#                                                                             #
+# IAR ANSI C/C++ Compiler V5.20.0.50892/W32 for ARM     16/Dec/2008  15:18:46 #
+# Copyright 1999-2008 IAR Systems AB.                                         #
+#                                                                             #
+#    Cpu mode     =  thumb                                                    #
+#    Endian       =  little                                                   #
+#    Source file  =  D:\wesley\AS210R_ST_200812151925\HardWare_10ms.c         #
+#    Command line =  D:\wesley\AS210R_ST_200812151925\HardWare_10ms.c -D      #
+#                    VECT_TAB_FLASH -lC D:\wesley\AS210R_ST_200812151925\STM3 #
+#                    210E-EVAL\List\ -o D:\wesley\AS210R_ST_200812151925\STM3 #
+#                    210E-EVAL\Obj\ --no_cse --no_unroll --no_inline          #
+#                    --no_code_motion --no_tbaa --no_clustering               #
+#                    --no_scheduling --debug --endian=little --cpu=Cortex-M3  #
+#                    -e --char_is_signed --require_prototypes --fpu=None      #
+#                    --dlib_config "C:\Program Files\IAR Systems\Embedded     #
+#                    Workbench 5.0\ARM\INC\DLib_Config_Full.h" -I             #
+#                    D:\wesley\AS210R_ST_200812151925\ -I                     #
+#                    D:\wesley\AS210R_ST_200812151925\library\inc\ -I         #
+#                    "C:\Program Files\IAR Systems\Embedded Workbench         #
+#                    5.0\ARM\INC\" -On                                        #
+#    List file    =  D:\wesley\AS210R_ST_200812151925\STM3210E-EVAL\List\Hard #
+#                    Ware_10ms.lst                                            #
+#    Object file  =  D:\wesley\AS210R_ST_200812151925\STM3210E-EVAL\Obj\HardW #
+#                    are_10ms.o                                               #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+D:\wesley\AS210R_ST_200812151925\HardWare_10ms.c
+      1          #include "stm32f10x_it.h"
+      2          
+
+   \                                 In section .bss, align 4
+      3          unsigned int ms_timer_counter;
+   \                     ms_timer_counter:
+   \   00000000                      DS8 4
+      4          
+      5          
+      6          extern u16 capture;
+      7          extern vu16 Tim2_CCR1_Val;
+      8          extern vu16 Tim2_CCR2_Val;
+      9          extern vu16 Tim2_CCR3_Val;
+     10          extern vu16 Tim2_CCR4_Val;
+     11          
+     12          
+     13          void TIM2_ISR(void);
+     14          
+     15          /*******************************************************************************
+     16          * Function Name  : TIM2_IRQHandler
+     17          * Description    : This function handles TIM2 global interrupt request.
+     18          * Input          : None
+     19          * Output         : None
+     20          * Return         : None
+     21          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+     22          void TIM2_ISR(void)
+     23          {
+   \                     TIM2_ISR:
+   \   00000000   80B5               PUSH     {R7,LR}
+     24            if (TIM_GetITStatus(TIM2, TIM_IT_CC1) != RESET)
+   \   00000002   0221               MOVS     R1,#+2
+   \   00000004   5FF08040           MOVS     R0,#+1073741824
+   \   00000008   ........           BL       TIM_GetITStatus
+   \   0000000C   0028               CMP      R0,#+0
+   \   0000000E   15D0               BEQ.N    ??TIM2_ISR_0
+     25            {
+     26              TIM_ClearITPendingBit(TIM2, TIM_IT_CC1);
+   \   00000010   0221               MOVS     R1,#+2
+   \   00000012   5FF08040           MOVS     R0,#+1073741824
+   \   00000016   ........           BL       TIM_ClearITPendingBit
+     27          
+     28              /* Pin PC.06 toggling with frequency = 73.24 Hz */
+     29          //    GPIO_WriteBit(GPIOC, GPIO_Pin_6, (BitAction)(1 - GPIO_ReadOutputDataBit(GPIOC, GPIO_Pin_6)));
+     30              capture = TIM_GetCapture1(TIM2);
+   \   0000001A   5FF08040           MOVS     R0,#+1073741824
+   \   0000001E   ........           BL       TIM_GetCapture1
+   \   00000022   3B49               LDR.N    R1,??TIM2_ISR_1  ;; capture
+   \   00000024   0880               STRH     R0,[R1, #+0]
+     31              TIM_SetCompare1(TIM2, capture + Tim2_CCR1_Val);
+   \   00000026   3A48               LDR.N    R0,??TIM2_ISR_1  ;; capture
+   \   00000028   0088               LDRH     R0,[R0, #+0]
+   \   0000002A   3A49               LDR.N    R1,??TIM2_ISR_1+0x4  ;; Tim2_CCR1_Val
+   \   0000002C   0988               LDRH     R1,[R1, #+0]
+   \   0000002E   0918               ADDS     R1,R1,R0
+   \   00000030   89B2               UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
+   \   00000032   5FF08040           MOVS     R0,#+1073741824
+   \   00000036   ........           BL       TIM_SetCompare1
+   \   0000003A   68E0               B.N      ??TIM2_ISR_2
+     32            }
+     33            else if (TIM_GetITStatus(TIM2, TIM_IT_CC2) != RESET)
+   \                     ??TIM2_ISR_0:
+   \   0000003C   0421               MOVS     R1,#+4
+   \   0000003E   5FF08040           MOVS     R0,#+1073741824
+   \   00000042   ........           BL       TIM_GetITStatus
+   \   00000046   0028               CMP      R0,#+0
+   \   00000048   15D0               BEQ.N    ??TIM2_ISR_3
+     34            {
+     35              TIM_ClearITPendingBit(TIM2, TIM_IT_CC2);
+   \   0000004A   0421               MOVS     R1,#+4
+   \   0000004C   5FF08040           MOVS     R0,#+1073741824
+   \   00000050   ........           BL       TIM_ClearITPendingBit
+     36          
+     37              /* Pin PC.07 toggling with frequency = 109.8 Hz */
+     38          //    GPIO_WriteBit(GPIOC, GPIO_Pin_6, (BitAction)(1 - GPIO_ReadOutputDataBit(GPIOC, GPIO_Pin_7)));
+     39              capture = TIM_GetCapture2(TIM2);
+   \   00000054   5FF08040           MOVS     R0,#+1073741824
+   \   00000058   ........           BL       TIM_GetCapture2
+   \   0000005C   2C49               LDR.N    R1,??TIM2_ISR_1  ;; capture
+   \   0000005E   0880               STRH     R0,[R1, #+0]
+     40              TIM_SetCompare2(TIM2, capture + Tim2_CCR2_Val);
+   \   00000060   2B48               LDR.N    R0,??TIM2_ISR_1  ;; capture
+   \   00000062   0088               LDRH     R0,[R0, #+0]
+   \   00000064   2C49               LDR.N    R1,??TIM2_ISR_1+0x8  ;; Tim2_CCR2_Val
+   \   00000066   0988               LDRH     R1,[R1, #+0]
+   \   00000068   0918               ADDS     R1,R1,R0
+   \   0000006A   89B2               UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
+   \   0000006C   5FF08040           MOVS     R0,#+1073741824
+   \   00000070   ........           BL       TIM_SetCompare2
+   \   00000074   4BE0               B.N      ??TIM2_ISR_2
+     41            }
+     42            else if (TIM_GetITStatus(TIM2, TIM_IT_CC3) != RESET)
+   \                     ??TIM2_ISR_3:
+   \   00000076   0821               MOVS     R1,#+8
+   \   00000078   5FF08040           MOVS     R0,#+1073741824
+   \   0000007C   ........           BL       TIM_GetITStatus
+   \   00000080   0028               CMP      R0,#+0
+   \   00000082   22D0               BEQ.N    ??TIM2_ISR_4
+     43            {
+     44              TIM_ClearITPendingBit(TIM2, TIM_IT_CC3);
+   \   00000084   0821               MOVS     R1,#+8
+   \   00000086   5FF08040           MOVS     R0,#+1073741824
+   \   0000008A   ........           BL       TIM_ClearITPendingBit
+     45          
+     46              /* Pin PC.08 toggling with frequency = 219.7 Hz */
+     47              GPIO_WriteBit(GPIOC, GPIO_Pin_8, (BitAction)(1 - GPIO_ReadOutputDataBit(GPIOC, GPIO_Pin_8)));
+   \   0000008E   4FF48071           MOV      R1,#+256
+   \   00000092   2248               LDR.N    R0,??TIM2_ISR_1+0xC  ;; 0x40011000
+   \   00000094   ........           BL       GPIO_ReadOutputDataBit
+   \   00000098   D0F10102           RSBS     R2,R0,#+1
+   \   0000009C   52B2               SXTB     R2,R2            ;; SignExt  R2,R2,#+24,#+24
+   \   0000009E   4FF48071           MOV      R1,#+256
+   \   000000A2   1E48               LDR.N    R0,??TIM2_ISR_1+0xC  ;; 0x40011000
+   \   000000A4   ........           BL       GPIO_WriteBit
+     48              capture = TIM_GetCapture3(TIM2);
+   \   000000A8   5FF08040           MOVS     R0,#+1073741824
+   \   000000AC   ........           BL       TIM_GetCapture3
+   \   000000B0   1749               LDR.N    R1,??TIM2_ISR_1  ;; capture
+   \   000000B2   0880               STRH     R0,[R1, #+0]
+     49              TIM_SetCompare3(TIM2, capture + Tim2_CCR3_Val);
+   \   000000B4   1648               LDR.N    R0,??TIM2_ISR_1  ;; capture
+   \   000000B6   0088               LDRH     R0,[R0, #+0]
+   \   000000B8   1949               LDR.N    R1,??TIM2_ISR_1+0x10  ;; Tim2_CCR3_Val
+   \   000000BA   0988               LDRH     R1,[R1, #+0]
+   \   000000BC   0918               ADDS     R1,R1,R0
+   \   000000BE   89B2               UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
+   \   000000C0   5FF08040           MOVS     R0,#+1073741824
+   \   000000C4   ........           BL       TIM_SetCompare3
+   \   000000C8   21E0               B.N      ??TIM2_ISR_2
+     50            }
+     51            else
+     52            {
+     53              TIM_ClearITPendingBit(TIM2, TIM_IT_CC4);
+   \                     ??TIM2_ISR_4:
+   \   000000CA   1021               MOVS     R1,#+16
+   \   000000CC   5FF08040           MOVS     R0,#+1073741824
+   \   000000D0   ........           BL       TIM_ClearITPendingBit
+     54          
+     55              /* Pin PC.09 toggling with frequency = 439.4 Hz */
+     56              GPIO_WriteBit(GPIOC, GPIO_Pin_9, (BitAction)(1 - GPIO_ReadOutputDataBit(GPIOC, GPIO_Pin_9)));
+   \   000000D4   4FF40071           MOV      R1,#+512
+   \   000000D8   1048               LDR.N    R0,??TIM2_ISR_1+0xC  ;; 0x40011000
+   \   000000DA   ........           BL       GPIO_ReadOutputDataBit
+   \   000000DE   D0F10102           RSBS     R2,R0,#+1
+   \   000000E2   52B2               SXTB     R2,R2            ;; SignExt  R2,R2,#+24,#+24
+   \   000000E4   4FF40071           MOV      R1,#+512
+   \   000000E8   0C48               LDR.N    R0,??TIM2_ISR_1+0xC  ;; 0x40011000
+   \   000000EA   ........           BL       GPIO_WriteBit
+     57              capture = TIM_GetCapture4(TIM2);
+   \   000000EE   5FF08040           MOVS     R0,#+1073741824
+   \   000000F2   ........           BL       TIM_GetCapture4
+   \   000000F6   0649               LDR.N    R1,??TIM2_ISR_1  ;; capture
+   \   000000F8   0880               STRH     R0,[R1, #+0]
+     58              TIM_SetCompare4(TIM2, capture + Tim2_CCR4_Val);
+   \   000000FA   0548               LDR.N    R0,??TIM2_ISR_1  ;; capture
+   \   000000FC   0088               LDRH     R0,[R0, #+0]
+   \   000000FE   0949               LDR.N    R1,??TIM2_ISR_1+0x14  ;; Tim2_CCR4_Val
+   \   00000100   0988               LDRH     R1,[R1, #+0]
+   \   00000102   0918               ADDS     R1,R1,R0
+   \   00000104   89B2               UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
+   \   00000106   5FF08040           MOVS     R0,#+1073741824
+   \   0000010A   ........           BL       TIM_SetCompare4
+     59            }
+     60          }
+   \                     ??TIM2_ISR_2:
+   \   0000010E   01BD               POP      {R0,PC}          ;; return
+   \                     ??TIM2_ISR_1:
+   \   00000110   ........           DC32     capture
+   \   00000114   ........           DC32     Tim2_CCR1_Val
+   \   00000118   ........           DC32     Tim2_CCR2_Val
+   \   0000011C   00100140           DC32     0x40011000
+   \   00000120   ........           DC32     Tim2_CCR3_Val
+   \   00000124   ........           DC32     Tim2_CCR4_Val
+
+   Maximum stack usage in bytes:
+
+     Function .cstack
+     -------- -------
+     TIM2_ISR      0
+
+
+   Section sizes:
+
+     Function/Label   Bytes
+     --------------   -----
+     ms_timer_counter    4
+     TIM2_ISR          296
+
+ 
+   4 bytes in section .bss
+ 296 bytes in section .text
+ 
+ 296 bytes of CODE memory
+   4 bytes of DATA memory
+
+Errors: none
+Warnings: none

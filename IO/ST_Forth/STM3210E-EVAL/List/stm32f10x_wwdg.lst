@@ -1,0 +1,334 @@
+###############################################################################
+#                                                                             #
+# IAR ANSI C/C++ Compiler V5.20.0.50892/W32 for ARM     07/Oct/2009  13:04:02 #
+# Copyright 1999-2008 IAR Systems AB.                                         #
+#                                                                             #
+#    Cpu mode     =  thumb                                                    #
+#    Endian       =  little                                                   #
+#    Source file  =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\library\src\stm32f #
+#                    10x_wwdg.c                                               #
+#    Command line =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\library\src\stm32f #
+#                    10x_wwdg.c -D VECT_TAB_FLASH -lC                         #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\List #
+#                    \ -o F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL #
+#                    \Obj\ --debug --endian=little --cpu=Cortex-M3 -e         #
+#                    --char_is_signed --require_prototypes --fpu=None         #
+#                    --dlib_config "C:\Program Files\IAR Systems\Embedded     #
+#                    Workbench 5.0\ARM\INC\DLib_Config_Full.h" -I             #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\ -I                #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\library\inc\ -I    #
+#                    "C:\Program Files\IAR Systems\Embedded Workbench         #
+#                    5.0\ARM\INC\" -Ohz                                       #
+#    List file    =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\List #
+#                    \stm32f10x_wwdg.lst                                      #
+#    Object file  =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\ #
+#                    stm32f10x_wwdg.o                                         #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\library\src\stm32f10x_wwdg.c
+      1          /******************** (C) COPYRIGHT 2008 STMicroelectronics ********************
+      2          * File Name          : stm32f10x_wwdg.c
+      3          * Author             : MCD Application Team
+      4          * Version            : V2.0.3
+      5          * Date               : 09/22/2008
+      6          * Description        : This file provides all the WWDG firmware functions.
+      7          ********************************************************************************
+      8          * THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
+      9          * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE TIME.
+     10          * AS A RESULT, STMICROELECTRONICS SHALL NOT BE HELD LIABLE FOR ANY DIRECT,
+     11          * INDIRECT OR CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING FROM THE
+     12          * CONTENT OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE CODING
+     13          * INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
+     14          *******************************************************************************/
+     15          
+     16          /* Includes ------------------------------------------------------------------*/
+     17          #include "stm32f10x_wwdg.h"
+     18          #include "stm32f10x_rcc.h"
+     19          
+     20          /* Private typedef -----------------------------------------------------------*/
+     21          /* Private define ------------------------------------------------------------*/
+     22          /* ----------- WWDG registers bit address in the alias region ----------- */
+     23          #define WWDG_OFFSET       (WWDG_BASE - PERIPH_BASE)
+     24          
+     25          /* Alias word address of EWI bit */
+     26          #define CFR_OFFSET        (WWDG_OFFSET + 0x04)
+     27          #define EWI_BitNumber     0x09
+     28          #define CFR_EWI_BB        (PERIPH_BB_BASE + (CFR_OFFSET * 32) + (EWI_BitNumber * 4))
+     29          
+     30          /* --------------------- WWDG registers bit mask ------------------------ */
+     31          /* CR register bit mask */
+     32          #define CR_WDGA_Set       ((u32)0x00000080)
+     33          
+     34          /* CFR register bit mask */
+     35          #define CFR_WDGTB_Mask    ((u32)0xFFFFFE7F)
+     36          #define CFR_W_Mask        ((u32)0xFFFFFF80)
+     37          
+     38          #define BIT_Mask          ((u8)0x7F)
+     39          
+     40          /* Private macro -------------------------------------------------------------*/
+     41          /* Private variables ---------------------------------------------------------*/
+     42          /* Private function prototypes -----------------------------------------------*/
+     43          /* Private functions ---------------------------------------------------------*/
+     44          
+     45          /*******************************************************************************
+     46          * Function Name  : WWDG_DeInit
+     47          * Description    : Deinitializes the WWDG  peripheral registers to their default
+     48          *                  reset values.
+     49          * Input          : None
+     50          * Output         : None
+     51          * Return         : None
+     52          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+     53          void WWDG_DeInit(void)
+     54          {
+   \                     WWDG_DeInit:
+   \   00000000   80B5               PUSH     {R7,LR}
+     55            RCC_APB1PeriphResetCmd(RCC_APB1Periph_WWDG, ENABLE);
+   \   00000002   0121               MOVS     R1,#+1
+   \   00000004   4FF40060           MOV      R0,#+2048
+   \   00000008   ........           BL       RCC_APB1PeriphResetCmd
+     56            RCC_APB1PeriphResetCmd(RCC_APB1Periph_WWDG, DISABLE);
+   \   0000000C   0021               MOVS     R1,#+0
+   \   0000000E   4FF40060           MOV      R0,#+2048
+   \   00000012   BDE80440           POP      {R2,LR}
+   \   00000016   ........           B.W      RCC_APB1PeriphResetCmd
+     57          }
+     58          
+     59          /*******************************************************************************
+     60          * Function Name  : WWDG_SetPrescaler
+     61          * Description    : Sets the WWDG Prescaler.
+     62          * Input          : - WWDG_Prescaler: specifies the WWDG Prescaler.
+     63          *                    This parameter can be one of the following values:
+     64          *                       - WWDG_Prescaler_1: WWDG counter clock = (PCLK1/4096)/1
+     65          *                       - WWDG_Prescaler_2: WWDG counter clock = (PCLK1/4096)/2
+     66          *                       - WWDG_Prescaler_4: WWDG counter clock = (PCLK1/4096)/4
+     67          *                       - WWDG_Prescaler_8: WWDG counter clock = (PCLK1/4096)/8
+     68          * Output         : None
+     69          * Return         : None
+     70          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+     71          void WWDG_SetPrescaler(u32 WWDG_Prescaler)
+     72          {
+     73            u32 tmpreg = 0;
+     74          
+     75            /* Check the parameters */
+     76            assert_param(IS_WWDG_PRESCALER(WWDG_Prescaler));
+     77          
+     78            /* Clear WDGTB[1:0] bits */
+     79            tmpreg = WWDG->CFR & CFR_WDGTB_Mask;
+   \                     WWDG_SetPrescaler:
+   \   00000000   ....               LDR.N    R1,??DataTable1  ;; 0x40002c04
+   \   00000002   0A68               LDR      R2,[R1, #+0]
+   \   00000004   6FF4C073           MVN      R3,#+384
+   \   00000008   1A40               ANDS     R2,R3,R2
+     80          
+     81            /* Set WDGTB[1:0] bits according to WWDG_Prescaler value */
+     82            tmpreg |= WWDG_Prescaler;
+     83          
+     84            /* Store the new value */
+     85            WWDG->CFR = tmpreg;
+   \   0000000A   1043               ORRS     R0,R0,R2
+   \   0000000C   0860               STR      R0,[R1, #+0]
+     86          }
+   \   0000000E   7047               BX       LR               ;; return
+     87          
+     88          /*******************************************************************************
+     89          * Function Name  : WWDG_SetWindowValue
+     90          * Description    : Sets the WWDG window value.
+     91          * Input          : - WindowValue: specifies the window value to be compared to
+     92          *                    the downcounter.
+     93          *                    This parameter value must be lower than 0x80.
+     94          * Output         : None
+     95          * Return         : None
+     96          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+     97          void WWDG_SetWindowValue(u8 WindowValue)
+     98          {
+     99            u32 tmpreg = 0;
+    100          
+    101            /* Check the parameters */
+    102            assert_param(IS_WWDG_WINDOW_VALUE(WindowValue));
+    103          
+    104            /* Clear W[6:0] bits */
+    105            tmpreg = WWDG->CFR & CFR_W_Mask;
+   \                     WWDG_SetWindowValue:
+   \   00000000   ....               LDR.N    R1,??DataTable1  ;; 0x40002c04
+   \   00000002   0A68               LDR      R2,[R1, #+0]
+   \   00000004   7F23               MOVS     R3,#+127
+   \   00000006   9A43               BICS     R2,R2,R3
+    106          
+    107            /* Set W[6:0] bits according to WindowValue value */
+    108            tmpreg |= WindowValue & BIT_Mask;
+    109          
+    110            /* Store the new value */
+    111            WWDG->CFR = tmpreg;
+   \   00000008   00F07F00           AND      R0,R0,#0x7F
+   \   0000000C   1043               ORRS     R0,R0,R2
+   \   0000000E   0860               STR      R0,[R1, #+0]
+    112          }
+   \   00000010   7047               BX       LR               ;; return
+    113          
+    114          /*******************************************************************************
+    115          * Function Name  : WWDG_EnableIT
+    116          * Description    : Enables the WWDG Early Wakeup interrupt(EWI).
+    117          * Input          : None
+    118          * Output         : None
+    119          * Return         : None
+    120          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+    121          void WWDG_EnableIT(void)
+    122          {
+    123            *(vu32 *) CFR_EWI_BB = (u32)ENABLE;
+   \                     WWDG_EnableIT:
+   \   00000000   0148               LDR.N    R0,??WWDG_EnableIT_0  ;; 0x420580a4
+   \   00000002   0121               MOVS     R1,#+1
+   \   00000004   0160               STR      R1,[R0, #+0]
+    124          }
+   \   00000006   7047               BX       LR               ;; return
+   \                     ??WWDG_EnableIT_0:
+   \   00000008   A4800542           DC32     0x420580a4
+    125          
+    126          /*******************************************************************************
+    127          * Function Name  : WWDG_SetCounter
+    128          * Description    : Sets the WWDG counter value.
+    129          * Input          : - Counter: specifies the watchdog counter value.
+    130          *                    This parameter must be a number between 0x40 and 0x7F.
+    131          * Output         : None
+    132          * Return         : None
+    133          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+    134          void WWDG_SetCounter(u8 Counter)
+    135          {
+    136            /* Check the parameters */
+    137            assert_param(IS_WWDG_COUNTER(Counter));
+    138          
+    139            /* Write to T[6:0] bits to configure the counter value, no need to do
+    140               a read-modify-write; writing a 0 to WDGA bit does nothing */
+    141            WWDG->CR = Counter & BIT_Mask;
+   \                     WWDG_SetCounter:
+   \   00000000   00F07F00           AND      R0,R0,#0x7F
+   \   00000004   ....               LDR.N    R1,??DataTable3  ;; 0x40002c00
+   \   00000006   0860               STR      R0,[R1, #+0]
+    142          }
+   \   00000008   7047               BX       LR               ;; return
+    143          
+    144          /*******************************************************************************
+    145          * Function Name  : WWDG_Enable
+    146          * Description    : Enables WWDG and load the counter value.
+    147          *                  - Counter: specifies the watchdog counter value.
+    148          *                    This parameter must be a number between 0x40 and 0x7F.
+    149          * Input          : None
+    150          * Output         : None
+    151          * Return         : None
+    152          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+    153          void WWDG_Enable(u8 Counter)
+    154          {
+    155            /* Check the parameters */
+    156            assert_param(IS_WWDG_COUNTER(Counter));
+    157          
+    158            WWDG->CR = CR_WDGA_Set | Counter;
+   \                     WWDG_Enable:
+   \   00000000   40F08000           ORR      R0,R0,#0x80
+   \   00000004   ....               LDR.N    R1,??DataTable3  ;; 0x40002c00
+   \   00000006   0860               STR      R0,[R1, #+0]
+    159          }
+   \   00000008   7047               BX       LR               ;; return
+    160          
+    161          /*******************************************************************************
+    162          * Function Name  : WWDG_GetFlagStatus
+    163          * Description    : Checks whether the Early Wakeup interrupt flag is set or not.
+    164          * Input          : None
+    165          * Output         : None
+    166          * Return         : The new state of the Early Wakeup interrupt flag (SET or RESET)
+    167          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+    168          FlagStatus WWDG_GetFlagStatus(void)
+    169          {
+    170            return (FlagStatus)(WWDG->SR);
+   \                     WWDG_GetFlagStatus:
+   \   00000000   ....               LDR.N    R0,??DataTable5  ;; 0x40002c08
+   \   00000002   0068               LDR      R0,[R0, #+0]
+   \   00000004   40B2               SXTB     R0,R0
+   \   00000006   7047               BX       LR               ;; return
+    171          }
+    172          
+    173          /*******************************************************************************
+    174          * Function Name  : WWDG_ClearFlag
+    175          * Description    : Clears Early Wakeup interrupt flag.
+    176          * Input          : None
+    177          * Output         : None
+    178          * Return         : None
+    179          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+    180          void WWDG_ClearFlag(void)
+    181          {
+    182            WWDG->SR = (u32)RESET;
+   \                     WWDG_ClearFlag:
+   \   00000000   ....               LDR.N    R0,??DataTable5  ;; 0x40002c08
+   \   00000002   0021               MOVS     R1,#+0
+   \   00000004   0160               STR      R1,[R0, #+0]
+    183          }
+   \   00000006   7047               BX       LR               ;; return
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable1:
+   \   00000000   042C0040           DC32     0x40002c04
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable3:
+   \   00000000   002C0040           DC32     0x40002c00
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable5:
+   \   00000000   082C0040           DC32     0x40002c08
+    184          
+    185          /******************* (C) COPYRIGHT 2008 STMicroelectronics *****END OF FILE****/
+
+   Maximum stack usage in bytes:
+
+     Function            .cstack
+     --------            -------
+     WWDG_ClearFlag           0
+     WWDG_DeInit              0
+     WWDG_Enable              0
+     WWDG_EnableIT            0
+     WWDG_GetFlagStatus       0
+     WWDG_SetCounter          0
+     WWDG_SetPrescaler        0
+     WWDG_SetWindowValue      0
+
+
+   Section sizes:
+
+     Function/Label      Bytes
+     --------------      -----
+     WWDG_DeInit           26
+     WWDG_SetPrescaler     16
+     WWDG_SetWindowValue   18
+     WWDG_EnableIT         12
+     WWDG_SetCounter       10
+     WWDG_Enable           10
+     WWDG_GetFlagStatus     8
+     WWDG_ClearFlag         8
+     ??DataTable1           4
+     ??DataTable3           4
+     ??DataTable5           4
+
+ 
+ 120 bytes in section .text
+ 
+ 120 bytes of CODE memory
+
+Errors: none
+Warnings: none

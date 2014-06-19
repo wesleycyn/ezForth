@@ -1,0 +1,359 @@
+###############################################################################
+#                                                                             #
+# IAR ANSI C/C++ Compiler V5.20.0.50892/W32 for ARM     07/Oct/2009  13:03:50 #
+# Copyright 1999-2008 IAR Systems AB.                                         #
+#                                                                             #
+#    Cpu mode     =  thumb                                                    #
+#    Endian       =  little                                                   #
+#    Source file  =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\HardWare_LEDScan.c #
+#    Command line =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\HardWare_LEDScan.c #
+#                     -D VECT_TAB_FLASH -lC F:\CoLtd\Forth\MCU\STM32F10x\ST_F #
+#                    orth\STM3210E-EVAL\List\ -o                              #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\ #
+#                     --debug --endian=little --cpu=Cortex-M3 -e              #
+#                    --char_is_signed --require_prototypes --fpu=None         #
+#                    --dlib_config "C:\Program Files\IAR Systems\Embedded     #
+#                    Workbench 5.0\ARM\INC\DLib_Config_Full.h" -I             #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\ -I                #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\library\inc\ -I    #
+#                    "C:\Program Files\IAR Systems\Embedded Workbench         #
+#                    5.0\ARM\INC\" -Ohz                                       #
+#    List file    =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\List #
+#                    \HardWare_LEDScan.lst                                    #
+#    Object file  =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\ #
+#                    HardWare_LEDScan.o                                       #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\HardWare_LEDScan.c
+      1          #include "stm32f10x.h"
+      2          #define SPI1_DR_Address    0x4001300C
+      3          #define SPI2_DR_Address    0x4000380C
+      4          
+      5          extern DMA_InitTypeDef DMA_InitStructure;
+      6          #define LED_byte_Length 10
+      7          extern struct LED{
+      8                       unsigned char COM[16][LED_byte_Length];
+      9                    }LED_display,LED_displayG,LED_buffer,LED_bufferG,Backup,BackupG;
+     10          
+     11          extern unsigned char LED_change;
+     12          extern volatile unsigned long msTi ;
+
+   \                                 In section FastDataRAM, align 4
+     13          unsigned int LedState @"FastDataRAM";
+   \                     LedState:
+   \   00000000                      DS8 4
+     14          extern unsigned char LED_ON_flag;
+     15          
+     16          extern void LEDsSet (unsigned int State);
+     17          extern void DMA_SPI(unsigned int Ti);
+     18          extern void mCopy(u8* sBuf,u8* dBuf,u32 Legth);
+     19          
+     20          
+     21          void  LED_OFF(void);
+     22          void TimingDelay_Decrement(void);
+     23          void SPI01(unsigned char * add0,unsigned char * add1, unsigned short count);
+
+   \                                 In section .text, align 4, keep-with-next
+     24          void  LED_OFF(void)
+     25          {
+     26           //  	IO2SET = 0x00800000; // Enable=Hi   
+     27          }
+   \                     LED_OFF:
+   \   00000000   7047               BX       LR               ;; return
+     28          
+     29          
+     30          /*******************************************************************************
+     31          * Function Name  : TimingDelay_Decrement
+     32          * Description    : Decrements the TimingDelay variable.
+     33          * Input          : None
+     34          * Output         : TimingDelay
+     35          * Return         : None
+     36          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+     37          void TimingDelay_Decrement(void)
+     38          {
+   \                     TimingDelay_Decrement:
+   \   00000000   2DE9F041           PUSH     {R4-R8,LR}
+     39          //  if (TimingDelay != 0x00)
+     40          //  { 
+     41          //    TimingDelay--;
+     42          //  }
+     43           
+     44          if(  LED_ON_flag != 0) 
+   \   00000004   6FF00104           MVN      R4,#+1
+   \   00000008   364D               LDR.N    R5,??TimingDelay_Decrement_0  ;; LedState
+   \   0000000A   3748               LDR.N    R0,??TimingDelay_Decrement_0+0x4  ;; LED_ON_flag
+   \   0000000C   0078               LDRB     R0,[R0, #+0]
+   \   0000000E   0028               CMP      R0,#+0
+   \   00000010   4ED0               BEQ.N    ??TimingDelay_Decrement_1
+     45          {  
+     46              if (LedState==16)
+   \   00000012   2868               LDR      R0,[R5, #+0]
+   \   00000014   354E               LDR.N    R6,??TimingDelay_Decrement_0+0x8  ;; LED_display
+   \   00000016   364F               LDR.N    R7,??TimingDelay_Decrement_0+0xC  ;; LED_displayG
+   \   00000018   1028               CMP      R0,#+16
+   \   0000001A   08D1               BNE.N    ??TimingDelay_Decrement_2
+     47              { 
+     48                  LEDsSet(~(0x1));// Enable=Hi  
+   \   0000001C   2000               MOVS     R0,R4
+   \   0000001E   ........           BL       LEDsSet
+     49          	SPI01(LED_display.COM[0],LED_displayG.COM[0],LED_byte_Length); // read temperature	
+   \   00000022   0A22               MOVS     R2,#+10
+   \   00000024   3900               MOVS     R1,R7
+   \   00000026   3000               MOVS     R0,R6
+   \                     ??TimingDelay_Decrement_3:
+   \   00000028   ........           BL       SPI01
+   \   0000002C   43E0               B.N      ??TimingDelay_Decrement_4
+     50              }
+     51              else
+     52              {
+     53                   LEDsSet(~((LedState<<6)|0x1));// Enable=Hi
+   \                     ??TimingDelay_Decrement_2:
+   \   0000002E   8001               LSLS     R0,R0,#+6
+   \   00000030   40F00100           ORR      R0,R0,#0x1
+   \   00000034   C043               MVNS     R0,R0
+   \   00000036   ........           BL       LEDsSet
+     54                   LEDsSet(~((LedState<<6)|0x0401));// LE&Enable=Hi        
+   \   0000003A   2868               LDR      R0,[R5, #+0]
+   \   0000003C   40F20141           MOVW     R1,#+1025
+   \   00000040   41EA8010           ORR      R0,R1,R0, LSL #+6
+   \   00000044   C043               MVNS     R0,R0
+   \   00000046   ........           BL       LEDsSet
+     55                   LEDsSet(~((LedState<<6)|0x1));// LE=Lo 
+   \   0000004A   2868               LDR      R0,[R5, #+0]
+   \   0000004C   8001               LSLS     R0,R0,#+6
+   \   0000004E   40F00100           ORR      R0,R0,#0x1
+   \   00000052   C043               MVNS     R0,R0
+   \   00000054   ........           BL       LEDsSet
+     56                   LEDsSet(~((LedState<<6)|0x1));// LE=Lo 
+   \   00000058   2868               LDR      R0,[R5, #+0]
+   \   0000005A   8001               LSLS     R0,R0,#+6
+   \   0000005C   40F00100           ORR      R0,R0,#0x1
+   \   00000060   C043               MVNS     R0,R0
+   \   00000062   ........           BL       LEDsSet
+     57                   LEDsSet(~(LedState<<6));          
+   \   00000066   2868               LDR      R0,[R5, #+0]
+   \   00000068   6FEA8010           MVN      R0,R0, LSL #+6
+   \   0000006C   ........           BL       LEDsSet
+     58          	if (LedState==15)  
+   \   00000070   2868               LDR      R0,[R5, #+0]
+   \   00000072   0F28               CMP      R0,#+15
+   \   00000074   13D1               BNE.N    ??TimingDelay_Decrement_5
+     59          	{
+     60          	    if(LED_change==1)
+   \   00000076   DFF87C80           LDR.W    R8,??TimingDelay_Decrement_0+0x10  ;; LED_change
+   \   0000007A   98F80000           LDRB     R0,[R8, #+0]
+   \   0000007E   0128               CMP      R0,#+1
+   \   00000080   19D1               BNE.N    ??TimingDelay_Decrement_4
+     61          	    {
+     62                         mCopy((unsigned char*)LED_buffer.COM[0],(unsigned char*)LED_display.COM[0],LED_byte_Length*16);
+   \   00000082   A022               MOVS     R2,#+160
+   \   00000084   3100               MOVS     R1,R6
+   \   00000086   1C48               LDR.N    R0,??TimingDelay_Decrement_0+0x14  ;; LED_buffer
+   \   00000088   ........           BL       mCopy
+     63                         mCopy((unsigned char*)LED_bufferG.COM[0],(unsigned char*)LED_displayG.COM[0],LED_byte_Length*16);                                        
+   \   0000008C   A022               MOVS     R2,#+160
+   \   0000008E   3900               MOVS     R1,R7
+   \   00000090   1A48               LDR.N    R0,??TimingDelay_Decrement_0+0x18  ;; LED_bufferG
+   \   00000092   ........           BL       mCopy
+     64          	       LED_change=0;
+   \   00000096   0020               MOVS     R0,#+0
+   \   00000098   88F80000           STRB     R0,[R8, #+0]
+   \   0000009C   0BE0               B.N      ??TimingDelay_Decrement_4
+     65                      }
+     66                    
+     67          	}	
+     68          	else
+     69          	{
+     70                    SPI01(LED_display.COM[(LedState+1)&0xf],LED_displayG.COM[(LedState+1)&0xf],LED_byte_Length); // read temperature          
+   \                     ??TimingDelay_Decrement_5:
+   \   0000009E   401C               ADDS     R0,R0,#+1
+   \   000000A0   00F00F00           AND      R0,R0,#0xF
+   \   000000A4   0A21               MOVS     R1,#+10
+   \   000000A6   4843               MULS     R0,R0,R1
+   \   000000A8   0A22               MOVS     R2,#+10
+   \   000000AA   C119               ADDS     R1,R0,R7
+   \   000000AC   8019               ADDS     R0,R0,R6
+   \   000000AE   BBE7               B.N      ??TimingDelay_Decrement_3
+     71                  }
+     72               }	
+     73          }
+     74          else
+     75          {
+     76                  LEDsSet(~(0x1));// Enable=Hi   
+   \                     ??TimingDelay_Decrement_1:
+   \   000000B0   2000               MOVS     R0,R4
+   \   000000B2   ........           BL       LEDsSet
+     77          }
+     78          
+     79            LedState=(LedState+1);
+   \                     ??TimingDelay_Decrement_4:
+   \   000000B6   2868               LDR      R0,[R5, #+0]
+   \   000000B8   401C               ADDS     R0,R0,#+1
+   \   000000BA   2860               STR      R0,[R5, #+0]
+     80            if (LedState==17)
+   \   000000BC   1128               CMP      R0,#+17
+   \   000000BE   01D1               BNE.N    ??TimingDelay_Decrement_6
+     81            {
+     82          	LedState=0;
+   \   000000C0   0020               MOVS     R0,#+0
+   \   000000C2   2860               STR      R0,[R5, #+0]
+     83            }  
+     84          
+     85          
+     86            
+     87          msTi=msTi+1;  
+   \                     ??TimingDelay_Decrement_6:
+   \   000000C4   0E48               LDR.N    R0,??TimingDelay_Decrement_0+0x1C  ;; msTi
+   \   000000C6   0168               LDR      R1,[R0, #+0]
+   \   000000C8   491C               ADDS     R1,R1,#+1
+   \   000000CA   0160               STR      R1,[R0, #+0]
+     88            
+     89              /* Disable SysTick Counter */
+     90            SysTick_CounterCmd(SysTick_Counter_Disable);
+   \   000000CC   2000               MOVS     R0,R4
+   \   000000CE   ........           BL       SysTick_CounterCmd
+     91            /* Clear SysTick Counter */
+     92            SysTick_CounterCmd(SysTick_Counter_Clear);
+   \   000000D2   0020               MOVS     R0,#+0
+   \   000000D4   ........           BL       SysTick_CounterCmd
+     93           
+     94            /* Enable the SysTick Counter */
+     95            SysTick_CounterCmd(SysTick_Counter_Enable);  
+   \   000000D8   0120               MOVS     R0,#+1
+   \   000000DA   BDE8F041           POP      {R4-R8,LR}
+   \   000000DE   ........           B.W      SysTick_CounterCmd
+   \   000000E2   00BF               Nop      
+   \                     ??TimingDelay_Decrement_0:
+   \   000000E4   ........           DC32     LedState
+   \   000000E8   ........           DC32     LED_ON_flag
+   \   000000EC   ........           DC32     LED_display
+   \   000000F0   ........           DC32     LED_displayG
+   \   000000F4   ........           DC32     LED_change
+   \   000000F8   ........           DC32     LED_buffer
+   \   000000FC   ........           DC32     LED_bufferG
+   \   00000100   ........           DC32     msTi
+     96            
+     97          }
+     98          
+
+   \                                 In section FastProcRAM, align 4, keep-with-next
+     99          void SPI01(unsigned char * add0,unsigned char * add1, unsigned short count)@"FastProcRAM"
+    100          {
+   \                     SPI01:
+   \   00000000   F8B5               PUSH     {R3-R7,LR}
+   \   00000002   0600               MOVS     R6,R0
+   \   00000004   0F00               MOVS     R7,R1
+    101          
+    102            DMA_InitStructure.DMA_BufferSize = count;//BufferSize;  
+   \   00000006   1C4C               LDR.N    R4,??SPI01_0     ;; DMA_InitStructure
+   \   00000008   E260               STR      R2,[R4, #+12]
+    103            
+    104            
+    105            DMA_DeInit(DMA1_Channel3);
+   \   0000000A   1C4D               LDR.N    R5,??SPI01_0+0x4  ;; 0x40020030
+   \   0000000C   2800               MOVS     R0,R5
+   \   0000000E   ........           BL       DMA_DeInit
+    106            DMA_InitStructure.DMA_PeripheralBaseAddr = (u32)SPI1_DR_Address;
+   \   00000012   1B48               LDR.N    R0,??SPI01_0+0x8  ;; 0x4001300c
+   \   00000014   2060               STR      R0,[R4, #+0]
+    107            DMA_InitStructure.DMA_MemoryBaseAddr = (u32)add0;
+   \   00000016   6660               STR      R6,[R4, #+4]
+    108            DMA_Init(DMA1_Channel3, &DMA_InitStructure);          
+   \   00000018   2100               MOVS     R1,R4
+   \   0000001A   2800               MOVS     R0,R5
+   \   0000001C   ........           BL       DMA_Init
+    109          
+    110            /* Transfer complete */   
+    111            DMA_DeInit(DMA1_Channel5);
+   \   00000020   2846               MOV      R0,R5
+   \   00000022   2830               ADDS     R0,R0,#+40
+   \   00000024   ........           BL       DMA_DeInit
+    112            DMA_InitStructure.DMA_PeripheralBaseAddr = (u32)SPI2_DR_Address;
+   \   00000028   1648               LDR.N    R0,??SPI01_0+0xC  ;; 0x4000380c
+   \   0000002A   2060               STR      R0,[R4, #+0]
+    113            DMA_InitStructure.DMA_MemoryBaseAddr = (u32)add1;
+   \   0000002C   6760               STR      R7,[R4, #+4]
+    114            DMA_Init(DMA1_Channel5, &DMA_InitStructure);   
+   \   0000002E   2100               MOVS     R1,R4
+   \   00000030   2846               MOV      R0,R5
+   \   00000032   2830               ADDS     R0,R0,#+40
+   \   00000034   ........           BL       DMA_Init
+    115            
+    116            /* Enable SPI DMA Tx request */
+    117              SPI_I2S_DMACmd(SPI2, SPI_I2S_DMAReq_Tx, ENABLE);
+   \   00000038   134C               LDR.N    R4,??SPI01_0+0x10  ;; 0x40003800
+   \   0000003A   0122               MOVS     R2,#+1
+   \   0000003C   0221               MOVS     R1,#+2
+   \   0000003E   2000               MOVS     R0,R4
+   \   00000040   ........           BL       SPI_I2S_DMACmd
+    118            SPI_I2S_DMACmd(SPI1, SPI_I2S_DMAReq_Tx, ENABLE);
+   \   00000044   114E               LDR.N    R6,??SPI01_0+0x14  ;; 0x40013000
+   \   00000046   0122               MOVS     R2,#+1
+   \   00000048   0221               MOVS     R1,#+2
+   \   0000004A   3000               MOVS     R0,R6
+   \   0000004C   ........           BL       SPI_I2S_DMACmd
+    119          
+    120            /* Enable SPI&DMA */  
+    121            SPI_Cmd(SPI2, ENABLE);  
+   \   00000050   0121               MOVS     R1,#+1
+   \   00000052   2000               MOVS     R0,R4
+   \   00000054   ........           BL       SPI_Cmd
+    122              SPI_Cmd(SPI1, ENABLE);
+   \   00000058   0121               MOVS     R1,#+1
+   \   0000005A   3000               MOVS     R0,R6
+   \   0000005C   ........           BL       SPI_Cmd
+    123              
+    124            DMA_Cmd(DMA1_Channel5, ENABLE); 
+   \   00000060   0121               MOVS     R1,#+1
+   \   00000062   2846               MOV      R0,R5
+   \   00000064   2830               ADDS     R0,R0,#+40
+   \   00000066   ........           BL       DMA_Cmd
+    125              DMA_Cmd(DMA1_Channel3, ENABLE); 
+   \   0000006A   0121               MOVS     R1,#+1
+   \   0000006C   2800               MOVS     R0,R5
+   \   0000006E   BDE8F440           POP      {R2,R4-R7,LR}
+   \   00000072   ........           B.W      DMA_Cmd
+   \   00000076   00BF               Nop      
+   \                     ??SPI01_0:
+   \   00000078   ........           DC32     DMA_InitStructure
+   \   0000007C   30000240           DC32     0x40020030
+   \   00000080   0C300140           DC32     0x4001300c
+   \   00000084   0C380040           DC32     0x4000380c
+   \   00000088   00380040           DC32     0x40003800
+   \   0000008C   00300140           DC32     0x40013000
+    126                
+    127            /* Transfer complete */      
+    128          }
+
+   Maximum stack usage in bytes:
+
+     Function              .cstack
+     --------              -------
+     LED_OFF                    0
+     SPI01                      0
+     TimingDelay_Decrement      0
+
+
+   Section sizes:
+
+     Function/Label        Bytes
+     --------------        -----
+     LedState                 4
+     LED_OFF                  2
+     TimingDelay_Decrement  260
+     SPI01                  144
+
+ 
+ 262 bytes in section .text
+   4 bytes in section FastDataRAM
+ 144 bytes in section FastProcRAM
+ 
+ 406 bytes of CODE memory
+   4 bytes of DATA memory
+
+Errors: none
+Warnings: none

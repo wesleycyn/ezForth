@@ -1,0 +1,132 @@
+###############################################################################
+#                                                                             #
+# IAR ANSI C/C++ Compiler V5.20.0.50892/W32 for ARM     07/Oct/2009  13:03:48 #
+# Copyright 1999-2008 IAR Systems AB.                                         #
+#                                                                             #
+#    Cpu mode     =  thumb                                                    #
+#    Endian       =  little                                                   #
+#    Source file  =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\Configuration_SPI. #
+#                    c                                                        #
+#    Command line =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\Configuration_SPI. #
+#                    c -D VECT_TAB_FLASH -lC F:\CoLtd\Forth\MCU\STM32F10x\ST_ #
+#                    Forth\STM3210E-EVAL\List\ -o                             #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\ #
+#                     --debug --endian=little --cpu=Cortex-M3 -e              #
+#                    --char_is_signed --require_prototypes --fpu=None         #
+#                    --dlib_config "C:\Program Files\IAR Systems\Embedded     #
+#                    Workbench 5.0\ARM\INC\DLib_Config_Full.h" -I             #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\ -I                #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\library\inc\ -I    #
+#                    "C:\Program Files\IAR Systems\Embedded Workbench         #
+#                    5.0\ARM\INC\" -Ohz                                       #
+#    List file    =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\List #
+#                    \Configuration_SPI.lst                                   #
+#    Object file  =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\ #
+#                    Configuration_SPI.o                                      #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\Configuration_SPI.c
+      1          //#include <intrinsics.h>
+      2          #include "stm32f10x_lib.h"
+      3          
+      4          #define CRCPolynomial      7
+      5          
+      6          void  SPI_Configuration(void);
+      7          
+
+   \                                 In section .text, align 4, keep-with-next
+      8          void  SPI_Configuration(void)
+      9          {
+   \                     SPI_Configuration:
+   \   00000000   00B5               PUSH     {LR}
+   \   00000002   85B0               SUB      SP,SP,#+20
+     10            SPI_InitTypeDef   SPI_InitStructure;
+     11            
+     12            /* SPI1 configuration ------------------------------------------------------*/
+     13            SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex;
+   \   00000004   0020               MOVS     R0,#+0
+   \   00000006   ADF80000           STRH     R0,[SP, #+0]
+     14            SPI_InitStructure.SPI_Mode = SPI_Mode_Master;
+   \   0000000A   4FF48270           MOV      R0,#+260
+   \   0000000E   ADF80200           STRH     R0,[SP, #+2]
+     15            SPI_InitStructure.SPI_DataSize = SPI_DataSize_8b;
+   \   00000012   0020               MOVS     R0,#+0
+   \   00000014   0190               STR      R0,[SP, #+4]
+     16            SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low;
+     17            SPI_InitStructure.SPI_CPHA = SPI_CPHA_1Edge;
+   \   00000016   ADF80800           STRH     R0,[SP, #+8]
+     18            SPI_InitStructure.SPI_NSS = SPI_NSS_Soft;
+   \   0000001A   4FF40070           MOV      R0,#+512
+   \   0000001E   ADF80A00           STRH     R0,[SP, #+10]
+     19            SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_256;//SPI_BaudRatePrescaler_8;
+   \   00000022   3820               MOVS     R0,#+56
+   \   00000024   ADF80C00           STRH     R0,[SP, #+12]
+     20            SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;
+   \   00000028   0020               MOVS     R0,#+0
+   \   0000002A   ADF80E00           STRH     R0,[SP, #+14]
+     21            SPI_InitStructure.SPI_CRCPolynomial = CRCPolynomial;
+   \   0000002E   0720               MOVS     R0,#+7
+   \   00000030   ADF81000           STRH     R0,[SP, #+16]
+     22            SPI_Init(SPI1, &SPI_InitStructure);
+   \   00000034   00A9               ADD      R1,SP,#+0
+   \   00000036   1048               LDR.N    R0,??SPI_Configuration_0  ;; 0x40013000
+   \   00000038   ........           BL       SPI_Init
+     23            
+     24            /* SPI2 configuration ------------------------------------------------------*/   
+     25            SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex;
+   \   0000003C   0020               MOVS     R0,#+0
+   \   0000003E   ADF80000           STRH     R0,[SP, #+0]
+     26            SPI_InitStructure.SPI_Mode = SPI_Mode_Master;
+   \   00000042   4FF48270           MOV      R0,#+260
+   \   00000046   ADF80200           STRH     R0,[SP, #+2]
+     27            SPI_InitStructure.SPI_DataSize = SPI_DataSize_8b;
+   \   0000004A   0020               MOVS     R0,#+0
+   \   0000004C   0190               STR      R0,[SP, #+4]
+     28            SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low;
+     29            SPI_InitStructure.SPI_CPHA = SPI_CPHA_1Edge;
+   \   0000004E   ADF80800           STRH     R0,[SP, #+8]
+     30            SPI_InitStructure.SPI_NSS = SPI_NSS_Soft;
+   \   00000052   4FF40070           MOV      R0,#+512
+   \   00000056   ADF80A00           STRH     R0,[SP, #+10]
+     31            SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_256;//SPI_BaudRatePrescaler_8;
+   \   0000005A   3820               MOVS     R0,#+56
+   \   0000005C   ADF80C00           STRH     R0,[SP, #+12]
+     32            SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;
+   \   00000060   0020               MOVS     R0,#+0
+   \   00000062   ADF80E00           STRH     R0,[SP, #+14]
+     33            SPI_InitStructure.SPI_CRCPolynomial = CRCPolynomial;
+   \   00000066   0720               MOVS     R0,#+7
+   \   00000068   ADF81000           STRH     R0,[SP, #+16]
+     34            SPI_Init(SPI2, &SPI_InitStructure);    
+   \   0000006C   00A9               ADD      R1,SP,#+0
+   \   0000006E   0348               LDR.N    R0,??SPI_Configuration_0+0x4  ;; 0x40003800
+   \   00000070   ........           BL       SPI_Init
+     35          }
+   \   00000074   05B0               ADD      SP,SP,#+20
+   \   00000076   00BD               POP      {PC}             ;; return
+   \                     ??SPI_Configuration_0:
+   \   00000078   00300140           DC32     0x40013000
+   \   0000007C   00380040           DC32     0x40003800
+
+   Maximum stack usage in bytes:
+
+     Function          .cstack
+     --------          -------
+     SPI_Configuration      0
+
+
+   Section sizes:
+
+     Function/Label    Bytes
+     --------------    -----
+     SPI_Configuration  128
+
+ 
+ 128 bytes in section .text
+ 
+ 128 bytes of CODE memory
+
+Errors: none
+Warnings: none

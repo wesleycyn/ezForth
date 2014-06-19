@@ -1,0 +1,137 @@
+###############################################################################
+#                                                                             #
+# IAR ANSI C/C++ Compiler V5.20.0.50892/W32 for ARM     07/Oct/2009  13:03:49 #
+# Copyright 1999-2008 IAR Systems AB.                                         #
+#                                                                             #
+#    Cpu mode     =  thumb                                                    #
+#    Endian       =  little                                                   #
+#    Source file  =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\Configuration_USAR #
+#                    T.c                                                      #
+#    Command line =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\Configuration_USAR #
+#                    T.c -D VECT_TAB_FLASH -lC F:\CoLtd\Forth\MCU\STM32F10x\S #
+#                    T_Forth\STM3210E-EVAL\List\ -o                           #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\ #
+#                     --debug --endian=little --cpu=Cortex-M3 -e              #
+#                    --char_is_signed --require_prototypes --fpu=None         #
+#                    --dlib_config "C:\Program Files\IAR Systems\Embedded     #
+#                    Workbench 5.0\ARM\INC\DLib_Config_Full.h" -I             #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\ -I                #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\library\inc\ -I    #
+#                    "C:\Program Files\IAR Systems\Embedded Workbench         #
+#                    5.0\ARM\INC\" -Ohz                                       #
+#    List file    =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\List #
+#                    \Configuration_USART.lst                                 #
+#    Object file  =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\ #
+#                    Configuration_USART.o                                    #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\Configuration_USART.c
+      1          #include <intrinsics.h>
+      2          #include "stm32f10x_lib.h"
+      3          
+      4          void  USART_Configuration(void);
+
+   \                                 In section .text, align 4, keep-with-next
+      5          void  USART_Configuration(void)
+      6          {
+   \                     USART_Configuration:
+   \   00000000   1FB5               PUSH     {R0-R4,LR}
+      7            USART_InitTypeDef USART_InitStructure;  
+      8            
+      9          /* USART2 configuration ------------------------------------------------------*/
+     10            /* USART2 configured as follow:
+     11                  - BaudRate = 115200 baud  
+     12                  - Word Length = 8 Bits
+     13                  - One Stop Bit
+     14                  - No parity
+     15                  - Hardware flow control enabled (RTS and CTS signals)
+     16                  - Receive and transmit enabled
+     17                  - USART Clock disabled
+     18                  - USART CPOL: Clock is active low
+     19                  - USART CPHA: Data is captured on the second edge 
+     20                  - USART LastBit: The clock pulse of the last data bit is not output to 
+     21                                   the SCLK pin
+     22            */
+     23            USART_InitStructure.USART_BaudRate = 19200;
+   \   00000002   4FF49640           MOV      R0,#+19200
+   \   00000006   0090               STR      R0,[SP, #+0]
+     24            USART_InitStructure.USART_WordLength = USART_WordLength_8b;
+   \   00000008   0020               MOVS     R0,#+0
+   \   0000000A   0190               STR      R0,[SP, #+4]
+     25            USART_InitStructure.USART_StopBits = USART_StopBits_1;
+     26            USART_InitStructure.USART_Parity = USART_Parity_No ;
+   \   0000000C   ADF80800           STRH     R0,[SP, #+8]
+     27            USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_RTS_CTS;
+   \   00000010   4FF44070           MOV      R0,#+768
+   \   00000014   ADF80C00           STRH     R0,[SP, #+12]
+     28            
+     29          //   USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None; 
+     30            USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
+   \   00000018   0C20               MOVS     R0,#+12
+   \   0000001A   ADF80A00           STRH     R0,[SP, #+10]
+     31          //  USART_InitStructure.USART_Clock = USART_Clock_Disable;
+     32          //  USART_InitStructure.USART_CPOL = USART_CPOL_Low;
+     33          //  USART_InitStructure.USART_CPHA = USART_CPHA_2Edge;
+     34          //  USART_InitStructure.USART_LastBit = USART_LastBit_Disable;
+     35            
+     36          
+     37          
+     38            /* Configure the USART1 */
+     39            USART_Init(USART2, &USART_InitStructure);
+   \   0000001E   0A4C               LDR.N    R4,??USART_Configuration_0  ;; 0x40004400
+   \   00000020   00A9               ADD      R1,SP,#+0
+   \   00000022   2000               MOVS     R0,R4
+   \   00000024   ........           BL       USART_Init
+     40          
+     41          /* Enable the USART Transmoit interrupt: this interrupt is generated when the 
+     42             USART1 transmit data register is empty */  
+     43          //  USART_ITConfig(USART2, USART_IT_TXE, ENABLE);
+     44          
+     45          /* Enable the USART Receive interrupt: this interrupt is generated when the 
+     46             USART1 receive data register is not empty */
+     47            USART_ITConfig(USART2, USART_IT_RXNE, ENABLE);
+   \   00000028   0122               MOVS     R2,#+1
+   \   0000002A   40F22551           MOVW     R1,#+1317
+   \   0000002E   2000               MOVS     R0,R4
+   \   00000030   ........           BL       USART_ITConfig
+     48           
+     49          
+     50            USART_Init(USART2, &USART_InitStructure);
+   \   00000034   00A9               ADD      R1,SP,#+0
+   \   00000036   2000               MOVS     R0,R4
+   \   00000038   ........           BL       USART_Init
+     51            /* Enable the USART2 */
+     52            
+     53              /* Enable the USART2 */
+     54            USART_Cmd(USART2, ENABLE);
+   \   0000003C   0121               MOVS     R1,#+1
+   \   0000003E   2000               MOVS     R0,R4
+   \   00000040   ........           BL       USART_Cmd
+     55          }
+   \   00000044   1FBD               POP      {R0-R4,PC}       ;; return
+   \   00000046   00BF               Nop      
+   \                     ??USART_Configuration_0:
+   \   00000048   00440040           DC32     0x40004400
+
+   Maximum stack usage in bytes:
+
+     Function            .cstack
+     --------            -------
+     USART_Configuration      0
+
+
+   Section sizes:
+
+     Function/Label      Bytes
+     --------------      -----
+     USART_Configuration   76
+
+ 
+ 76 bytes in section .text
+ 
+ 76 bytes of CODE memory
+
+Errors: none
+Warnings: none

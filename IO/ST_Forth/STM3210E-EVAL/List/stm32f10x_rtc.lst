@@ -1,0 +1,584 @@
+###############################################################################
+#                                                                             #
+# IAR ANSI C/C++ Compiler V5.20.0.50892/W32 for ARM     07/Oct/2009  13:03:59 #
+# Copyright 1999-2008 IAR Systems AB.                                         #
+#                                                                             #
+#    Cpu mode     =  thumb                                                    #
+#    Endian       =  little                                                   #
+#    Source file  =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\library\src\stm32f #
+#                    10x_rtc.c                                                #
+#    Command line =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\library\src\stm32f #
+#                    10x_rtc.c -D VECT_TAB_FLASH -lC                          #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\List #
+#                    \ -o F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL #
+#                    \Obj\ --debug --endian=little --cpu=Cortex-M3 -e         #
+#                    --char_is_signed --require_prototypes --fpu=None         #
+#                    --dlib_config "C:\Program Files\IAR Systems\Embedded     #
+#                    Workbench 5.0\ARM\INC\DLib_Config_Full.h" -I             #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\ -I                #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\library\inc\ -I    #
+#                    "C:\Program Files\IAR Systems\Embedded Workbench         #
+#                    5.0\ARM\INC\" -Ohz                                       #
+#    List file    =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\List #
+#                    \stm32f10x_rtc.lst                                       #
+#    Object file  =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\ #
+#                    stm32f10x_rtc.o                                          #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\library\src\stm32f10x_rtc.c
+      1          /******************** (C) COPYRIGHT 2008 STMicroelectronics ********************
+      2          * File Name          : stm32f10x_rtc.c
+      3          * Author             : MCD Application Team
+      4          * Version            : V2.0.3
+      5          * Date               : 09/22/2008
+      6          * Description        : This file provides all the RTC firmware functions.
+      7          ********************************************************************************
+      8          * THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
+      9          * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE TIME.
+     10          * AS A RESULT, STMICROELECTRONICS SHALL NOT BE HELD LIABLE FOR ANY DIRECT,
+     11          * INDIRECT OR CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING FROM THE
+     12          * CONTENT OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE CODING
+     13          * INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
+     14          *******************************************************************************/
+     15          
+     16          /* Includes ------------------------------------------------------------------*/
+     17          #include "stm32f10x_rtc.h"
+     18          
+     19          /* Private typedef -----------------------------------------------------------*/
+     20          /* Private define ------------------------------------------------------------*/
+     21          #define CRL_CNF_Set      ((u16)0x0010)      /* Configuration Flag Enable Mask */
+     22          #define CRL_CNF_Reset    ((u16)0xFFEF)      /* Configuration Flag Disable Mask */
+     23          #define RTC_LSB_Mask     ((u32)0x0000FFFF)  /* RTC LSB Mask */
+     24          #define PRLH_MSB_Mask    ((u32)0x000F0000)  /* RTC Prescaler MSB Mask */
+     25          
+     26          /* Private macro -------------------------------------------------------------*/
+     27          /* Private variables ---------------------------------------------------------*/
+     28          /* Private function prototypes -----------------------------------------------*/
+     29          /* Private functions ---------------------------------------------------------*/
+     30          
+     31          /*******************************************************************************
+     32          * Function Name  : RTC_ITConfig
+     33          * Description    : Enables or disables the specified RTC interrupts.
+     34          * Input          : - RTC_IT: specifies the RTC interrupts sources to be enabled
+     35          *                    or disabled.
+     36          *                    This parameter can be any combination of the following values:
+     37          *                       - RTC_IT_OW: Overflow interrupt
+     38          *                       - RTC_IT_ALR: Alarm interrupt
+     39          *                       - RTC_IT_SEC: Second interrupt
+     40          *                  - NewState: new state of the specified RTC interrupts.
+     41          *                    This parameter can be: ENABLE or DISABLE.
+     42          * Output         : None
+     43          * Return         : None
+     44          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+     45          void RTC_ITConfig(u16 RTC_IT, FunctionalState NewState)
+     46          {
+     47            /* Check the parameters */
+     48            assert_param(IS_RTC_IT(RTC_IT));  
+     49            assert_param(IS_FUNCTIONAL_STATE(NewState));
+     50            
+     51            if (NewState != DISABLE)
+   \                     RTC_ITConfig:
+   \   00000000   ....               LDR.N    R2,??DataTable11  ;; 0x40002800
+   \   00000002   0029               CMP      R1,#+0
+   \   00000004   1188               LDRH     R1,[R2, #+0]
+   \   00000006   01D0               BEQ.N    ??RTC_ITConfig_0
+     52            {
+     53              RTC->CRH |= RTC_IT;
+   \   00000008   0843               ORRS     R0,R0,R1
+   \   0000000A   01E0               B.N      ??RTC_ITConfig_1
+     54            }
+     55            else
+     56            {
+     57              RTC->CRH &= (u16)~RTC_IT;
+   \                     ??RTC_ITConfig_0:
+   \   0000000C   C043               MVNS     R0,R0
+   \   0000000E   0840               ANDS     R0,R0,R1
+   \                     ??RTC_ITConfig_1:
+   \   00000010   1080               STRH     R0,[R2, #+0]
+     58            }
+     59          }
+   \   00000012   7047               BX       LR               ;; return
+     60          
+     61          /*******************************************************************************
+     62          * Function Name  : RTC_EnterConfigMode
+     63          * Description    : Enters the RTC configuration mode.
+     64          * Input          : None
+     65          * Output         : None
+     66          * Return         : None
+     67          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+     68          void RTC_EnterConfigMode(void)
+     69          {
+     70            /* Set the CNF flag to enter in the Configuration Mode */
+     71            RTC->CRL |= CRL_CNF_Set;
+   \                     RTC_EnterConfigMode:
+   \   00000000   ....               LDR.N    R0,??DataTable12  ;; 0x40002804
+   \   00000002   0188               LDRH     R1,[R0, #+0]
+   \   00000004   41F01001           ORR      R1,R1,#0x10
+   \   00000008   0180               STRH     R1,[R0, #+0]
+     72          }
+   \   0000000A   7047               BX       LR               ;; return
+     73          
+     74          /*******************************************************************************
+     75          * Function Name  : RTC_ExitConfigMode
+     76          * Description    : Exits from the RTC configuration mode.
+     77          * Input          : None
+     78          * Output         : None
+     79          * Return         : None
+     80          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+     81          void RTC_ExitConfigMode(void)
+     82          {
+     83            /* Reset the CNF flag to exit from the Configuration Mode */
+     84            RTC->CRL &= CRL_CNF_Reset;
+   \                     RTC_ExitConfigMode:
+   \   00000000   ....               LDR.N    R0,??DataTable12  ;; 0x40002804
+   \   00000002   0188               LDRH     R1,[R0, #+0]
+   \   00000004   4FF6EF72           MOVW     R2,#+65519
+   \   00000008   1140               ANDS     R1,R2,R1
+   \   0000000A   0180               STRH     R1,[R0, #+0]
+     85          }
+   \   0000000C   7047               BX       LR               ;; return
+     86          
+     87          /*******************************************************************************
+     88          * Function Name  : RTC_GetCounter
+     89          * Description    : Gets the RTC counter value.
+     90          * Input          : None
+     91          * Output         : None
+     92          * Return         : RTC counter value.
+     93          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+     94          u32 RTC_GetCounter(void)
+     95          {
+     96            u16 tmp = 0;
+     97            tmp = RTC->CNTL;
+   \                     RTC_GetCounter:
+   \   00000000   0348               LDR.N    R0,??RTC_GetCounter_0  ;; 0x40002818
+   \   00000002   8088               LDRH     R0,[R0, #+4]
+     98          
+     99            return (((u32)RTC->CNTH << 16 ) | tmp) ;
+   \   00000004   0249               LDR.N    R1,??RTC_GetCounter_0  ;; 0x40002818
+   \   00000006   0988               LDRH     R1,[R1, #+0]
+   \   00000008   40EA0140           ORR      R0,R0,R1, LSL #+16
+   \   0000000C   7047               BX       LR               ;; return
+   \   0000000E   00BF               Nop      
+   \                     ??RTC_GetCounter_0:
+   \   00000010   18280040           DC32     0x40002818
+    100          }
+    101          
+    102          /*******************************************************************************
+    103          * Function Name  : RTC_SetCounter
+    104          * Description    : Sets the RTC counter value.
+    105          * Input          : - CounterValue: RTC counter new value.
+    106          * Output         : None
+    107          * Return         : None
+    108          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+    109          void RTC_SetCounter(u32 CounterValue)
+    110          { 
+    111            RTC_EnterConfigMode();
+   \                     RTC_SetCounter:
+   \   00000000   ....               LDR.N    R1,??DataTable12  ;; 0x40002804
+   \   00000002   0A88               LDRH     R2,[R1, #+0]
+   \   00000004   42F01002           ORR      R2,R2,#0x10
+   \   00000008   0A80               STRH     R2,[R1, #+0]
+    112          
+    113            /* Set RTC COUNTER MSB word */
+    114            RTC->CNTH = CounterValue >> 16;
+   \   0000000A   030C               LSRS     R3,R0,#+16
+   \   0000000C   8B82               STRH     R3,[R1, #+20]
+    115            /* Set RTC COUNTER LSB word */
+    116            RTC->CNTL = (CounterValue & RTC_LSB_Mask);
+   \   0000000E   0883               STRH     R0,[R1, #+24]
+    117          
+    118            RTC_ExitConfigMode();
+   \   00000010   0888               LDRH     R0,[R1, #+0]
+   \   00000012   4FF6EF72           MOVW     R2,#+65519
+   \   00000016   1040               ANDS     R0,R2,R0
+   \   00000018   0880               STRH     R0,[R1, #+0]
+    119          }
+   \   0000001A   7047               BX       LR               ;; return
+    120          
+    121          /*******************************************************************************
+    122          * Function Name  : RTC_SetPrescaler
+    123          * Description    : Sets the RTC prescaler value.
+    124          * Input          : - PrescalerValue: RTC prescaler new value.
+    125          * Output         : None
+    126          * Return         : None
+    127          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+    128          void RTC_SetPrescaler(u32 PrescalerValue)
+    129          {
+    130            /* Check the parameters */
+    131            assert_param(IS_RTC_PRESCALER(PrescalerValue));
+    132            
+    133            RTC_EnterConfigMode();
+   \                     RTC_SetPrescaler:
+   \   00000000   ....               LDR.N    R1,??DataTable12  ;; 0x40002804
+   \   00000002   0A88               LDRH     R2,[R1, #+0]
+   \   00000004   42F01002           ORR      R2,R2,#0x10
+   \   00000008   0A80               STRH     R2,[R1, #+0]
+    134          
+    135            /* Set RTC PRESCALER MSB word */
+    136            RTC->PRLH = (PrescalerValue & PRLH_MSB_Mask) >> 16;
+   \   0000000A   00F47022           AND      R2,R0,#0xF0000
+   \   0000000E   120C               LSRS     R2,R2,#+16
+   \   00000010   8A80               STRH     R2,[R1, #+4]
+    137            /* Set RTC PRESCALER LSB word */
+    138            RTC->PRLL = (PrescalerValue & RTC_LSB_Mask);
+   \   00000012   0881               STRH     R0,[R1, #+8]
+    139          
+    140            RTC_ExitConfigMode();
+   \   00000014   0888               LDRH     R0,[R1, #+0]
+   \   00000016   4FF6EF72           MOVW     R2,#+65519
+   \   0000001A   1040               ANDS     R0,R2,R0
+   \   0000001C   0880               STRH     R0,[R1, #+0]
+    141          }
+   \   0000001E   7047               BX       LR               ;; return
+    142          
+    143          /*******************************************************************************
+    144          * Function Name  : RTC_SetAlarm
+    145          * Description    : Sets the RTC alarm value.
+    146          * Input          : - AlarmValue: RTC alarm new value.
+    147          * Output         : None
+    148          * Return         : None
+    149          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+    150          void RTC_SetAlarm(u32 AlarmValue)
+    151          {  
+    152            RTC_EnterConfigMode();
+   \                     RTC_SetAlarm:
+   \   00000000   ....               LDR.N    R1,??DataTable12  ;; 0x40002804
+   \   00000002   0A88               LDRH     R2,[R1, #+0]
+   \   00000004   42F01002           ORR      R2,R2,#0x10
+   \   00000008   0A80               STRH     R2,[R1, #+0]
+    153          
+    154            /* Set the ALARM MSB word */
+    155            RTC->ALRH = AlarmValue >> 16;
+   \   0000000A   030C               LSRS     R3,R0,#+16
+   \   0000000C   8B83               STRH     R3,[R1, #+28]
+    156            /* Set the ALARM LSB word */
+    157            RTC->ALRL = (AlarmValue & RTC_LSB_Mask);
+   \   0000000E   0884               STRH     R0,[R1, #+32]
+    158          
+    159            RTC_ExitConfigMode();
+   \   00000010   0888               LDRH     R0,[R1, #+0]
+   \   00000012   4FF6EF72           MOVW     R2,#+65519
+   \   00000016   1040               ANDS     R0,R2,R0
+   \   00000018   0880               STRH     R0,[R1, #+0]
+    160          }
+   \   0000001A   7047               BX       LR               ;; return
+    161          
+    162          /*******************************************************************************
+    163          * Function Name  : RTC_GetDivider
+    164          * Description    : Gets the RTC divider value.
+    165          * Input          : None
+    166          * Output         : None
+    167          * Return         : RTC Divider value.
+    168          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+    169          u32 RTC_GetDivider(void)
+    170          {
+    171            u32 tmp = 0x00;
+    172          
+    173            tmp = ((u32)RTC->DIVH & (u32)0x000F) << 16;
+   \                     RTC_GetDivider:
+   \   00000000   0448               LDR.N    R0,??RTC_GetDivider_0  ;; 0x40002810
+   \   00000002   0088               LDRH     R0,[R0, #+0]
+   \   00000004   00F00F00           AND      R0,R0,#0xF
+   \   00000008   0004               LSLS     R0,R0,#+16
+    174            tmp |= RTC->DIVL;
+   \   0000000A   0249               LDR.N    R1,??RTC_GetDivider_0  ;; 0x40002810
+   \   0000000C   8988               LDRH     R1,[R1, #+4]
+   \   0000000E   0843               ORRS     R0,R1,R0
+    175          
+    176            return tmp;
+   \   00000010   7047               BX       LR               ;; return
+   \   00000012   00BF               Nop      
+   \                     ??RTC_GetDivider_0:
+   \   00000014   10280040           DC32     0x40002810
+    177          }
+    178          
+    179          /*******************************************************************************
+    180          * Function Name  : RTC_WaitForLastTask
+    181          * Description    : Waits until last write operation on RTC registers has finished.
+    182          *                  This function must be called before any write to RTC registers.
+    183          * Input          : None
+    184          * Output         : None
+    185          * Return         : None
+    186          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+    187          void RTC_WaitForLastTask(void)
+    188          {
+    189            /* Loop until RTOFF flag is set */
+    190            while ((RTC->CRL & RTC_FLAG_RTOFF) == (u16)RESET)
+   \                     RTC_WaitForLastTask:
+   \                     ??RTC_WaitForLastTask_0:
+   \   00000000   ....               LDR.N    R0,??DataTable12  ;; 0x40002804
+   \   00000002   0088               LDRH     R0,[R0, #+0]
+   \   00000004   10F0200F           TST      R0,#0x20
+   \   00000008   FAD0               BEQ.N    ??RTC_WaitForLastTask_0
+    191            {
+    192            }
+    193          }
+   \   0000000A   7047               BX       LR               ;; return
+    194          
+    195          /*******************************************************************************
+    196          * Function Name  : RTC_WaitForSynchro
+    197          * Description    : Waits until the RTC registers (RTC_CNT, RTC_ALR and RTC_PRL)
+    198          *                  are synchronized with RTC APB clock.
+    199          *                  This function must be called before any read operation after
+    200          *                  an APB reset or an APB clock stop.
+    201          * Input          : None
+    202          * Output         : None
+    203          * Return         : None
+    204          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+    205          void RTC_WaitForSynchro(void)
+    206          {
+    207            /* Clear RSF flag */
+    208            RTC->CRL &= (u16)~RTC_FLAG_RSF;
+   \                     RTC_WaitForSynchro:
+   \   00000000   ....               LDR.N    R0,??DataTable12  ;; 0x40002804
+   \   00000002   0188               LDRH     R1,[R0, #+0]
+   \   00000004   4FF6F772           MOVW     R2,#+65527
+   \   00000008   1140               ANDS     R1,R2,R1
+   \   0000000A   0180               STRH     R1,[R0, #+0]
+    209          
+    210            /* Loop until RSF flag is set */
+    211            while ((RTC->CRL & RTC_FLAG_RSF) == (u16)RESET)
+   \                     ??RTC_WaitForSynchro_0:
+   \   0000000C   0188               LDRH     R1,[R0, #+0]
+   \   0000000E   11F0080F           TST      R1,#0x8
+   \   00000012   FBD0               BEQ.N    ??RTC_WaitForSynchro_0
+    212            {
+    213            }
+    214          }
+   \   00000014   7047               BX       LR               ;; return
+    215          
+    216          /*******************************************************************************
+    217          * Function Name  : RTC_GetFlagStatus
+    218          * Description    : Checks whether the specified RTC flag is set or not.
+    219          * Input          : - RTC_FLAG: specifies the flag to check.
+    220          *                    This parameter can be one the following values:
+    221          *                       - RTC_FLAG_RTOFF: RTC Operation OFF flag
+    222          *                       - RTC_FLAG_RSF: Registers Synchronized flag
+    223          *                       - RTC_FLAG_OW: Overflow flag
+    224          *                       - RTC_FLAG_ALR: Alarm flag
+    225          *                       - RTC_FLAG_SEC: Second flag
+    226          * Output         : None
+    227          * Return         : The new state of RTC_FLAG (SET or RESET).
+    228          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+    229          FlagStatus RTC_GetFlagStatus(u16 RTC_FLAG)
+    230          {
+    231            FlagStatus bitstatus = RESET;
+    232            
+    233            /* Check the parameters */
+    234            assert_param(IS_RTC_GET_FLAG(RTC_FLAG)); 
+    235            
+    236            if ((RTC->CRL & RTC_FLAG) != (u16)RESET)
+   \                     RTC_GetFlagStatus:
+   \   00000000   ....               LDR.N    R1,??DataTable12  ;; 0x40002804
+   \   00000002   0988               LDRH     R1,[R1, #+0]
+   \   00000004   0140               ANDS     R1,R0,R1
+   \   00000006   0800               MOVS     R0,R1
+   \   00000008   18BF               IT       NE 
+   \   0000000A   0120               MOVNE    R0,#+1
+    237            {
+    238              bitstatus = SET;
+    239            }
+    240            else
+    241            {
+    242              bitstatus = RESET;
+    243            }
+    244            return bitstatus;
+   \   0000000C   40B2               SXTB     R0,R0
+   \   0000000E   7047               BX       LR               ;; return
+    245          }
+    246          
+    247          /*******************************************************************************
+    248          * Function Name  : RTC_ClearFlag
+    249          * Description    : Clears the RTC’s pending flags.
+    250          * Input          : - RTC_FLAG: specifies the flag to clear.
+    251          *                    This parameter can be any combination of the following values:
+    252          *                       - RTC_FLAG_RSF: Registers Synchronized flag. This flag
+    253          *                         is cleared only after an APB reset or an APB Clock stop.
+    254          *                       - RTC_FLAG_OW: Overflow flag
+    255          *                       - RTC_FLAG_ALR: Alarm flag
+    256          *                       - RTC_FLAG_SEC: Second flag
+    257          * Output         : None
+    258          * Return         : None
+    259          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+    260          void RTC_ClearFlag(u16 RTC_FLAG)
+    261          {
+    262            /* Check the parameters */
+    263            assert_param(IS_RTC_CLEAR_FLAG(RTC_FLAG)); 
+    264              
+    265            /* Clear the coressponding RTC flag */
+    266            RTC->CRL &= (u16)~RTC_FLAG;
+   \                     RTC_ClearFlag:
+   \   00000000   ....               LDR.N    R1,??DataTable12  ;; 0x40002804
+   \   00000002   ....               B.N      ?Subroutine0
+    267          }
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ?Subroutine0:
+   \   00000000   0A88               LDRH     R2,[R1, #+0]
+   \   00000002   C043               MVNS     R0,R0
+   \   00000004   1040               ANDS     R0,R0,R2
+   \   00000006   0880               STRH     R0,[R1, #+0]
+   \   00000008   7047               BX       LR               ;; return
+    268          
+    269          /*******************************************************************************
+    270          * Function Name  : RTC_GetITStatus
+    271          * Description    : Checks whether the specified RTC interrupt has occured or not.
+    272          * Input          : - RTC_IT: specifies the RTC interrupts sources to check.
+    273          *                    This parameter can be one of the following values:
+    274          *                       - RTC_IT_OW: Overflow interrupt
+    275          *                       - RTC_IT_ALR: Alarm interrupt
+    276          *                       - RTC_IT_SEC: Second interrupt
+    277          * Output         : None
+    278          * Return         : The new state of the RTC_IT (SET or RESET).
+    279          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+    280          ITStatus RTC_GetITStatus(u16 RTC_IT)
+    281          {
+    282            ITStatus bitstatus = RESET;
+    283          
+    284            /* Check the parameters */
+    285            assert_param(IS_RTC_GET_IT(RTC_IT)); 
+    286            
+    287            bitstatus = (ITStatus)(RTC->CRL & RTC_IT);
+   \                     RTC_GetITStatus:
+   \   00000000   ....               LDR.N    R1,??DataTable11  ;; 0x40002800
+   \   00000002   8988               LDRH     R1,[R1, #+4]
+   \   00000004   0200               MOVS     R2,R0
+   \   00000006   1140               ANDS     R1,R2,R1
+    288          
+    289            if (((RTC->CRH & RTC_IT) != (u16)RESET) && (bitstatus != (u16)RESET))
+   \   00000008   ....               LDR.N    R2,??DataTable11  ;; 0x40002800
+   \   0000000A   1288               LDRH     R2,[R2, #+0]
+   \   0000000C   0242               TST      R2,R0
+   \   0000000E   03D0               BEQ.N    ??RTC_GetITStatus_0
+   \   00000010   48B2               SXTB     R0,R1
+   \   00000012   10B1               CBZ      R0,??RTC_GetITStatus_1
+   \   00000014   0120               MOVS     R0,#+1
+   \   00000016   7047               BX       LR
+    290            {
+    291              bitstatus = SET;
+    292            }
+    293            else
+    294            {
+    295              bitstatus = RESET;
+   \                     ??RTC_GetITStatus_0:
+   \   00000018   0020               MOVS     R0,#+0
+    296            }
+    297            return bitstatus;
+   \                     ??RTC_GetITStatus_1:
+   \   0000001A   7047               BX       LR               ;; return
+    298          }
+    299          
+    300          /*******************************************************************************
+    301          * Function Name  : RTC_ClearITPendingBit
+    302          * Description    : Clears the RTC’s interrupt pending bits.
+    303          * Input          : - RTC_IT: specifies the interrupt pending bit to clear.
+    304          *                    This parameter can be any combination of the following values:
+    305          *                       - RTC_IT_OW: Overflow interrupt
+    306          *                       - RTC_IT_ALR: Alarm interrupt
+    307          *                       - RTC_IT_SEC: Second interrupt
+    308          * Output         : None
+    309          * Return         : None
+    310          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+    311          void RTC_ClearITPendingBit(u16 RTC_IT)
+    312          {
+    313            /* Check the parameters */
+    314            assert_param(IS_RTC_IT(RTC_IT));  
+    315            
+    316            /* Clear the coressponding RTC pending bit */
+    317            RTC->CRL &= (u16)~RTC_IT;
+   \                     RTC_ClearITPendingBit:
+   \   00000000   ....               LDR.N    R1,??DataTable12  ;; 0x40002804
+   \   00000002   00BF               Nop      
+   \   00000004                      REQUIRE ?Subroutine0
+   \   00000004                      ;; // Fall through to label ?Subroutine0
+    318          }
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable11:
+   \   00000000   00280040           DC32     0x40002800
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable12:
+   \   00000000   04280040           DC32     0x40002804
+    319          
+    320          /******************* (C) COPYRIGHT 2008 STMicroelectronics *****END OF FILE****/
+
+   Maximum stack usage in bytes:
+
+     Function              .cstack
+     --------              -------
+     RTC_ClearFlag              0
+     RTC_ClearITPendingBit      0
+     RTC_EnterConfigMode        0
+     RTC_ExitConfigMode         0
+     RTC_GetCounter             0
+     RTC_GetDivider             0
+     RTC_GetFlagStatus          0
+     RTC_GetITStatus            0
+     RTC_ITConfig               0
+     RTC_SetAlarm               0
+     RTC_SetCounter             0
+     RTC_SetPrescaler           0
+     RTC_WaitForLastTask        0
+     RTC_WaitForSynchro         0
+
+
+   Section sizes:
+
+     Function/Label        Bytes
+     --------------        -----
+     RTC_ITConfig            20
+     RTC_EnterConfigMode     12
+     RTC_ExitConfigMode      14
+     RTC_GetCounter          20
+     RTC_SetCounter          28
+     RTC_SetPrescaler        32
+     RTC_SetAlarm            28
+     RTC_GetDivider          24
+     RTC_WaitForLastTask     12
+     RTC_WaitForSynchro      22
+     RTC_GetFlagStatus       16
+     RTC_ClearFlag            4
+     ?Subroutine0            10
+     RTC_GetITStatus         28
+     RTC_ClearITPendingBit    4
+     ??DataTable11            4
+     ??DataTable12            4
+
+ 
+ 282 bytes in section .text
+ 
+ 282 bytes of CODE memory
+
+Errors: none
+Warnings: none

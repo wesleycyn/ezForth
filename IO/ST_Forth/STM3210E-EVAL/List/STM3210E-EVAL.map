@@ -1,0 +1,475 @@
+###############################################################################
+#                                                                             #
+# IAR ELF Linker V5.20.0.50951/W32 for ARM              07/Oct/2009  13:04:02 #
+# Copyright 2007-2008 IAR Systems AB.                                         #
+#                                                                             #
+#    Output file  =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Exe\ #
+#                    STM3210E-EVAL.out                                        #
+#    Map file     =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\List #
+#                    \STM3210E-EVAL.map                                       #
+#    Command line =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\ #
+#                    Configuration_DMA.o F:\CoLtd\Forth\MCU\STM32F10x\ST_Fort #
+#                    h\STM3210E-EVAL\Obj\Configuration_GPIO.o                 #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\ #
+#                    Configuration_NVIC.o F:\CoLtd\Forth\MCU\STM32F10x\ST_For #
+#                    th\STM3210E-EVAL\Obj\Configuration_RCC.o                 #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\ #
+#                    Configuration_RTC.o F:\CoLtd\Forth\MCU\STM32F10x\ST_Fort #
+#                    h\STM3210E-EVAL\Obj\Configuration_SPI.o                  #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\ #
+#                    Configuration_Timer.o F:\CoLtd\Forth\MCU\STM32F10x\ST_Fo #
+#                    rth\STM3210E-EVAL\Obj\Configuration_USART.o              #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\ #
+#                    HardWare_1sec.o F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\ST #
+#                    M3210E-EVAL\Obj\HardWare_FastFun.o                       #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\ #
+#                    HardWare_Flash.o F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\S #
+#                    TM3210E-EVAL\Obj\HardWare_LEDScan.o                      #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\ #
+#                    HardWare_Music.o F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\S #
+#                    TM3210E-EVAL\Obj\HardWare_RTC.o                          #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\ #
+#                    HardWare_Relay.o F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\S #
+#                    TM3210E-EVAL\Obj\HardWare_USART.o                        #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\ #
+#                    STM32F10x.o F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM321 #
+#                    0E-EVAL\Obj\cortexm3_macro.o                             #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\ #
+#                    fsmc_nor.o F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210 #
+#                    E-EVAL\Obj\music.o F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth #
+#                    \STM3210E-EVAL\Obj\stm32f10x_adc.o                       #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\ #
+#                    stm32f10x_bkp.o F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\ST #
+#                    M3210E-EVAL\Obj\stm32f10x_can.o                          #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\ #
+#                    stm32f10x_crc.o F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\ST #
+#                    M3210E-EVAL\Obj\stm32f10x_dac.o                          #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\ #
+#                    stm32f10x_dbgmcu.o F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth #
+#                    \STM3210E-EVAL\Obj\stm32f10x_dma.o                       #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\ #
+#                    stm32f10x_exti.o F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\S #
+#                    TM3210E-EVAL\Obj\stm32f10x_flash.o                       #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\ #
+#                    stm32f10x_fsmc.o F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\S #
+#                    TM3210E-EVAL\Obj\stm32f10x_gpio.o                        #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\ #
+#                    stm32f10x_i2c.o F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\ST #
+#                    M3210E-EVAL\Obj\stm32f10x_it.o                           #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\ #
+#                    stm32f10x_iwdg.o F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\S #
+#                    TM3210E-EVAL\Obj\stm32f10x_lib.o                         #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\ #
+#                    stm32f10x_nvic.o F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\S #
+#                    TM3210E-EVAL\Obj\stm32f10x_pwr.o                         #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\ #
+#                    stm32f10x_rcc.o F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\ST #
+#                    M3210E-EVAL\Obj\stm32f10x_rtc.o                          #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\ #
+#                    stm32f10x_sdio.o F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\S #
+#                    TM3210E-EVAL\Obj\stm32f10x_spi.o                         #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\ #
+#                    stm32f10x_systick.o F:\CoLtd\Forth\MCU\STM32F10x\ST_Fort #
+#                    h\STM3210E-EVAL\Obj\stm32f10x_tim.o                      #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\ #
+#                    stm32f10x_usart.o F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\ #
+#                    STM3210E-EVAL\Obj\stm32f10x_vector.o                     #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\ #
+#                    stm32f10x_wwdg.o -o F:\CoLtd\Forth\MCU\STM32F10x\ST_Fort #
+#                    h\STM3210E-EVAL\Exe\STM3210E-EVAL.out --map              #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\List #
+#                    \STM3210E-EVAL.map --log initialization,modules,sections #
+#                    ,veneers --log_file F:\CoLtd\Forth\MCU\STM32F10x\ST_Fort #
+#                    h\STM3210E-EVAL\List\STM3210E-EVAL.log --config          #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\stm32f10x_flash_ex #
+#                    tsram.icf --semihosting --entry __iar_program_start      #
+#                    --redirect __iar_sh_stdout=__iar_sh_stdout_swo           #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+*******************************************************************************
+*** MESSAGES
+***
+
+Error[Li005]: no definition for "main" [referenced from cmain.o(rt7M_tl.a)]
+Error[Li005]: no definition for "UART1receive" [referenced from F:\CoLtd\Forth\
+          MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\HardWare_USART.o]
+Error[Li005]: no definition for "gUartRecTmp" [referenced from F:\CoLtd\Forth\M
+          CU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\HardWare_USART.o]
+Error[Li005]: no definition for "SYS_sec" [referenced from F:\CoLtd\Forth\MCU\S
+          TM32F10x\ST_Forth\STM3210E-EVAL\Obj\HardWare_Music.o]
+Error[Li005]: no definition for "time_entry" [referenced from F:\CoLtd\Forth\MC
+          U\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\HardWare_1sec.o]
+Error[Li005]: no definition for "timer_counter" [referenced from F:\CoLtd\Forth
+          \MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\HardWare_1sec.o]
+Error[Li005]: no definition for "rly_counter" [referenced from F:\CoLtd\Forth\M
+          CU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\HardWare_1sec.o]
+Error[Li005]: no definition for "primsg_flag" [referenced from F:\CoLtd\Forth\M
+          CU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\HardWare_1sec.o]
+Error[Li005]: no definition for "nml_timer" [referenced from F:\CoLtd\Forth\MCU
+          \STM32F10x\ST_Forth\STM3210E-EVAL\Obj\HardWare_1sec.o]
+Error[Li005]: no definition for "UpdateFlg" [referenced from F:\CoLtd\Forth\MCU
+          \STM32F10x\ST_Forth\STM3210E-EVAL\Obj\HardWare_1sec.o]
+Error[Li005]: no definition for "LED_ON_flag" [referenced from F:\CoLtd\Forth\M
+          CU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\HardWare_LEDScan.o]
+Error[Li005]: no definition for "LED_display" [referenced from F:\CoLtd\Forth\M
+          CU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\HardWare_LEDScan.o]
+Error[Li005]: no definition for "LED_displayG" [referenced from F:\CoLtd\Forth\
+          MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\HardWare_LEDScan.o]
+Error[Li005]: no definition for "LED_change" [referenced from F:\CoLtd\Forth\MC
+          U\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\HardWare_LEDScan.o]
+Error[Li005]: no definition for "LED_buffer" [referenced from F:\CoLtd\Forth\MC
+          U\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\HardWare_LEDScan.o]
+Error[Li005]: no definition for "LED_bufferG" [referenced from F:\CoLtd\Forth\M
+          CU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\HardWare_LEDScan.o]
+Error[Li005]: no definition for "msTi" [referenced from F:\CoLtd\Forth\MCU\STM3
+          2F10x\ST_Forth\STM3210E-EVAL\Obj\HardWare_LEDScan.o]
+
+
+*******************************************************************************
+*** PLACEMENT SUMMARY
+***
+
+"A1":  place at mem:0x8000000 { ro section .intvec };
+"P1":  place in [from mem:0x8000000 to mem:0x810ffff] { ro };
+"P3":  place in [from mem:0x20008000 to mem:0x2000efff] { section FastProcRAM };
+"P4":  place in [from mem:0x20000000 to mem:0x20007fff] {
+          block CSTACK, block HEAP, section FastPorcRAM, section FastDataRAM };
+"P5":  place in [from mem:0x68000000 to mem:0x6807ffff] { rw };
+
+  Section            Kind        Address    Size  Object
+  -------            ----        -------    ----  ------
+"A1":                                      0x130
+  .intvec            const    0x08000000   0x130  stm32f10x_vector.o [1]
+                            - 0x08000130   0x130
+
+"P1":                                      0xc2c
+  .text              ro code  0x08000130   0x208  HardWare_Music.o [1]
+  .text              ro code  0x08000338   0x148  stm32f10x_tim.o [1]
+  .text              ro code  0x08000480   0x114  stm32f10x_dma.o [1]
+  .text              ro code  0x08000594   0x112  stm32f10x_it.o [1]
+  Veneer             ro code  0x080006a8     0x8  - Linker created -
+  Veneer             ro code  0x080006b0     0x8  - Linker created -
+  .text              ro code  0x080006b8   0x104  HardWare_LEDScan.o [1]
+  .text              ro code  0x080007bc    0x9c  HardWare_1sec.o [1]
+  ICODE              ro code  0x08000858    0x9c  stm32f10x_vector.o [1]
+  .text              ro code  0x080008f4    0x94  STM32F10x.o [1]
+  .text              ro code  0x08000988    0x7a  cortexm3_macro.o [1]
+  .text              ro code  0x08000a04    0x54  stm32f10x_usart.o [1]
+  .text              ro code  0x08000a58    0x48  HardWare_USART.o [1]
+  .text              ro code  0x08000aa0    0x40  stm32f10x_rtc.o [1]
+  .text              ro code  0x08000ae0    0x2c  stm32f10x_spi.o [1]
+  .text              ro code  0x08000b0c    0x2c  stm32f10x_systick.o [1]
+  .text              ro code  0x08000b38    0x24  HardWare_Relay.o [1]
+  .text              ro code  0x08000b5c    0x24  stm32f10x_gpio.o [1]
+  .iar.init_table    const    0x08000b80    0x40  - Linker created -
+  .text              ro code  0x08000bc0    0x20  copy_init2.o [4]
+  .text              ro code  0x08000be0    0x1c  data_init2.o [4]
+  .text              ro code  0x08000bfc    0x1a  zero_init2.o [4]
+  .text              ro code  0x08000c18    0x18  cmain.o [4]
+  .text              ro code  0x08000c30    0x16  HardWare_RTC.o [1]
+  .text              ro code  0x08000c48    0x14  exit.o [5]
+  .text              ro code  0x08000c5c     0xa  cexit.o [4]
+  .text              ro code  0x08000c68     0x4  exit.o [3]
+  Initializer bytes  ro data  0x08000c6c    0x24  <for P5 s0> (used: 0x0)
+  Initializer bytes  ro data  0x08000c90    0xcc  <for P3 s1> (used: 0x0)
+                            - 0x08000d5c   0xc2c
+
+"P4", part 1 of 2:                        0x1000
+  CSTACK                      0x20000000  0x1000  <Block>
+    CSTACK           uninit   0x20000000  0x1000  <Block tail>
+                            - 0x20001000  0x1000
+
+"P4", part 2 of 2:                          0x38
+  FastDataRAM        zero     0x20001000    0x2c  Configuration_DMA.o [1]
+  FastDataRAM        zero     0x2000102c     0x8  HardWare_Music.o [1]
+  FastDataRAM        zero     0x20001034     0x4  HardWare_LEDScan.o [1]
+                            - 0x20001038    0x38
+
+"P3":                                       0xcc
+  P3 s1                       0x20008000    0xcc  <Init block>
+    Veneer           inited   0x20008000     0x8  - Linker created -
+    Veneer           inited   0x20008008     0x8  - Linker created -
+    Veneer           inited   0x20008010     0x8  - Linker created -
+    Veneer           inited   0x20008018     0x8  - Linker created -
+    Veneer           inited   0x20008020     0x8  - Linker created -
+    FastProcRAM      inited   0x20008028    0x90  HardWare_LEDScan.o [1]
+    FastProcRAM      inited   0x200080b8    0x14  HardWare_FastFun.o [1]
+                            - 0x200080cc    0xcc
+
+"P5", part 1 of 2:                           0x4
+  .bss               zero     0x68000000     0x2  Configuration_Timer.o [1]
+                            - 0x68000002     0x2
+
+"P5", part 2 of 2:                          0x24
+  P5 s0                       0x68000004    0x24  <Init block>
+    .data            inited   0x68000004    0x24  Configuration_Timer.o [1]
+                            - 0x68000028    0x24
+
+
+*******************************************************************************
+*** INIT TABLE
+***
+
+Kind  Routine           From       Size  To          Size
+----  -------           ----       ----  --          ----
+Zero  __iar_zero_init2                   0x20001000  0x38
+                                         0x68000000   0x2
+Copy  __iar_copy_init2  0x8000c6c  0x24  0x68000004  0x24
+Copy  __iar_copy_init2  0x8000c90  0xcc  0x20008000  0xcc
+
+
+*******************************************************************************
+*** MODULE SUMMARY
+***
+
+    Module                 ro code  rw code  ro data  rw data
+    ------                 -------  -------  -------  -------
+F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj: [1]
+    Configuration_DMA.o                                    44
+    Configuration_Timer.o                         36       38
+    HardWare_1sec.o            156
+    HardWare_FastFun.o                   20       20
+    HardWare_LEDScan.o         260      144      144        4
+    HardWare_Music.o           520                          8
+    HardWare_RTC.o              22
+    HardWare_Relay.o            36
+    HardWare_USART.o            72
+    STM32F10x.o                148
+    cortexm3_macro.o           122
+    stm32f10x_dma.o            276
+    stm32f10x_gpio.o            36
+    stm32f10x_it.o             274
+    stm32f10x_rtc.o             64
+    stm32f10x_spi.o             44
+    stm32f10x_systick.o         44
+    stm32f10x_tim.o            328
+    stm32f10x_usart.o           84
+    stm32f10x_vector.o         156               304
+    ---------------------------------------------------------
+    Total:                   2 642      164      504       94
+
+command line: [2]
+    ---------------------------------------------------------
+    Total:
+
+dl7M_tl_in.a: [3]
+    exit.o                       4
+    ---------------------------------------------------------
+    Total:                       4
+
+rt7M_tl.a: [4]
+    cexit.o                     10
+    cmain.o                     24
+    copy_init2.o                32
+    data_init2.o                28
+    zero_init2.o                26
+    ---------------------------------------------------------
+    Total:                     120
+
+shb_l.a: [5]
+    exit.o                      20
+    ---------------------------------------------------------
+    Total:                      20
+
+    Gaps                        10
+    Linker created              16       40      104    4 096
+-------------------------------------------------------------
+    Grand Total:             2 812      204      608    4 190
+
+
+*******************************************************************************
+*** ENTRY LIST
+***
+
+Entry                      Address   Size  Type      Object
+-----                      -------   ----  ----      ------
+ADC1_2_IRQHandler       0x08000601    0x2  Code  Gb  stm32f10x_it.o [1]
+ADC3_IRQHandler         0x08000675    0x2  Code  Gb  stm32f10x_it.o [1]
+BusFaultException       0x080005a1    0x2  Code  Gb  stm32f10x_it.o [1]
+CAN_RX1_IRQHandler      0x0800060d    0x2  Code  Gb  stm32f10x_it.o [1]
+CAN_SCE_IRQHandler      0x08000611    0x2  Code  Gb  stm32f10x_it.o [1]
+CSTACK$$Base            0x20000000          --   Gb  - Linker created -
+CSTACK$$Limit           0x20001000          --   Gb  - Linker created -
+DMA1_Channel1_IRQHandler
+                        0x080005e5    0x2  Code  Gb  stm32f10x_it.o [1]
+DMA1_Channel2_IRQHandler
+                        0x080005e9    0x2  Code  Gb  stm32f10x_it.o [1]
+DMA1_Channel3_IRQHandler
+                        0x080005ed    0x2  Code  Gb  stm32f10x_it.o [1]
+DMA1_Channel4_IRQHandler
+                        0x080005f1    0x2  Code  Gb  stm32f10x_it.o [1]
+DMA1_Channel5_IRQHandler
+                        0x080005f5    0x2  Code  Gb  stm32f10x_it.o [1]
+DMA1_Channel6_IRQHandler
+                        0x080005f9    0x2  Code  Gb  stm32f10x_it.o [1]
+DMA1_Channel7_IRQHandler
+                        0x080005fd    0x2  Code  Gb  stm32f10x_it.o [1]
+DMA2_Channel1_IRQHandler
+                        0x08000699    0x2  Code  Gb  stm32f10x_it.o [1]
+DMA2_Channel2_IRQHandler
+                        0x0800069d    0x2  Code  Gb  stm32f10x_it.o [1]
+DMA2_Channel3_IRQHandler
+                        0x080006a1    0x2  Code  Gb  stm32f10x_it.o [1]
+DMA2_Channel4_5_IRQHandler
+                        0x080006a5    0x2  Code  Gb  stm32f10x_it.o [1]
+DMA_Cmd                 0x08000579   0x14  Code  Gb  stm32f10x_dma.o [1]
+DMA_DeInit              0x08000481   0xbc  Code  Gb  stm32f10x_dma.o [1]
+DMA_Init                0x0800053d   0x3c  Code  Gb  stm32f10x_dma.o [1]
+DMA_InitStructure       0x20001000   0x2c  Data  Gb  Configuration_DMA.o [1]
+DebugMonitor            0x080005a9    0x2  Code  Gb  stm32f10x_it.o [1]
+EXTI0_IRQHandler        0x080005d1    0x2  Code  Gb  stm32f10x_it.o [1]
+EXTI15_10_IRQHandler    0x08000659    0x2  Code  Gb  stm32f10x_it.o [1]
+EXTI1_IRQHandler        0x080005d5    0x2  Code  Gb  stm32f10x_it.o [1]
+EXTI2_IRQHandler        0x080005d9    0x2  Code  Gb  stm32f10x_it.o [1]
+EXTI3_IRQHandler        0x080005dd    0x2  Code  Gb  stm32f10x_it.o [1]
+EXTI4_IRQHandler        0x080005e1    0x2  Code  Gb  stm32f10x_it.o [1]
+EXTI9_5_IRQHandler      0x08000615    0x2  Code  Gb  stm32f10x_it.o [1]
+FLASH_IRQHandler        0x080005c9    0x2  Code  Gb  stm32f10x_it.o [1]
+FSMC_IRQHandler         0x08000679    0x2  Code  Gb  stm32f10x_it.o [1]
+GPIO_ReadOutputDataBit  0x08000b5d    0xe  Code  Gb  stm32f10x_gpio.o [1]
+GPIO_ResetBits          0x08000b71    0x4  Code  Gb  stm32f10x_gpio.o [1]
+GPIO_SetBits            0x08000b6d    0x4  Code  Gb  stm32f10x_gpio.o [1]
+GPIO_WriteBit           0x08000b75    0xa  Code  Gb  stm32f10x_gpio.o [1]
+HardFaultException      0x08000599    0x2  Code  Gb  stm32f10x_it.o [1]
+I2C1_ER_IRQHandler      0x08000639    0x2  Code  Gb  stm32f10x_it.o [1]
+I2C1_EV_IRQHandler      0x08000635    0x2  Code  Gb  stm32f10x_it.o [1]
+I2C2_ER_IRQHandler      0x08000641    0x2  Code  Gb  stm32f10x_it.o [1]
+I2C2_EV_IRQHandler      0x0800063d    0x2  Code  Gb  stm32f10x_it.o [1]
+LEDsSet                 0x080008f5   0x94  Code  Gb  STM32F10x.o [1]
+LedState                0x20001034    0x4  Data  Gb  HardWare_LEDScan.o [1]
+MemManageException      0x0800059d    0x2  Code  Gb  stm32f10x_it.o [1]
+Music_PTR               0x2000102c    0x4  Data  Gb  HardWare_Music.o [1]
+NMIException            0x08000595    0x2  Code  Gb  stm32f10x_it.o [1]
+POINT                   0x20001030    0x4  Data  Gb  HardWare_Music.o [1]
+PVD_IRQHandler          0x080005bd    0x2  Code  Gb  stm32f10x_it.o [1]
+PendSVC                 0x080005b1    0x2  Code  Gb  stm32f10x_it.o [1]
+RCC_IRQHandler          0x080005cd    0x2  Code  Gb  stm32f10x_it.o [1]
+RTCAlarm_IRQHandler     0x0800065d    0x2  Code  Gb  stm32f10x_it.o [1]
+RTC_ClearITPendingBit   0x08000acd    0x4  Code  Gb  stm32f10x_rtc.o [1]
+RTC_GetITStatus         0x08000aad   0x1c  Code  Gb  stm32f10x_rtc.o [1]
+RTC_IRQHandler          0x080005c5    0x4  Code  Gb  stm32f10x_it.o [1]
+RTC_ISR                 0x08000c31   0x16  Code  Gb  HardWare_RTC.o [1]
+RTC_WaitForLastTask     0x08000aa1    0xc  Code  Gb  stm32f10x_rtc.o [1]
+Region$$Table$$Base     0x08000b80          --   Gb  - Linker created -
+Region$$Table$$Limit    0x08000bc0          --   Gb  - Linker created -
+Relay                   0x08000b39   0x24  Code  Gb  HardWare_Relay.o [1]
+SDIO_IRQHandler         0x0800067d    0x2  Code  Gb  stm32f10x_it.o [1]
+SPI01                   0x20008029   0x90  Code  Gb  HardWare_LEDScan.o [1]
+SPI1_IRQHandler         0x08000645    0x2  Code  Gb  stm32f10x_it.o [1]
+SPI2_IRQHandler         0x08000649    0x2  Code  Gb  stm32f10x_it.o [1]
+SPI3_IRQHandler         0x08000685    0x2  Code  Gb  stm32f10x_it.o [1]
+SPI_Cmd                 0x08000ae1   0x16  Code  Gb  stm32f10x_spi.o [1]
+SPI_I2S_DMACmd          0x08000af9         Code  Gb  stm32f10x_spi.o [1]
+SVCHandler              0x080005ad    0x2  Code  Gb  stm32f10x_it.o [1]
+Set_Beat                0x080002c5   0x64  Code  Gb  HardWare_Music.o [1]
+Set_Tone                0x08000245   0x78  Code  Gb  HardWare_Music.o [1]
+SysTickHandler          0x080005b5    0x4  Code  Gb  stm32f10x_it.o [1]
+SysTick_CounterCmd      0x08000b0d   0x28  Code  Gb  stm32f10x_systick.o [1]
+TAMPER_IRQHandler       0x080005c1    0x2  Code  Gb  stm32f10x_it.o [1]
+TIM1_BRK_IRQHandler     0x08000619    0x2  Code  Gb  stm32f10x_it.o [1]
+TIM1_CC_IRQHandler      0x08000625    0x2  Code  Gb  stm32f10x_it.o [1]
+TIM1_TRG_COM_IRQHandler
+                        0x08000621    0x2  Code  Gb  stm32f10x_it.o [1]
+TIM1_UP_IRQHandler      0x0800061d    0x2  Code  Gb  stm32f10x_it.o [1]
+TIM2_IRQHandler         0x08000629    0x4  Code  Gb  stm32f10x_it.o [1]
+TIM2_ISR                0x080007bd   0x9c  Code  Gb  HardWare_1sec.o [1]
+TIM3_IRQHandler         0x0800062d    0x4  Code  Gb  stm32f10x_it.o [1]
+TIM3_ISR                0x08000131   0x44  Code  Gb  HardWare_Music.o [1]
+TIM4_IRQHandler         0x08000631    0x4  Code  Gb  stm32f10x_it.o [1]
+TIM4_ISR                0x08000175   0x72  Code  Gb  HardWare_Music.o [1]
+TIM5_IRQHandler         0x08000681    0x4  Code  Gb  stm32f10x_it.o [1]
+TIM5_ISR                0x080001f1   0x50  Code  Gb  HardWare_Music.o [1]
+TIM6_IRQHandler         0x08000691    0x2  Code  Gb  stm32f10x_it.o [1]
+TIM7_IRQHandler         0x08000695    0x2  Code  Gb  stm32f10x_it.o [1]
+TIM8_BRK_IRQHandler     0x08000665    0x2  Code  Gb  stm32f10x_it.o [1]
+TIM8_CC_IRQHandler      0x08000671    0x2  Code  Gb  stm32f10x_it.o [1]
+TIM8_TRG_COM_IRQHandler
+                        0x0800066d    0x2  Code  Gb  stm32f10x_it.o [1]
+TIM8_UP_IRQHandler      0x08000669    0x2  Code  Gb  stm32f10x_it.o [1]
+TIM_ClearITPendingBit   0x08000479    0x6  Code  Gb  stm32f10x_tim.o [1]
+TIM_Cmd                 0x0800040d   0x16  Code  Gb  stm32f10x_tim.o [1]
+TIM_DMACmd              0x08000429         Code  Gb  stm32f10x_tim.o [1]
+TIM_GetCapture1         0x0800045d    0x4  Code  Gb  stm32f10x_tim.o [1]
+TIM_GetITStatus         0x08000461   0x18  Code  Gb  stm32f10x_tim.o [1]
+TIM_ITConfig            0x08000425    0x2  Code  Gb  stm32f10x_tim.o [1]
+TIM_OC1Init             0x08000371   0x92  Code  Gb  stm32f10x_tim.o [1]
+TIM_OC1PreloadConfig    0x08000445    0x8  Code  Gb  stm32f10x_tim.o [1]
+TIM_OCInitStructure     0x68000004   0x10  Data  Gb  Configuration_Timer.o [1]
+TIM_PrescalerConfig     0x0800043d    0x6  Code  Gb  stm32f10x_tim.o [1]
+TIM_SetCompare1         0x08000459    0x4  Code  Gb  stm32f10x_tim.o [1]
+TIM_TimeBaseInit        0x08000339   0x36  Code  Gb  stm32f10x_tim.o [1]
+TIM_TimeBaseStructure   0x68000014    0xc  Data  Gb  Configuration_Timer.o [1]
+Tim2_CCR1_Val           0x68000020    0x2  Data  Gb  Configuration_Timer.o [1]
+Tim3_CCR1_Val           0x68000022    0x2  Data  Gb  Configuration_Timer.o [1]
+Tim4_CCR1_Val           0x68000024    0x2  Data  Gb  Configuration_Timer.o [1]
+Tim5_CCR1_Val           0x68000026    0x2  Data  Gb  Configuration_Timer.o [1]
+TimingDelay_Decrement   0x080006b9  0x104  Code  Gb  HardWare_LEDScan.o [1]
+UART4_IRQHandler        0x08000689    0x2  Code  Gb  stm32f10x_it.o [1]
+UART5_IRQHandler        0x0800068d    0x2  Code  Gb  stm32f10x_it.o [1]
+USART1_IRQHandler       0x0800064d    0x2  Code  Gb  stm32f10x_it.o [1]
+USART2_IRQHandler       0x08000651    0x4  Code  Gb  stm32f10x_it.o [1]
+USART2_ISR              0x08000a59   0x44  Code  Gb  HardWare_USART.o [1]
+USART3_IRQHandler       0x08000655    0x2  Code  Gb  stm32f10x_it.o [1]
+USART_ClearITPendingBit
+                        0x08000a49   0x10  Code  Gb  stm32f10x_usart.o [1]
+USART_GetITStatus       0x08000a0d   0x3c  Code  Gb  stm32f10x_usart.o [1]
+USART_ReceiveData       0x08000a05    0x8  Code  Gb  stm32f10x_usart.o [1]
+USBWakeUp_IRQHandler    0x08000661    0x2  Code  Gb  stm32f10x_it.o [1]
+USB_HP_CAN_TX_IRQHandler
+                        0x08000605    0x2  Code  Gb  stm32f10x_it.o [1]
+USB_LP_CAN_RX0_IRQHandler
+                        0x08000609    0x2  Code  Gb  stm32f10x_it.o [1]
+UsageFaultException     0x080005a5    0x2  Code  Gb  stm32f10x_it.o [1]
+WWDG_IRQHandler         0x080005b9    0x2  Code  Gb  stm32f10x_it.o [1]
+__BASEPRICONFIG         0x080009ef         Code  Gb  cortexm3_macro.o [1]
+__DMB                   0x080009a1         Code  Gb  cortexm3_macro.o [1]
+__DSB                   0x0800099b         Code  Gb  cortexm3_macro.o [1]
+__GetBASEPRI            0x080009f5         Code  Gb  cortexm3_macro.o [1]
+__ISB                   0x08000995         Code  Gb  cortexm3_macro.o [1]
+__MRS_CONTROL           0x080009ab         Code  Gb  cortexm3_macro.o [1]
+__MRS_MSP               0x080009c7         Code  Gb  cortexm3_macro.o [1]
+__MRS_PSP               0x080009bb         Code  Gb  cortexm3_macro.o [1]
+__MSR_CONTROL           0x080009b1         Code  Gb  cortexm3_macro.o [1]
+__MSR_MSP               0x080009cd         Code  Gb  cortexm3_macro.o [1]
+__MSR_PSP               0x080009c1         Code  Gb  cortexm3_macro.o [1]
+__READ_FAULTMASK        0x080009e9         Code  Gb  cortexm3_macro.o [1]
+__READ_PRIMASK          0x080009db         Code  Gb  cortexm3_macro.o [1]
+__RESETFAULTMASK        0x080009e1         Code  Gb  cortexm3_macro.o [1]
+__RESETPRIMASK          0x080009d3         Code  Gb  cortexm3_macro.o [1]
+__REV_HalfWord          0x080009fb         Code  Gb  cortexm3_macro.o [1]
+__REV_Word              0x080009ff         Code  Gb  cortexm3_macro.o [1]
+__SETFAULTMASK          0x080009e5         Code  Gb  cortexm3_macro.o [1]
+__SETPRIMASK            0x080009d7         Code  Gb  cortexm3_macro.o [1]
+__SEV                   0x08000991         Code  Gb  cortexm3_macro.o [1]
+__SVC                   0x080009a7         Code  Gb  cortexm3_macro.o [1]
+__WFE                   0x0800098d         Code  Gb  cortexm3_macro.o [1]
+__WFI                   0x08000989         Code  Gb  cortexm3_macro.o [1]
+__exit                  0x08000c49   0x14  Code  Gb  exit.o [5]
+__iar_copy_init2        0x08000bc1   0x20  Code  Gb  copy_init2.o [4]
+__iar_data_init2        0x08000be1   0x1c  Code  Gb  data_init2.o [4]
+__iar_program_start     0x08000c19         Code  Gb  cmain.o [4]
+__iar_zero_init2        0x08000bfd   0x1a  Code  Gb  zero_init2.o [4]
+__low_level_init        0x08000859   0x9c  Code  Gb  stm32f10x_vector.o [1]
+__vector_table          0x08000000  0x130  Data  Gb  stm32f10x_vector.o [1]
+_exit                   0x08000c5d         Code  Gb  cexit.o [4]
+_main                   0x08000c2b         Code  Gb  cmain.o [4]
+capture                 0x68000000    0x2  Data  Gb  Configuration_Timer.o [1]
+exit                    0x08000c69    0x4  Code  Gb  exit.o [3]
+mCopy                   0x200080b9   0x14  Code  Gb  HardWare_FastFun.o [1]
+
+
+[1] = F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj
+[2] = command line
+[3] = dl7M_tl_in.a
+[4] = rt7M_tl.a
+[5] = shb_l.a
+
+  2 812 bytes of readonly  code memory
+    204 bytes of readwrite code memory
+    608 bytes of readonly  data memory
+  4 190 bytes of readwrite data memory
+
+Errors: 17
+Warnings: none

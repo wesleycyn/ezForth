@@ -1,0 +1,494 @@
+###############################################################################
+#                                                                             #
+# IAR ANSI C/C++ Compiler V5.20.0.50892/W32 for ARM     07/Oct/2009  13:03:48 #
+# Copyright 1999-2008 IAR Systems AB.                                         #
+#                                                                             #
+#    Cpu mode     =  thumb                                                    #
+#    Endian       =  little                                                   #
+#    Source file  =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\Configuration_Time #
+#                    r.c                                                      #
+#    Command line =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\Configuration_Time #
+#                    r.c -D VECT_TAB_FLASH -lC F:\CoLtd\Forth\MCU\STM32F10x\S #
+#                    T_Forth\STM3210E-EVAL\List\ -o                           #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\ #
+#                     --debug --endian=little --cpu=Cortex-M3 -e              #
+#                    --char_is_signed --require_prototypes --fpu=None         #
+#                    --dlib_config "C:\Program Files\IAR Systems\Embedded     #
+#                    Workbench 5.0\ARM\INC\DLib_Config_Full.h" -I             #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\ -I                #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\library\inc\ -I    #
+#                    "C:\Program Files\IAR Systems\Embedded Workbench         #
+#                    5.0\ARM\INC\" -Ohz                                       #
+#    List file    =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\List #
+#                    \Configuration_Timer.lst                                 #
+#    Object file  =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\ #
+#                    Configuration_Timer.o                                    #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\Configuration_Timer.c
+      1          #include "stm32f10x_lib.h"
+      2          
+      3          #include "stm32f10x.h"
+      4          #include "platform_config.h"
+      5          TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
+
+   \                                 In section .bss, align 4
+      6          TIM_TimeBaseInitTypeDef  TIM2_TimeBaseStructure;
+   \                     TIM2_TimeBaseStructure:
+   \   00000000                      DS8 12
+
+   \                                 In section .bss, align 4
+      7          TIM_TimeBaseInitTypeDef  TIM3_TimeBaseStructure;
+   \                     TIM3_TimeBaseStructure:
+   \   00000000                      DS8 12
+
+   \                                 In section .bss, align 4
+      8          TIM_TimeBaseInitTypeDef  TIM4_TimeBaseStructure;
+   \                     TIM4_TimeBaseStructure:
+   \   00000000                      DS8 12
+
+   \                                 In section .bss, align 4
+      9          TIM_TimeBaseInitTypeDef  TIM5_TimeBaseStructure;
+   \                     TIM5_TimeBaseStructure:
+   \   00000000                      DS8 12
+     10          
+     11          TIM_OCInitTypeDef  TIM_OCInitStructure;
+
+   \                                 In section .bss, align 4
+     12          TIM_OCInitTypeDef  TIM2_OCInitStructure;
+   \                     TIM2_OCInitStructure:
+   \   00000000                      DS8 16
+
+   \                                 In section .bss, align 4
+     13          TIM_OCInitTypeDef  TIM3_OCInitStructure;
+   \                     TIM3_OCInitStructure:
+   \   00000000                      DS8 16
+
+   \                                 In section .bss, align 4
+     14          TIM_OCInitTypeDef  TIM4_OCInitStructure;
+   \                     TIM4_OCInitStructure:
+   \   00000000                      DS8 16
+
+   \                                 In section .bss, align 4
+     15          TIM_OCInitTypeDef  TIM5_OCInitStructure;
+   \                     TIM5_OCInitStructure:
+   \   00000000                      DS8 16
+     16          
+     17          
+
+   \                                 In section .bss, align 2
+     18          u16 capture = 0;
+   \                     capture:
+   \   00000000                      DS8 2
+
+   \                                 In section .data, align 4
+   \                     TIM_OCInitStructure:
+   \   00000000   000000000000       DC8 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+   \              000000000000
+   \              00000000    
+   \                     TIM_TimeBaseStructure:
+   \   00000010   000000000000       DC8 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+   \              000000000000
+     19          
+     20          vu16 Tim2_CCR1_Val = 10000; //49152;
+   \                     Tim2_CCR1_Val:
+   \   0000001C   1027               DC16 10000
+     21          vu16 Tim3_CCR1_Val = 10000; //49152;
+   \                     Tim3_CCR1_Val:
+   \   0000001E   1027               DC16 10000
+     22          vu16 Tim4_CCR1_Val = 200; //49152;
+   \                     Tim4_CCR1_Val:
+   \   00000020   C800               DC16 200
+     23          vu16 Tim5_CCR1_Val = 182; //49152;
+   \                     Tim5_CCR1_Val:
+   \   00000022   B600               DC16 182
+     24          
+     25          
+     26          void Tim2_Configuration(void);
+     27          void Tim3_Configuration(void);
+     28          void Tim4_Configuration(void);
+     29          void Tim5_Configuration(void);
+     30          
+     31          
+
+   \                                 In section .text, align 4, keep-with-next
+     32          void Tim2_Configuration(void)
+     33          {
+   \                     Tim2_Configuration:
+   \   00000000   10B5               PUSH     {R4,LR}
+     34            /* ---------------------------------------------------------------
+     35              TIM2 Configuration: Output Compare Timing Mode:
+     36              TIM2CLK = 36 MHz, Prescaler = 4, TIM2 counter clock = 7.2 MHz
+     37              CC1 update rate = TIM2 counter clock / CCR1_Val = 146.48 Hz
+     38              CC2 update rate = TIM2 counter clock / CCR2_Val = 219.7 Hz
+     39              CC3 update rate = TIM2 counter clock / CCR3_Val = 439.4 Hz
+     40              CC4 update rate = TIM2 counter clock / CCR4_Val =  878.9 Hz
+     41            --------------------------------------------------------------- */
+     42          
+     43            /* Time base configuration */
+     44            TIM_TimeBaseStructure.TIM_Period = 65535;
+   \   00000002   ....               LDR.N    R4,??DataTable3  ;; TIM_OCInitStructure
+   \   00000004   4FF6FF70           MOVW     R0,#+65535
+   \   00000008   A082               STRH     R0,[R4, #+20]
+     45            TIM_TimeBaseStructure.TIM_Prescaler = 0;
+   \   0000000A   0020               MOVS     R0,#+0
+   \   0000000C   2061               STR      R0,[R4, #+16]
+     46            TIM_TimeBaseStructure.TIM_ClockDivision = 0;
+   \   0000000E   E082               STRH     R0,[R4, #+22]
+     47            TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
+     48          
+     49            TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStructure);
+   \   00000010   04F11001           ADD      R1,R4,#+16
+   \   00000014   4FF08040           MOV      R0,#+1073741824
+   \   00000018   ........           BL       TIM_TimeBaseInit
+     50          
+     51            /* Prescaler configuration */
+     52            TIM_PrescalerConfig(TIM2, 7200, TIM_PSCReloadMode_Immediate);
+   \   0000001C   0122               MOVS     R2,#+1
+   \   0000001E   4FF4E151           MOV      R1,#+7200
+   \   00000022   4FF08040           MOV      R0,#+1073741824
+   \   00000026   ........           BL       TIM_PrescalerConfig
+     53          
+     54            /* Output Compare Timing Mode configuration: Channel1 */
+     55            TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_Timing;
+   \   0000002A   0020               MOVS     R0,#+0
+   \   0000002C   2080               STRH     R0,[R4, #+0]
+     56            TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
+   \   0000002E   0120               MOVS     R0,#+1
+   \   00000030   6080               STRH     R0,[R4, #+2]
+     57            TIM_OCInitStructure.TIM_Pulse = Tim2_CCR1_Val;
+   \   00000032   A08B               LDRH     R0,[R4, #+28]
+   \   00000034   E080               STRH     R0,[R4, #+6]
+     58            TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
+   \   00000036   0020               MOVS     R0,#+0
+   \   00000038   2081               STRH     R0,[R4, #+8]
+     59          
+     60            TIM_OC1Init(TIM2, &TIM_OCInitStructure);
+   \   0000003A   2100               MOVS     R1,R4
+   \   0000003C   4FF08040           MOV      R0,#+1073741824
+   \   00000040   ........           BL       TIM_OC1Init
+     61          
+     62            TIM_OC1PreloadConfig(TIM2, TIM_OCPreload_Disable);
+   \   00000044   0021               MOVS     R1,#+0
+   \   00000046   4FF08040           MOV      R0,#+1073741824
+   \   0000004A   ........           BL       TIM_OC1PreloadConfig
+     63          
+     64            /* TIM IT enable */
+     65            TIM_ITConfig(TIM2, TIM_IT_CC1 , ENABLE);
+   \   0000004E   0122               MOVS     R2,#+1
+   \   00000050   0221               MOVS     R1,#+2
+   \   00000052   4FF08040           MOV      R0,#+1073741824
+   \   00000056   ........           BL       TIM_ITConfig
+     66          
+     67            /* TIM2 enable counter */
+     68            TIM_Cmd(TIM2, ENABLE);
+   \   0000005A   0121               MOVS     R1,#+1
+   \   0000005C   4FF08040           MOV      R0,#+1073741824
+   \   00000060   BDE81040           POP      {R4,LR}
+   \   00000064   ........           B.W      TIM_Cmd
+     69          } 
+     70          
+
+   \                                 In section .text, align 4, keep-with-next
+     71          void Tim3_Configuration(void)
+     72          {
+   \                     Tim3_Configuration:
+   \   00000000   38B5               PUSH     {R3-R5,LR}
+     73            /* ---------------------------------------------------------------
+     74              TIM2 Configuration: Output Compare Timing Mode:
+     75              TIM2CLK = 36 MHz, Prescaler = 4, TIM2 counter clock = 7.2 MHz
+     76              CC1 update rate = TIM2 counter clock / CCR1_Val = 146.48 Hz
+     77              CC2 update rate = TIM2 counter clock / CCR2_Val = 219.7 Hz
+     78              CC3 update rate = TIM2 counter clock / CCR3_Val = 439.4 Hz
+     79              CC4 update rate = TIM2 counter clock / CCR4_Val =  878.9 Hz
+     80            --------------------------------------------------------------- */
+     81          
+     82            /* Time base configuration */
+     83            TIM_TimeBaseStructure.TIM_Period = 65535;
+   \   00000002   ....               LDR.N    R4,??DataTable3  ;; TIM_OCInitStructure
+   \   00000004   4FF6FF70           MOVW     R0,#+65535
+   \   00000008   A082               STRH     R0,[R4, #+20]
+     84            TIM_TimeBaseStructure.TIM_Prescaler = 0;
+   \   0000000A   0020               MOVS     R0,#+0
+   \   0000000C   2061               STR      R0,[R4, #+16]
+     85            TIM_TimeBaseStructure.TIM_ClockDivision = 0;
+   \   0000000E   E082               STRH     R0,[R4, #+22]
+     86            TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
+     87          
+     88            TIM_TimeBaseInit(TIM3, &TIM_TimeBaseStructure);
+   \   00000010   134D               LDR.N    R5,??Tim3_Configuration_0  ;; 0x40000400
+   \   00000012   04F11001           ADD      R1,R4,#+16
+   \   00000016   2800               MOVS     R0,R5
+   \   00000018   ........           BL       TIM_TimeBaseInit
+     89          
+     90            /* Prescaler configuration */
+     91            TIM_PrescalerConfig(TIM3, 720, TIM_PSCReloadMode_Immediate);
+   \   0000001C   0122               MOVS     R2,#+1
+   \   0000001E   4FF43471           MOV      R1,#+720
+   \   00000022   2800               MOVS     R0,R5
+   \   00000024   ........           BL       TIM_PrescalerConfig
+     92          
+     93            /* Output Compare Timing Mode configuration: Channel1 */
+     94            TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_Timing;
+   \   00000028   0020               MOVS     R0,#+0
+   \   0000002A   2080               STRH     R0,[R4, #+0]
+     95            TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
+   \   0000002C   0120               MOVS     R0,#+1
+   \   0000002E   6080               STRH     R0,[R4, #+2]
+     96            TIM_OCInitStructure.TIM_Pulse = Tim3_CCR1_Val;
+   \   00000030   E08B               LDRH     R0,[R4, #+30]
+   \   00000032   E080               STRH     R0,[R4, #+6]
+     97            TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
+   \   00000034   0020               MOVS     R0,#+0
+   \   00000036   2081               STRH     R0,[R4, #+8]
+     98          
+     99            TIM_OC1Init(TIM3, &TIM_OCInitStructure);
+   \   00000038   2100               MOVS     R1,R4
+   \   0000003A   2800               MOVS     R0,R5
+   \   0000003C   ........           BL       TIM_OC1Init
+    100          
+    101            TIM_OC1PreloadConfig(TIM3, TIM_OCPreload_Disable);
+   \   00000040   0021               MOVS     R1,#+0
+   \   00000042   2800               MOVS     R0,R5
+   \   00000044   ........           BL       TIM_OC1PreloadConfig
+    102          
+    103            /* TIM IT enable */
+    104            TIM_ITConfig(TIM3, TIM_IT_CC1 , ENABLE);
+   \   00000048   0122               MOVS     R2,#+1
+   \   0000004A   0221               MOVS     R1,#+2
+   \   0000004C   2800               MOVS     R0,R5
+   \   0000004E   ........           BL       TIM_ITConfig
+    105          
+    106            /* TIM2 enable counter */
+    107            TIM_Cmd(TIM3, ENABLE);
+   \   00000052   0121               MOVS     R1,#+1
+   \   00000054   2800               MOVS     R0,R5
+   \   00000056   BDE83440           POP      {R2,R4,R5,LR}
+   \   0000005A   ........           B.W      TIM_Cmd
+   \   0000005E   00BF               Nop      
+   \                     ??Tim3_Configuration_0:
+   \   00000060   00040040           DC32     0x40000400
+    108          }
+    109          
+    110          
+    111          
+
+   \                                 In section .text, align 4, keep-with-next
+    112          void Tim4_Configuration(void)
+    113          {
+   \                     Tim4_Configuration:
+   \   00000000   38B5               PUSH     {R3-R5,LR}
+    114            /* ---------------------------------------------------------------
+    115              TIM2 Configuration: Output Compare Timing Mode:
+    116              TIM2CLK = 36 MHz, Prescaler = 4, TIM2 counter clock = 7.2 MHz
+    117              CC1 update rate = TIM2 counter clock / CCR1_Val = 146.48 Hz
+    118              CC2 update rate = TIM2 counter clock / CCR2_Val = 219.7 Hz
+    119              CC3 update rate = TIM2 counter clock / CCR3_Val = 439.4 Hz
+    120              CC4 update rate = TIM2 counter clock / CCR4_Val =  878.9 Hz
+    121            --------------------------------------------------------------- */
+    122          
+    123            /* Time base configuration */
+    124            TIM_TimeBaseStructure.TIM_Period = 65535;
+   \   00000002   ....               LDR.N    R4,??DataTable3  ;; TIM_OCInitStructure
+   \   00000004   4FF6FF70           MOVW     R0,#+65535
+   \   00000008   A082               STRH     R0,[R4, #+20]
+    125            TIM_TimeBaseStructure.TIM_Prescaler = 0;
+   \   0000000A   0020               MOVS     R0,#+0
+   \   0000000C   2061               STR      R0,[R4, #+16]
+    126            TIM_TimeBaseStructure.TIM_ClockDivision = 0;
+   \   0000000E   E082               STRH     R0,[R4, #+22]
+    127            TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
+    128          
+    129            TIM_TimeBaseInit(TIM4, &TIM_TimeBaseStructure);
+   \   00000010   134D               LDR.N    R5,??Tim4_Configuration_0  ;; 0x40000800
+   \   00000012   04F11001           ADD      R1,R4,#+16
+   \   00000016   2800               MOVS     R0,R5
+   \   00000018   ........           BL       TIM_TimeBaseInit
+    130          
+    131            /* Prescaler configuration */
+    132            TIM_PrescalerConfig(TIM4, 45000, TIM_PSCReloadMode_Immediate);
+   \   0000001C   0122               MOVS     R2,#+1
+   \   0000001E   4AF6C871           MOVW     R1,#+45000
+   \   00000022   2800               MOVS     R0,R5
+   \   00000024   ........           BL       TIM_PrescalerConfig
+    133          
+    134            /* Output Compare Timing Mode configuration: Channel1 */
+    135            TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_Timing;
+   \   00000028   0020               MOVS     R0,#+0
+   \   0000002A   2080               STRH     R0,[R4, #+0]
+    136            TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
+   \   0000002C   0120               MOVS     R0,#+1
+   \   0000002E   6080               STRH     R0,[R4, #+2]
+    137            TIM_OCInitStructure.TIM_Pulse = Tim4_CCR1_Val;
+   \   00000030   208C               LDRH     R0,[R4, #+32]
+   \   00000032   E080               STRH     R0,[R4, #+6]
+    138            TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
+   \   00000034   0020               MOVS     R0,#+0
+   \   00000036   2081               STRH     R0,[R4, #+8]
+    139          
+    140            TIM_OC1Init(TIM4, &TIM_OCInitStructure);
+   \   00000038   2100               MOVS     R1,R4
+   \   0000003A   2800               MOVS     R0,R5
+   \   0000003C   ........           BL       TIM_OC1Init
+    141          
+    142            TIM_OC1PreloadConfig(TIM4, TIM_OCPreload_Disable);
+   \   00000040   0021               MOVS     R1,#+0
+   \   00000042   2800               MOVS     R0,R5
+   \   00000044   ........           BL       TIM_OC1PreloadConfig
+    143          
+    144          
+    145            /* TIM IT enable */
+    146            TIM_ITConfig(TIM4, TIM_IT_CC1 , ENABLE);
+   \   00000048   0122               MOVS     R2,#+1
+   \   0000004A   0221               MOVS     R1,#+2
+   \   0000004C   2800               MOVS     R0,R5
+   \   0000004E   ........           BL       TIM_ITConfig
+    147            /* TIM2 enable counter */
+    148            TIM_Cmd(TIM4, ENABLE);
+   \   00000052   0121               MOVS     R1,#+1
+   \   00000054   2800               MOVS     R0,R5
+   \   00000056   BDE83440           POP      {R2,R4,R5,LR}
+   \   0000005A   ........           B.W      TIM_Cmd
+   \   0000005E   00BF               Nop      
+   \                     ??Tim4_Configuration_0:
+   \   00000060   00080040           DC32     0x40000800
+    149            
+    150            
+    151            
+    152          }
+    153          
+    154          
+
+   \                                 In section .text, align 4, keep-with-next
+    155          void Tim5_Configuration(void)
+    156          {
+   \                     Tim5_Configuration:
+   \   00000000   38B5               PUSH     {R3-R5,LR}
+    157            /* ---------------------------------------------------------------
+    158              TIM2 Configuration: Output Compare Timing Mode:
+    159              TIM2CLK = 36 MHz, Prescaler = 4, TIM2 counter clock = 7.2 MHz
+    160              CC1 update rate = TIM2 counter clock / CCR1_Val = 146.48 Hz
+    161              CC2 update rate = TIM2 counter clock / CCR2_Val = 219.7 Hz
+    162              CC3 update rate = TIM2 counter clock / CCR3_Val = 439.4 Hz
+    163              CC4 update rate = TIM2 counter clock / CCR4_Val =  878.9 Hz
+    164            --------------------------------------------------------------- */
+    165          
+    166            /* Time base configuration */
+    167            TIM_TimeBaseStructure.TIM_Period = 65535;
+   \   00000002   ....               LDR.N    R4,??DataTable3  ;; TIM_OCInitStructure
+   \   00000004   4FF6FF70           MOVW     R0,#+65535
+   \   00000008   A082               STRH     R0,[R4, #+20]
+    168            TIM_TimeBaseStructure.TIM_Prescaler = 0;
+   \   0000000A   0020               MOVS     R0,#+0
+   \   0000000C   2061               STR      R0,[R4, #+16]
+    169            TIM_TimeBaseStructure.TIM_ClockDivision = 0;
+   \   0000000E   E082               STRH     R0,[R4, #+22]
+    170            TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
+    171          
+    172            TIM_TimeBaseInit(TIM5, &TIM_TimeBaseStructure);
+   \   00000010   124D               LDR.N    R5,??Tim5_Configuration_0  ;; 0x40000c00
+   \   00000012   04F11001           ADD      R1,R4,#+16
+   \   00000016   2800               MOVS     R0,R5
+   \   00000018   ........           BL       TIM_TimeBaseInit
+    173          
+    174            /* Prescaler configuration */
+    175            TIM_PrescalerConfig(TIM5,72, TIM_PSCReloadMode_Immediate);
+   \   0000001C   0122               MOVS     R2,#+1
+   \   0000001E   4821               MOVS     R1,#+72
+   \   00000020   2800               MOVS     R0,R5
+   \   00000022   ........           BL       TIM_PrescalerConfig
+    176          
+    177            /* Output Compare Timing Mode configuration: Channel1 */
+    178            TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_Timing;
+   \   00000026   0020               MOVS     R0,#+0
+   \   00000028   2080               STRH     R0,[R4, #+0]
+    179            TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
+   \   0000002A   0120               MOVS     R0,#+1
+   \   0000002C   6080               STRH     R0,[R4, #+2]
+    180            TIM_OCInitStructure.TIM_Pulse = Tim5_CCR1_Val;
+   \   0000002E   608C               LDRH     R0,[R4, #+34]
+   \   00000030   E080               STRH     R0,[R4, #+6]
+    181            TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
+   \   00000032   0020               MOVS     R0,#+0
+   \   00000034   2081               STRH     R0,[R4, #+8]
+    182          
+    183            TIM_OC1Init(TIM5, &TIM_OCInitStructure);
+   \   00000036   2100               MOVS     R1,R4
+   \   00000038   2800               MOVS     R0,R5
+   \   0000003A   ........           BL       TIM_OC1Init
+    184          
+    185            TIM_OC1PreloadConfig(TIM5, TIM_OCPreload_Disable);
+   \   0000003E   0021               MOVS     R1,#+0
+   \   00000040   2800               MOVS     R0,R5
+   \   00000042   ........           BL       TIM_OC1PreloadConfig
+    186          
+    187            /* TIM IT enable */
+    188            TIM_ITConfig(TIM5, TIM_IT_CC1 , ENABLE);
+   \   00000046   0122               MOVS     R2,#+1
+   \   00000048   0221               MOVS     R1,#+2
+   \   0000004A   2800               MOVS     R0,R5
+   \   0000004C   ........           BL       TIM_ITConfig
+    189          
+    190            /* TIM2 enable counter */
+    191            TIM_Cmd(TIM5, ENABLE);
+   \   00000050   0121               MOVS     R1,#+1
+   \   00000052   2800               MOVS     R0,R5
+   \   00000054   BDE83440           POP      {R2,R4,R5,LR}
+   \   00000058   ........           B.W      TIM_Cmd
+   \                     ??Tim5_Configuration_0:
+   \   0000005C   000C0040           DC32     0x40000c00
+    192          } 
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable3:
+   \   00000000   ........           DC32     TIM_OCInitStructure
+    193          
+    194          
+
+   Maximum stack usage in bytes:
+
+     Function           .cstack
+     --------           -------
+     Tim2_Configuration      0
+     Tim3_Configuration      0
+     Tim4_Configuration      0
+     Tim5_Configuration      0
+
+
+   Section sizes:
+
+     Function/Label         Bytes
+     --------------         -----
+     TIM2_TimeBaseStructure   12
+     TIM3_TimeBaseStructure   12
+     TIM4_TimeBaseStructure   12
+     TIM5_TimeBaseStructure   12
+     TIM2_OCInitStructure     16
+     TIM3_OCInitStructure     16
+     TIM4_OCInitStructure     16
+     TIM5_OCInitStructure     16
+     capture                   2
+     TIM_OCInitStructure      36
+     TIM_TimeBaseStructure
+     Tim2_CCR1_Val
+     Tim3_CCR1_Val
+     Tim4_CCR1_Val
+     Tim5_CCR1_Val
+     Tim2_Configuration      104
+     Tim3_Configuration      100
+     Tim4_Configuration      100
+     Tim5_Configuration       96
+     ??DataTable3              4
+
+ 
+ 114 bytes in section .bss
+  36 bytes in section .data
+ 404 bytes in section .text
+ 
+ 404 bytes of CODE memory
+ 150 bytes of DATA memory
+
+Errors: none
+Warnings: none

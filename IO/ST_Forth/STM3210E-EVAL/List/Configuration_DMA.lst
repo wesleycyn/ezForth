@@ -1,0 +1,98 @@
+###############################################################################
+#                                                                             #
+# IAR ANSI C/C++ Compiler V5.20.0.50892/W32 for ARM     07/Oct/2009  13:03:46 #
+# Copyright 1999-2008 IAR Systems AB.                                         #
+#                                                                             #
+#    Cpu mode     =  thumb                                                    #
+#    Endian       =  little                                                   #
+#    Source file  =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\Configuration_DMA. #
+#                    c                                                        #
+#    Command line =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\Configuration_DMA. #
+#                    c -D VECT_TAB_FLASH -lC F:\CoLtd\Forth\MCU\STM32F10x\ST_ #
+#                    Forth\STM3210E-EVAL\List\ -o                             #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\ #
+#                     --debug --endian=little --cpu=Cortex-M3 -e              #
+#                    --char_is_signed --require_prototypes --fpu=None         #
+#                    --dlib_config "C:\Program Files\IAR Systems\Embedded     #
+#                    Workbench 5.0\ARM\INC\DLib_Config_Full.h" -I             #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\ -I                #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\library\inc\ -I    #
+#                    "C:\Program Files\IAR Systems\Embedded Workbench         #
+#                    5.0\ARM\INC\" -Ohz                                       #
+#    List file    =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\List #
+#                    \Configuration_DMA.lst                                   #
+#    Object file  =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\ #
+#                    Configuration_DMA.o                                      #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\Configuration_DMA.c
+      1          #include <intrinsics.h>
+      2          #include "stm32f10x_lib.h"
+      3          
+
+   \                                 In section FastDataRAM, align 4
+      4          DMA_InitTypeDef DMA_InitStructure @"FastDataRAM";
+   \                     DMA_InitStructure:
+   \   00000000                      DS8 44
+      5          
+      6          void DMA_Configuration(void);
+      7          
+
+   \                                 In section .text, align 4, keep-with-next
+      8          void DMA_Configuration(void)
+      9          {
+     10            /* DMA Channel3 configuration ----------------------------------------------*/
+     11            DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
+   \                     DMA_Configuration:
+   \   00000000   0748               LDR.N    R0,??DMA_Configuration_0  ;; DMA_InitStructure
+   \   00000002   0021               MOVS     R1,#+0
+   \   00000004   0161               STR      R1,[R0, #+16]
+     12            DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;
+   \   00000006   8021               MOVS     R1,#+128
+   \   00000008   4161               STR      R1,[R0, #+20]
+     13            DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Byte;
+   \   0000000A   0021               MOVS     R1,#+0
+   \   0000000C   8161               STR      R1,[R0, #+24]
+     14            DMA_InitStructure.DMA_MemoryDataSize = DMA_MemoryDataSize_Byte;
+   \   0000000E   C161               STR      R1,[R0, #+28]
+     15            DMA_InitStructure.DMA_Mode = DMA_Mode_Normal;
+   \   00000010   0162               STR      R1,[R0, #+32]
+     16            DMA_InitStructure.DMA_M2M = DMA_M2M_Disable;
+   \   00000012   8162               STR      R1,[R0, #+40]
+     17            DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralDST;
+   \   00000014   1021               MOVS     R1,#+16
+   \   00000016   8160               STR      R1,[R0, #+8]
+     18            DMA_InitStructure.DMA_Priority = DMA_Priority_Low;  
+   \   00000018   0021               MOVS     R1,#+0
+   \   0000001A   4162               STR      R1,[R0, #+36]
+     19          }
+   \   0000001C   7047               BX       LR               ;; return
+   \   0000001E   00BF               Nop      
+   \                     ??DMA_Configuration_0:
+   \   00000020   ........           DC32     DMA_InitStructure
+
+   Maximum stack usage in bytes:
+
+     Function          .cstack
+     --------          -------
+     DMA_Configuration      0
+
+
+   Section sizes:
+
+     Function/Label    Bytes
+     --------------    -----
+     DMA_InitStructure   44
+     DMA_Configuration   36
+
+ 
+ 36 bytes in section .text
+ 44 bytes in section FastDataRAM
+ 
+ 36 bytes of CODE memory
+ 44 bytes of DATA memory
+
+Errors: none
+Warnings: none

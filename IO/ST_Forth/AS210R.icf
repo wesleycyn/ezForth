@@ -1,0 +1,38 @@
+define memory mem with size = 4G;
+define region ROM  = mem:[from 0x80000000 size 0x80000];
+//define region ROM1 = mem:[from 0x80010000 size 0x10000]; 
+define region ROM2 = mem:[from 0x80010000 size 0x10000]; 
+define region RAM = mem:[from 0x81008000 to 0x8107ffff];
+define region SatckRAM = mem:[from 0x81000000 size 0x8000];
+define region FRAM1  = mem:[from 0x40000200 size 0x1000];
+define region FRAM2  = mem:[from 0x40002200 to 0x40003fff];
+ 
+define block  CSTACK    with alignment = 8, size = 0x100 { };
+define block  SVC_STACK with alignment = 8, size = 0x100 { };
+define block  IRQ_STACK with alignment = 8, size = 0x100 { };
+define block  FIQ_STACK with alignment = 8, size = 0x100 { };
+define block  UND_STACK with alignment = 8, size = 0x10  { };
+define block  ABT_STACK with alignment = 8, size = 0x10  { };
+define block  HEAP      with alignment = 8, size = 0x1000 { };
+ 
+initialize by copy { rw };
+initialize by copy { section SatckRAM };
+initialize by copy { section FastProcRAM };
+initialize by copy { section FastDataRAM };
+do not initialize  { section .noinit };
+ 
+place at address mem:0x80000000 { readonly section .intvec };   // iar asm
+ 
+place in ROM { ro };                    //  main( ) 
+
+place in ROM2 { section UpgradeROM , section UpgradeData };            //   sub( )
+
+//place in SatckRAM { block CSTACK, block SVC_STACK, block IRQ_STACK, block FIQ_STACK,
+//                block UND_STACK, block ABT_STACK, block HEAP };
+place in RAM  { rw };
+place in FRAM1 { section FastProcRAM };    
+//place in FRAM2 { section FastDataRAM };   
+place in FRAM2 { section FastDataRAM ,block CSTACK, block SVC_STACK, block IRQ_STACK, block FIQ_STACK,
+                block UND_STACK, block ABT_STACK, block HEAP
+
+}; 

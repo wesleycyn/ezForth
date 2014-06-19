@@ -1,0 +1,189 @@
+###############################################################################
+#                                                                             #
+# IAR ANSI C/C++ Compiler V5.20.0.50892/W32 for ARM     07/Oct/2009  13:03:55 #
+# Copyright 1999-2008 IAR Systems AB.                                         #
+#                                                                             #
+#    Cpu mode     =  thumb                                                    #
+#    Endian       =  little                                                   #
+#    Source file  =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\library\src\stm32f #
+#                    10x_dbgmcu.c                                             #
+#    Command line =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\library\src\stm32f #
+#                    10x_dbgmcu.c -D VECT_TAB_FLASH -lC                       #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\List #
+#                    \ -o F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL #
+#                    \Obj\ --debug --endian=little --cpu=Cortex-M3 -e         #
+#                    --char_is_signed --require_prototypes --fpu=None         #
+#                    --dlib_config "C:\Program Files\IAR Systems\Embedded     #
+#                    Workbench 5.0\ARM\INC\DLib_Config_Full.h" -I             #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\ -I                #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\library\inc\ -I    #
+#                    "C:\Program Files\IAR Systems\Embedded Workbench         #
+#                    5.0\ARM\INC\" -Ohz                                       #
+#    List file    =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\List #
+#                    \stm32f10x_dbgmcu.lst                                    #
+#    Object file  =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\ #
+#                    stm32f10x_dbgmcu.o                                       #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\library\src\stm32f10x_dbgmcu.c
+      1          /******************** (C) COPYRIGHT 2008 STMicroelectronics ********************
+      2          * File Name          : stm32f10x_dbgmcu.c
+      3          * Author             : MCD Application Team
+      4          * Version            : V2.0.3
+      5          * Date               : 09/22/2008
+      6          * Description        : This file provides all the DBGMCU firmware functions.
+      7          ********************************************************************************
+      8          * THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
+      9          * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE TIME.
+     10          * AS A RESULT, STMICROELECTRONICS SHALL NOT BE HELD LIABLE FOR ANY DIRECT,
+     11          * INDIRECT OR CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING FROM THE
+     12          * CONTENT OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE CODING
+     13          * INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
+     14          *******************************************************************************/
+     15          
+     16          /* Includes ------------------------------------------------------------------*/
+     17          #include "stm32f10x_dbgmcu.h"
+     18          
+     19          /* Private typedef -----------------------------------------------------------*/
+     20          /* Private define ------------------------------------------------------------*/
+     21          #define IDCODE_DEVID_Mask    ((u32)0x00000FFF)
+     22          
+     23          /* Private macro -------------------------------------------------------------*/
+     24          /* Private variables ---------------------------------------------------------*/
+     25          /* Private function prototypes -----------------------------------------------*/
+     26          /* Private functions ---------------------------------------------------------*/
+     27          
+     28          /*******************************************************************************
+     29          * Function Name  : DBGMCU_GetREVID
+     30          * Description    : Returns the device revision identifier.
+     31          * Input          : None
+     32          * Output         : None
+     33          * Return         : Device revision identifier
+     34          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+     35          u32 DBGMCU_GetREVID(void)
+     36          {
+     37             return(DBGMCU->IDCODE >> 16);
+   \                     DBGMCU_GetREVID:
+   \   00000000   ....               LDR.N    R0,??DataTable1  ;; 0xe0042000
+   \   00000002   0068               LDR      R0,[R0, #+0]
+   \   00000004   000C               LSRS     R0,R0,#+16
+   \   00000006   7047               BX       LR               ;; return
+     38          }
+     39          
+     40          /*******************************************************************************
+     41          * Function Name  : DBGMCU_GetDEVID
+     42          * Description    : Returns the device identifier.
+     43          * Input          : None
+     44          * Output         : None
+     45          * Return         : Device identifier
+     46          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+     47          u32 DBGMCU_GetDEVID(void)
+     48          {
+     49             return(DBGMCU->IDCODE & IDCODE_DEVID_Mask);
+   \                     DBGMCU_GetDEVID:
+   \   00000000   ....               LDR.N    R0,??DataTable1  ;; 0xe0042000
+   \   00000002   0068               LDR      R0,[R0, #+0]
+   \   00000004   0005               LSLS     R0,R0,#+20
+   \   00000006   000D               LSRS     R0,R0,#+20
+   \   00000008   7047               BX       LR               ;; return
+     50          }
+     51          
+     52          /*******************************************************************************
+     53          * Function Name  : DBGMCU_Config
+     54          * Description    : Configures the specified peripheral and low power mode behavior
+     55          *                  when the MCU under Debug mode.
+     56          * Input          : - DBGMCU_Periph: specifies the peripheral and low power mode.
+     57          *                    This parameter can be any combination of the following values:
+     58          *                       - DBGMCU_SLEEP: Keep debugger connection during SLEEP mode              
+     59          *                       - DBGMCU_STOP: Keep debugger connection during STOP mode               
+     60          *                       - DBGMCU_STANDBY: Keep debugger connection during STANDBY mode            
+     61          *                       - DBGMCU_IWDG_STOP: Debug IWDG stopped when Core is halted          
+     62          *                       - DBGMCU_WWDG_STOP: Debug WWDG stopped when Core is halted          
+     63          *                       - DBGMCU_TIM1_STOP: TIM1 counter stopped when Core is halted          
+     64          *                       - DBGMCU_TIM2_STOP: TIM2 counter stopped when Core is halted          
+     65          *                       - DBGMCU_TIM3_STOP: TIM3 counter stopped when Core is halted          
+     66          *                       - DBGMCU_TIM4_STOP: TIM4 counter stopped when Core is halted          
+     67          *                       - DBGMCU_CAN_STOP: Debug CAN stopped when Core is halted           
+     68          *                       - DBGMCU_I2C1_SMBUS_TIMEOUT: I2C1 SMBUS timeout mode stopped
+     69          *                                                    when Core is halted
+     70          *                       - DBGMCU_I2C2_SMBUS_TIMEOUT: I2C2 SMBUS timeout mode stopped
+     71          *                                                    when Core is halted
+     72          *                       - DBGMCU_TIM5_STOP: TIM5 counter stopped when Core is halted          
+     73          *                       - DBGMCU_TIM6_STOP: TIM6 counter stopped when Core is halted          
+     74          *                       - DBGMCU_TIM7_STOP: TIM7 counter stopped when Core is halted          
+     75          *                       - DBGMCU_TIM8_STOP: TIM8 counter stopped when Core is halted          
+     76          *                  - NewState: new state of the specified peripheral in Debug mode.
+     77          *                    This parameter can be: ENABLE or DISABLE.
+     78          * Output         : None
+     79          * Return         : None
+     80          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+     81          void DBGMCU_Config(u32 DBGMCU_Periph, FunctionalState NewState)
+     82          {
+     83            /* Check the parameters */
+     84            assert_param(IS_DBGMCU_PERIPH(DBGMCU_Periph));
+     85            assert_param(IS_FUNCTIONAL_STATE(NewState));
+     86          
+     87            if (NewState != DISABLE)
+   \                     DBGMCU_Config:
+   \   00000000   044A               LDR.N    R2,??DBGMCU_Config_0  ;; 0xe0042004
+   \   00000002   0029               CMP      R1,#+0
+   \   00000004   1168               LDR      R1,[R2, #+0]
+   \   00000006   01D0               BEQ.N    ??DBGMCU_Config_1
+     88            {
+     89              DBGMCU->CR |= DBGMCU_Periph;
+   \   00000008   0843               ORRS     R0,R0,R1
+   \   0000000A   01E0               B.N      ??DBGMCU_Config_2
+     90            }
+     91            else
+     92            {
+     93              DBGMCU->CR &= ~DBGMCU_Periph;
+   \                     ??DBGMCU_Config_1:
+   \   0000000C   C043               MVNS     R0,R0
+   \   0000000E   0840               ANDS     R0,R0,R1
+   \                     ??DBGMCU_Config_2:
+   \   00000010   1060               STR      R0,[R2, #+0]
+     94            }
+     95          }
+   \   00000012   7047               BX       LR               ;; return
+   \                     ??DBGMCU_Config_0:
+   \   00000014   042004E0           DC32     0xe0042004
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable1:
+   \   00000000   002004E0           DC32     0xe0042000
+     96          
+     97          /******************* (C) COPYRIGHT 2008 STMicroelectronics *****END OF FILE****/
+
+   Maximum stack usage in bytes:
+
+     Function        .cstack
+     --------        -------
+     DBGMCU_Config        0
+     DBGMCU_GetDEVID      0
+     DBGMCU_GetREVID      0
+
+
+   Section sizes:
+
+     Function/Label  Bytes
+     --------------  -----
+     DBGMCU_GetREVID    8
+     DBGMCU_GetDEVID   10
+     DBGMCU_Config     24
+     ??DataTable1       4
+
+ 
+ 46 bytes in section .text
+ 
+ 46 bytes of CODE memory
+
+Errors: none
+Warnings: none

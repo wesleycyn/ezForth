@@ -1,0 +1,437 @@
+###############################################################################
+#                                                                             #
+# IAR ANSI C/C++ Compiler V5.20.0.50892/W32 for ARM     07/Oct/2009  13:03:53 #
+# Copyright 1999-2008 IAR Systems AB.                                         #
+#                                                                             #
+#    Cpu mode     =  thumb                                                    #
+#    Endian       =  little                                                   #
+#    Source file  =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\music.cpp          #
+#    Command line =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\music.cpp -D       #
+#                    VECT_TAB_FLASH -lC F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth #
+#                    \STM3210E-EVAL\List\ -o F:\CoLtd\Forth\MCU\STM32F10x\ST_ #
+#                    Forth\STM3210E-EVAL\Obj\ --no_cse --no_unroll            #
+#                    --no_inline --no_code_motion --no_tbaa --no_clustering   #
+#                    --no_scheduling --debug --endian=little --cpu=Cortex-M3  #
+#                    -e --char_is_signed --require_prototypes --fpu=None      #
+#                    --dlib_config "C:\Program Files\IAR Systems\Embedded     #
+#                    Workbench 5.0\ARM\INC\DLib_Config_Full.h" -I             #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\ -I                #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\library\inc\ -I    #
+#                    "C:\Program Files\IAR Systems\Embedded Workbench         #
+#                    5.0\ARM\INC\" -On                                        #
+#    List file    =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\List #
+#                    \music.lst                                               #
+#    Object file  =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\ #
+#                    music.o                                                  #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\music.cpp
+      1          #include "BCorHardWare.h"
+      2          
+      3          typedef unsigned char u8;
+      4          typedef unsigned short u16;
+      5          typedef unsigned long u32;
+      6          
+      7          #ifdef _HardWare
+      8           #include <Table_Music.h>
+
+  #pragma package(smart_init)
+          ^
+"F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\Table_Music.h",11  Warning[Pe161]: 
+          unrecognized #pragma
+
+  #pragma memory=constseg(ROMDATA):far
+                ^
+"F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\Table_Music.h",86  Warning[Pa006]: old
+          unsupported #pragma encountered
+
+   \                                 In section .rodata, align 4
+   \   unsigned char const __data Standard[6]
+   \                     Standard:
+   \   00000000   B68C00140000       DC8 182, 140, 0, 20, 0, 0, 0, 0
+   \              0000        
+
+   \                                 In section .rodata, align 4
+   \   unsigned char const __data WT125M[4]
+   \                     WT125M:
+   \   00000000   00140000           DC8 0, 20, 0, 0
+
+   \                                 In section .rodata, align 4
+   \   unsigned char const __data Beep1[7]
+   \                     Beep1:
+   \   00000000   14B690001400       DC8 20, 182, 144, 0, 20, 0, 0, 0
+   \              0000        
+
+                               SBAS*20,0,
+                               ^
+"F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\Table_Music.h",99  Warning[Pe069]: 
+          integer conversion resulted in truncation
+
+   \                                 In section .rodata, align 4
+   \   unsigned char const __data BFUN1[10]
+   \                     BFUN1:
+   \   00000000   B6140014B664       DC8 182, 20, 0, 20, 182, 100, 0, 20, 0, 0, 0, 0
+   \              001400000000
+
+   \                                 In section .rodata, align 4
+   \   unsigned char const __data BFUN2[14]
+   \                     BFUN2:
+   \   00000000   B6140014B614       DC8 182, 20, 0, 20, 182, 20, 0, 20, 182, 20, 0, 60, 0, 0, 0, 0
+   \              0014B614003C
+   \              00000000    
+
+   \                                 In section .rodata, align 4
+   \   unsigned char const __data BFUN3[18]
+   \                     BFUN3:
+   \   00000000   B6140014B614       DC8 182, 20, 0, 20, 182, 20, 0, 20, 182, 20, 0, 20, 182, 20, 0, 180, 0
+   \              0014B6140014
+   \              B61400B400  
+   \   00000011   000000             DC8 0, 0, 0
+
+   \                                 In section .rodata, align 4
+   \   unsigned char const __data NRBEP[4]
+   \                     NRBEP:
+   \   00000000   FC0A0000           DC8 252, 10, 0, 0
+
+   \                                 In section .rodata, align 4
+   \   unsigned char const __data keytone[4]
+   \                     keytone:
+   \   00000000   FA030000           DC8 250, 3, 0, 0
+
+   \                                 In section .rodata, align 4
+   \   unsigned char const __data Chirp[6]
+   \                     Chirp:
+   \   00000000   760A00320000       DC8 118, 10, 0, 50, 0, 0, 0, 0
+   \              0000        
+
+   \                                 In section .rodata, align 4
+   \   unsigned char const __data Alarm[24]
+   \                     Alarm:
+   \   00000000   C410AF189110       DC8 196, 16, 175, 24, 145, 16, 0, 16, 196, 16, 175, 24, 145, 16, 0, 16
+   \              0010C410AF18
+   \              91100010    
+   \   00000010   C410AF189110       DC8 196, 16, 175, 24, 145, 16, 0, 100
+   \              0064        
+
+   \                                 In section .rodata, align 2
+   \   unsigned char const __data SILN3S[2]
+   \                     SILN3S:
+   \   00000000   0064               DC8 0, 100
+
+   \                                 In section .rodata, align 2
+   \   unsigned char const __data SILN2S[2]
+   \                     SILN2S:
+   \   00000000   00AA               DC8 0, 170
+
+   \                                 In section .rodata, align 4
+   \   unsigned char const __data SILN1S[4]
+   \                     SILN1S:
+   \   00000000   001E0000           DC8 0, 30, 0, 0
+
+   \                                 In section .rodata, align 4
+   \   unsigned char const __data LOBEP[26]
+   \                     LOBEP:
+   \   00000000   B6200010B620       DC8 182, 32, 0, 16, 182, 32, 0, 16, 182, 32, 0, 16, 182, 32, 0, 16, 182
+   \              0010B6200010
+   \              B6200010B6  
+   \   00000011   200010B62000       DC8 32, 0, 16, 182, 32, 0, 255, 0, 0, 0, 0
+   \              FF00000000  
+
+   \                                 In section .rodata, align 4
+   \   unsigned char const __data Ring[36]
+   \                     Ring:
+   \   00000000   8C06A8068C06       DC8 140, 6, 168, 6, 140, 6, 168, 6, 140, 6, 168, 6, 140, 6, 168, 6, 140
+   \              A8068C06A806
+   \              8C06A8068C  
+   \   00000011   06A8068C06A8       DC8 6, 168, 6, 140, 6, 168, 6, 140, 6, 168, 6, 140, 6, 168, 6, 0, 80, 0
+   \              068C06A8068C
+   \              06A806005000
+   \   00000023   00                 DC8 0
+
+   \                                 In section .rodata, align 4
+   \   unsigned char const __data Soundwave[38]
+   \                     Soundwave:
+   \   00000000   760680088A08       DC8 118, 6, 128, 8, 138, 8, 128, 8, 118, 6, 128, 8, 118, 6, 128, 8, 138
+   \              800876068008
+   \              760680088A  
+   \   00000011   088008760680       DC8 8, 128, 8, 118, 6, 128, 8, 118, 6, 128, 8, 138, 8, 128, 8, 118, 6
+   \              08760680088A
+   \              0880087606  
+   \   00000022   005000000000       DC8 0, 80, 0, 0, 0, 0
+
+   \                                 In section .rodata, align 4
+   \   unsigned char const __data DingDong[42]
+   \                     DingDong:
+   \   00000000   7A0800027A08       DC8 122, 8, 0, 2, 122, 8, 0, 2, 122, 8, 0, 2, 122, 8, 0, 2, 122, 8, 0
+   \              00027A080002
+   \              7A0800027A08
+   \              00          
+   \   00000013   02C0080002C0       DC8 2, 192, 8, 0, 2, 192, 8, 0, 2, 192, 8, 0, 2, 192, 8, 0, 2, 192, 18
+   \              080002C00800
+   \              02C0080002C0
+   \              12          
+   \   00000026   005000000000       DC8 0, 80, 0, 0, 0, 0
+
+   \                                 In section .rodata, align 4
+   \   unsigned char const __data Astral[26]
+   \                     Astral:
+   \   00000000   BE08AE0B9E08       DC8 190, 8, 174, 11, 158, 8, 150, 11, 142, 8, 134, 11, 142, 8, 150, 11
+   \              960B8E08860B
+   \              8E08960B    
+   \   00000010   9E08AE0BBE08       DC8 158, 8, 174, 11, 190, 8, 0, 80, 0, 0, 0, 0
+   \              005000000000
+
+   \                                 In section .rodata, align 4
+   \   unsigned char const __data Triangle[10]
+   \                     Triangle:
+   \   00000000   FA23C323823C       DC8 250, 35, 195, 35, 130, 60, 0, 80, 0, 0, 0, 0
+   \              005000000000
+
+   \                                 In section .rodata, align 4
+   \   unsigned char const __data Arpeggio[16]
+   \                     Arpeggio:
+   \   00000000   BE0FF50FBE12       DC8 190, 15, 245, 15, 190, 18, 145, 15, 190, 15, 245, 20, 0, 80, 0, 0
+   \              910FBE0FF514
+   \              00500000    
+      9          extern void Play_Music(const unsigned char *Music_tbl);
+     10          #else //BC6
+     11          //---------------------------------------------------------------------------
+     12          #pragma hdrstop
+     13          #include <vcl.h>
+     14          #include "music.h"
+     15          #include "Unit1.h"
+     16          #include <winbase.h>
+     17          //---------------------------------------------------------------------------
+     18          extern void dly_ms(unsigned long dly);
+     19          void Play_Music(const unsigned char *Music_tbl);
+     20          #endif
+     21          
+     22          extern unsigned int SYS_sec;
+     23            
+     24          void beep_1(void) ; //short beep
+     25          void beep_vibrate( unsigned char beep_type );
+     26          
+     27          
+
+   \                                 In section .text, align 4, keep-with-next
+     28          void beep_vibrate( unsigned char beep_type )
+     29          {
+   \                     beep_vibrate:
+   \   00000000   10B5               PUSH     {R4,LR}
+   \   00000002   0400               MOVS     R4,R0
+     30             switch( beep_type )
+   \   00000004   E4B2               UXTB     R4,R4            ;; ZeroExt  R4,R4,#+24,#+24
+   \   00000006   2000               MOVS     R0,R4
+   \   00000008   0028               CMP      R0,#+0
+   \   0000000A   10D0               BEQ.N    ??beep_vibrate_0
+   \   0000000C   0128               CMP      R0,#+1
+   \   0000000E   12D0               BEQ.N    ??beep_vibrate_1
+   \   00000010   0228               CMP      R0,#+2
+   \   00000012   14D0               BEQ.N    ??beep_vibrate_2
+   \   00000014   0328               CMP      R0,#+3
+   \   00000016   16D0               BEQ.N    ??beep_vibrate_3
+   \   00000018   0428               CMP      R0,#+4
+   \   0000001A   18D0               BEQ.N    ??beep_vibrate_4
+   \   0000001C   0528               CMP      R0,#+5
+   \   0000001E   1AD0               BEQ.N    ??beep_vibrate_5
+   \   00000020   0628               CMP      R0,#+6
+   \   00000022   1CD0               BEQ.N    ??beep_vibrate_6
+   \   00000024   0728               CMP      R0,#+7
+   \   00000026   1ED0               BEQ.N    ??beep_vibrate_7
+   \   00000028   0828               CMP      R0,#+8
+   \   0000002A   20D0               BEQ.N    ??beep_vibrate_8
+   \   0000002C   23E0               B.N      ??beep_vibrate_9
+     31             {
+     32                      case 0 :
+     33                             Play_Music(Standard);
+   \                     ??beep_vibrate_0:
+   \   0000002E   1548               LDR.N    R0,??beep_vibrate_10  ;; Standard
+   \   00000030   ........           BL       Play_Music
+   \   00000034   25E0               B.N      ??beep_vibrate_11
+     34                             break;
+     35                      case 1 :
+     36          		   Play_Music(BFUN1);
+   \                     ??beep_vibrate_1:
+   \   00000036   1448               LDR.N    R0,??beep_vibrate_10+0x4  ;; BFUN1
+   \   00000038   ........           BL       Play_Music
+   \   0000003C   21E0               B.N      ??beep_vibrate_11
+     37                             break;
+     38                      case 2 :
+     39          		   Play_Music(BFUN2);
+   \                     ??beep_vibrate_2:
+   \   0000003E   1348               LDR.N    R0,??beep_vibrate_10+0x8  ;; BFUN2
+   \   00000040   ........           BL       Play_Music
+   \   00000044   1DE0               B.N      ??beep_vibrate_11
+     40                             break;
+     41                      case 3 :
+     42          		   Play_Music(BFUN3);
+   \                     ??beep_vibrate_3:
+   \   00000046   1248               LDR.N    R0,??beep_vibrate_10+0xC  ;; BFUN3
+   \   00000048   ........           BL       Play_Music
+   \   0000004C   19E0               B.N      ??beep_vibrate_11
+     43                             break;       
+     44                      case 4 :
+     45                             Play_Music(Ring);
+   \                     ??beep_vibrate_4:
+   \   0000004E   1148               LDR.N    R0,??beep_vibrate_10+0x10  ;; Ring
+   \   00000050   ........           BL       Play_Music
+   \   00000054   15E0               B.N      ??beep_vibrate_11
+     46                             break;
+     47                      case 5 :
+     48                             Play_Music(Arpeggio);
+   \                     ??beep_vibrate_5:
+   \   00000056   1048               LDR.N    R0,??beep_vibrate_10+0x14  ;; Arpeggio
+   \   00000058   ........           BL       Play_Music
+   \   0000005C   11E0               B.N      ??beep_vibrate_11
+     49                             break;
+     50                      case 6 :
+     51                             Play_Music(Astral);
+   \                     ??beep_vibrate_6:
+   \   0000005E   0F48               LDR.N    R0,??beep_vibrate_10+0x18  ;; Astral
+   \   00000060   ........           BL       Play_Music
+   \   00000064   0DE0               B.N      ??beep_vibrate_11
+     52                             break;
+     53                      case 7 :
+     54                             Play_Music(Triangle);
+   \                     ??beep_vibrate_7:
+   \   00000066   0E48               LDR.N    R0,??beep_vibrate_10+0x1C  ;; Triangle
+   \   00000068   ........           BL       Play_Music
+   \   0000006C   09E0               B.N      ??beep_vibrate_11
+     55                             break;       
+     56                      case 8 :
+     57                             Play_Music(Soundwave); // tone
+   \                     ??beep_vibrate_8:
+   \   0000006E   0D48               LDR.N    R0,??beep_vibrate_10+0x20  ;; Soundwave
+   \   00000070   ........           BL       Play_Music
+   \   00000074   05E0               B.N      ??beep_vibrate_11
+     58                             break;
+     59                      default:
+     60                             SYS_sec = 1 ;
+   \                     ??beep_vibrate_9:
+   \   00000076   0C48               LDR.N    R0,??beep_vibrate_10+0x24  ;; SYS_sec
+   \   00000078   0121               MOVS     R1,#+1
+   \   0000007A   0160               STR      R1,[R0, #+0]
+     61                             Play_Music(Chirp); // chirp
+   \   0000007C   0B48               LDR.N    R0,??beep_vibrate_10+0x28  ;; Chirp
+   \   0000007E   ........           BL       Play_Music
+     62                             break;
+     63             }
+     64          }
+   \                     ??beep_vibrate_11:
+   \   00000082   10BD               POP      {R4,PC}          ;; return
+   \                     ??beep_vibrate_10:
+   \   00000084   ........           DC32     Standard
+   \   00000088   ........           DC32     BFUN1
+   \   0000008C   ........           DC32     BFUN2
+   \   00000090   ........           DC32     BFUN3
+   \   00000094   ........           DC32     Ring
+   \   00000098   ........           DC32     Arpeggio
+   \   0000009C   ........           DC32     Astral
+   \   000000A0   ........           DC32     Triangle
+   \   000000A4   ........           DC32     Soundwave
+   \   000000A8   ........           DC32     SYS_sec
+   \   000000AC   ........           DC32     Chirp
+     65          
+     66          // [Description ]
+     67          // This is PC simulate Beep sound and vibrate stop function
+     68          // Return value : no return variable
+     69          // [LIB include]
+     70          // music.h
+     71          // [Variable]
+     72          // [example]
+     73          // beep_vibrate_stop() ;
+     74          // this example will stop beep or vibrate
+     75          // [Description ]
+     76          // This is key tone sound function
+     77          // Return value : no return variable
+     78          // [LIB include]
+     79          // music.h
+     80          // [Variable]
+     81          // [example]
+     82          // beep_1() ;
+     83          // this example will beep short tone
+
+   \                                 In section .text, align 4, keep-with-next
+     84          void beep_1(void)
+     85          {
+   \                     beep_1:
+   \   00000000   80B5               PUSH     {R7,LR}
+     86             beep_vibrate( 9 ) ; //short beep
+   \   00000002   0920               MOVS     R0,#+9
+   \   00000004   ........           BL       beep_vibrate
+     87          }
+   \   00000008   01BD               POP      {R0,PC}          ;; return
+     88          
+     89          #ifdef _HardWare
+     90          #else
+     91          void Play_Music(const unsigned char *Music_tbl)
+     92          {
+     93            int i;
+     94            //MusicFlg = True;
+     95              LARGE_INTEGER CurrTicks, TicksCount; 
+     96          
+     97              QueryPerformanceFrequency( &TicksCount );
+     98              QueryPerformanceCounter( &CurrTicks );
+     99          
+    100              TicksCount.QuadPart = TicksCount.QuadPart * SYS_sec /10i64;
+    101              TicksCount.QuadPart += CurrTicks.QuadPart; 
+    102          
+    103              while(CurrTicks.QuadPart<TicksCount.QuadPart){
+    104                 for (i = 0 ; ;i+=2){
+    105                   if ( Music_tbl[i+1] == 0 ) break;
+    106                   if (Music_tbl[i] == 0 )
+    107                     dly_ms(Music_tbl[i + 1] * 10);
+    108                   else
+    109                     Beep(4000000 / 8 / (Music_tbl[i] + 1), Music_tbl[i + 1] * 10) ;
+    110                 }
+    111                 QueryPerformanceCounter( &CurrTicks );
+    112              }
+    113          }
+    114          #endif
+
+   Maximum stack usage in bytes:
+
+     Function     .cstack
+     --------     -------
+     beep_1            0
+     beep_vibrate      0
+
+
+   Section sizes:
+
+     Function/Label Bytes
+     -------------- -----
+     Standard          8
+     WT125M            4
+     Beep1             8
+     BFUN1            12
+     BFUN2            16
+     BFUN3            20
+     NRBEP             4
+     keytone           4
+     Chirp             8
+     Alarm            24
+     SILN3S            2
+     SILN2S            2
+     SILN1S            4
+     LOBEP            28
+     Ring             36
+     Soundwave        40
+     DingDong         44
+     Astral           28
+     Triangle         12
+     Arpeggio         16
+     beep_vibrate    176
+     beep_1           10
+
+ 
+ 320 bytes in section .rodata
+ 186 bytes in section .text
+ 
+ 186 bytes of CODE  memory
+ 320 bytes of CONST memory
+
+Errors: none
+Warnings: 3

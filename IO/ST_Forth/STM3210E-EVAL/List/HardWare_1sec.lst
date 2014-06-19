@@ -1,0 +1,179 @@
+###############################################################################
+#                                                                             #
+# IAR ANSI C/C++ Compiler V5.20.0.50892/W32 for ARM     07/Oct/2009  13:03:49 #
+# Copyright 1999-2008 IAR Systems AB.                                         #
+#                                                                             #
+#    Cpu mode     =  thumb                                                    #
+#    Endian       =  little                                                   #
+#    Source file  =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\HardWare_1sec.c    #
+#    Command line =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\HardWare_1sec.c    #
+#                    -D VECT_TAB_FLASH -lC F:\CoLtd\Forth\MCU\STM32F10x\ST_Fo #
+#                    rth\STM3210E-EVAL\List\ -o F:\CoLtd\Forth\MCU\STM32F10x\ #
+#                    ST_Forth\STM3210E-EVAL\Obj\ --debug --endian=little      #
+#                    --cpu=Cortex-M3 -e --char_is_signed                      #
+#                    --require_prototypes --fpu=None --dlib_config            #
+#                    "C:\Program Files\IAR Systems\Embedded Workbench         #
+#                    5.0\ARM\INC\DLib_Config_Full.h" -I                       #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\ -I                #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\library\inc\ -I    #
+#                    "C:\Program Files\IAR Systems\Embedded Workbench         #
+#                    5.0\ARM\INC\" -Ohz                                       #
+#    List file    =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\List #
+#                    \HardWare_1sec.lst                                       #
+#    Object file  =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\ #
+#                    HardWare_1sec.o                                          #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\HardWare_1sec.c
+      1          #include "stm32f10x_it.h"
+      2          
+      3          extern void Relay(int color);
+      4          
+      5          
+      6          extern u16 capture;
+      7          extern vu16 Tim2_CCR1_Val;
+      8          extern unsigned char primsg_flag;
+      9          
+     10          extern unsigned int  timer_counter; // 1 second one time
+     11          extern unsigned int  nml_timer;
+     12          
+     13          extern u8 rly_counter;
+     14          
+     15          extern unsigned char UpdateFlg ;
+     16          extern void time_entry(void) @"UpgradeROM";
+     17          
+     18          void TIM2_ISR(void);
+     19          
+     20          /*******************************************************************************
+     21          * Function Name  : TIM2_IRQHandler
+     22          * Description    : This function handles TIM2 global interrupt request.
+     23          * Input          : None
+     24          * Output         : None
+     25          * Return         : None
+     26          *******************************************************************************/
+
+   \                                 In section .text, align 4, keep-with-next
+     27          void TIM2_ISR(void)
+     28          {
+   \                     TIM2_ISR:
+   \   00000000   10B5               PUSH     {R4,LR}
+     29          
+     30            
+     31            if (TIM_GetITStatus(TIM2, TIM_IT_CC1) != RESET)
+   \   00000002   0221               MOVS     R1,#+2
+   \   00000004   4FF08040           MOV      R0,#+1073741824
+   \   00000008   ........           BL       TIM_GetITStatus
+   \   0000000C   0028               CMP      R0,#+0
+   \   0000000E   36D0               BEQ.N    ??TIM2_ISR_0
+     32            {
+     33              TIM_ClearITPendingBit(TIM2, TIM_IT_CC1);
+   \   00000010   0221               MOVS     R1,#+2
+   \   00000012   4FF08040           MOV      R0,#+1073741824
+   \   00000016   ........           BL       TIM_ClearITPendingBit
+     34          
+     35              
+     36                  timer_counter = ( timer_counter + 1 ) % 10000;    
+   \   0000001A   1948               LDR.N    R0,??TIM2_ISR_1  ;; timer_counter
+   \   0000001C   0168               LDR      R1,[R0, #+0]
+   \   0000001E   491C               ADDS     R1,R1,#+1
+   \   00000020   42F21074           MOVW     R4,#+10000
+   \   00000024   B1FBF4F2           UDIV     R2,R1,R4
+   \   00000028   02FB1411           MLS      R1,R2,R4,R1
+   \   0000002C   0160               STR      R1,[R0, #+0]
+     37                  
+     38          
+     39          
+     40                       
+     41          	     if (rly_counter>0)
+   \   0000002E   1548               LDR.N    R0,??TIM2_ISR_1+0x4  ;; rly_counter
+   \   00000030   0178               LDRB     R1,[R0, #+0]
+   \   00000032   11B1               CBZ      R1,??TIM2_ISR_2
+     42          	     {
+     43            	      rly_counter--;
+   \   00000034   491E               SUBS     R1,R1,#+1
+   \   00000036   0170               STRB     R1,[R0, #+0]
+   \   00000038   02E0               B.N      ??TIM2_ISR_3
+     44              		}
+     45              		else
+     46              		{
+     47             				Relay(0);   
+   \                     ??TIM2_ISR_2:
+   \   0000003A   0020               MOVS     R0,#+0
+   \   0000003C   ........           BL       Relay
+     48              		}         
+     49                     if ( primsg_flag == 0 ) 
+   \                     ??TIM2_ISR_3:
+   \   00000040   1148               LDR.N    R0,??TIM2_ISR_1+0x8  ;; primsg_flag
+   \   00000042   0078               LDRB     R0,[R0, #+0]
+   \   00000044   38B9               CBNZ     R0,??TIM2_ISR_4
+     50               nml_timer = ( nml_timer + 1 ) % 10000;
+   \   00000046   1148               LDR.N    R0,??TIM2_ISR_1+0xC  ;; nml_timer
+   \   00000048   0168               LDR      R1,[R0, #+0]
+   \   0000004A   491C               ADDS     R1,R1,#+1
+   \   0000004C   B1FBF4F2           UDIV     R2,R1,R4
+   \   00000050   02FB1411           MLS      R1,R2,R4,R1
+   \   00000054   0160               STR      R1,[R0, #+0]
+     51                  
+     52             if ( UpdateFlg == 1 )  
+   \                     ??TIM2_ISR_4:
+   \   00000056   0E48               LDR.N    R0,??TIM2_ISR_1+0x10  ;; UpdateFlg
+   \   00000058   0078               LDRB     R0,[R0, #+0]
+   \   0000005A   0128               CMP      R0,#+1
+   \   0000005C   08BF               IT       EQ 
+     53               time_entry(); 
+   \   0000005E   ........           BLEQ     time_entry
+     54               
+     55              /* Pin PC.06 toggling with frequency = 73.24 Hz */
+     56          //    GPIO_WriteBit(GPIOC, GPIO_Pin_6, (BitAction)(1 - GPIO_ReadOutputDataBit(GPIOC, GPIO_Pin_6)));
+     57              capture = TIM_GetCapture1(TIM2);
+   \   00000062   0C4C               LDR.N    R4,??TIM2_ISR_1+0x14  ;; capture
+   \   00000064   4FF08040           MOV      R0,#+1073741824
+   \   00000068   ........           BL       TIM_GetCapture1
+   \   0000006C   2080               STRH     R0,[R4, #+0]
+     58              TIM_SetCompare1(TIM2, capture + Tim2_CCR1_Val);
+   \   0000006E   0A49               LDR.N    R1,??TIM2_ISR_1+0x18  ;; Tim2_CCR1_Val
+   \   00000070   0988               LDRH     R1,[R1, #+0]
+   \   00000072   0918               ADDS     R1,R1,R0
+   \   00000074   89B2               UXTH     R1,R1
+   \   00000076   4FF08040           MOV      R0,#+1073741824
+   \   0000007A   ........           BL       TIM_SetCompare1
+     59          
+     60          
+     61            }
+     62            
+     63          
+     64            
+     65          }
+   \                     ??TIM2_ISR_0:
+   \   0000007E   10BD               POP      {R4,PC}          ;; return
+   \                     ??TIM2_ISR_1:
+   \   00000080   ........           DC32     timer_counter
+   \   00000084   ........           DC32     rly_counter
+   \   00000088   ........           DC32     primsg_flag
+   \   0000008C   ........           DC32     nml_timer
+   \   00000090   ........           DC32     UpdateFlg
+   \   00000094   ........           DC32     capture
+   \   00000098   ........           DC32     Tim2_CCR1_Val
+
+   Maximum stack usage in bytes:
+
+     Function .cstack
+     -------- -------
+     TIM2_ISR      0
+
+
+   Section sizes:
+
+     Function/Label Bytes
+     -------------- -----
+     TIM2_ISR        156
+
+ 
+ 156 bytes in section .text
+ 
+ 156 bytes of CODE memory
+
+Errors: none
+Warnings: none

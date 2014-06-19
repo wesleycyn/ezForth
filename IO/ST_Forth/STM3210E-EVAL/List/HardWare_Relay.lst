@@ -1,0 +1,85 @@
+###############################################################################
+#                                                                             #
+# IAR ANSI C/C++ Compiler V5.20.0.50892/W32 for ARM     07/Oct/2009  13:03:51 #
+# Copyright 1999-2008 IAR Systems AB.                                         #
+#                                                                             #
+#    Cpu mode     =  thumb                                                    #
+#    Endian       =  little                                                   #
+#    Source file  =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\HardWare_Relay.c   #
+#    Command line =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\HardWare_Relay.c   #
+#                    -D VECT_TAB_FLASH -lC F:\CoLtd\Forth\MCU\STM32F10x\ST_Fo #
+#                    rth\STM3210E-EVAL\List\ -o F:\CoLtd\Forth\MCU\STM32F10x\ #
+#                    ST_Forth\STM3210E-EVAL\Obj\ --debug --endian=little      #
+#                    --cpu=Cortex-M3 -e --char_is_signed                      #
+#                    --require_prototypes --fpu=None --dlib_config            #
+#                    "C:\Program Files\IAR Systems\Embedded Workbench         #
+#                    5.0\ARM\INC\DLib_Config_Full.h" -I                       #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\ -I                #
+#                    F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\library\inc\ -I    #
+#                    "C:\Program Files\IAR Systems\Embedded Workbench         #
+#                    5.0\ARM\INC\" -Ohz                                       #
+#    List file    =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\List #
+#                    \HardWare_Relay.lst                                      #
+#    Object file  =  F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\STM3210E-EVAL\Obj\ #
+#                    HardWare_Relay.o                                         #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+F:\CoLtd\Forth\MCU\STM32F10x\ST_Forth\HardWare_Relay.c
+      1          #include "stm32f10x.h"
+      2          
+      3          void Relay(int color);
+      4          
+
+   \                                 In section .text, align 4, keep-with-next
+      5          void Relay(int color)
+      6          {
+   \                     Relay:
+   \   00000000   80B5               PUSH     {R7,LR}
+      7            if (color==1)
+   \   00000002   074A               LDR.N    R2,??Relay_0     ;; 0x40011c00
+   \   00000004   0128               CMP      R0,#+1
+   \   00000006   05D1               BNE.N    ??Relay_1
+      8            {    
+      9              GPIO_SetBits(GPIOF,GPIO_Pin_8);
+   \   00000008   4FF48071           MOV      R1,#+256
+   \   0000000C   1000               MOVS     R0,R2
+   \   0000000E   ........           BL       GPIO_SetBits
+   \   00000012   01BD               POP      {R0,PC}
+     10            }
+     11            else
+     12            {
+     13              GPIO_ResetBits(GPIOF,GPIO_Pin_8);    
+   \                     ??Relay_1:
+   \   00000014   4FF48071           MOV      R1,#+256
+   \   00000018   1000               MOVS     R0,R2
+   \   0000001A   ........           BL       GPIO_ResetBits
+     14              
+     15            }
+     16          }
+   \                     ??Relay_2:
+   \   0000001E   01BD               POP      {R0,PC}          ;; return
+   \                     ??Relay_0:
+   \   00000020   001C0140           DC32     0x40011c00
+
+   Maximum stack usage in bytes:
+
+     Function .cstack
+     -------- -------
+     Relay         0
+
+
+   Section sizes:
+
+     Function/Label Bytes
+     -------------- -----
+     Relay            36
+
+ 
+ 36 bytes in section .text
+ 
+ 36 bytes of CODE memory
+
+Errors: none
+Warnings: none
