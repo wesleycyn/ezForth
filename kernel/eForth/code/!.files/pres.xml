@@ -1,0 +1,44 @@
+<xml xmlns:v="urn:schemas-microsoft-com:vml"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:p="urn:schemas-microsoft-com:office:powerpoint">
+ <p:presentation>
+  <p:master id="3" type="main" href="master03.htm" xmlhref="master03.xml"
+   template="預設簡報設計" layout="title_body"
+   slots="title,body,dateTime,footer,slideNumber">
+   <p:schemes>
+    <p:colorscheme
+     colors="#0000FF,#FFFFFF,#000000,#FFFF00,#FF9900,#00FFFF,#FF0000,#969696"/>
+    <p:colorscheme
+     colors="#FFFFFF,#000000,#808080,#000000,#00CC99,#3333CC,#CCCCFF,#B2B2B2"/>
+    <p:colorscheme
+     colors="#FFFFFF,#000000,#333333,#000000,#DDDDDD,#808080,#4D4D4D,#EAEAEA"/>
+    <p:colorscheme
+     colors="#FFFFCC,#000000,#666633,#808000,#339933,#800000,#0033CC,#FFCC66"/>
+    <p:colorscheme
+     colors="#FFFFFF,#000000,#808080,#000000,#FFCC66,#0000FF,#CC00CC,#C0C0C0"/>
+    <p:colorscheme
+     colors="#FFFFFF,#000000,#808080,#000000,#C0C0C0,#0066FF,#FF0000,#009900"/>
+    <p:colorscheme
+     colors="#FFFFFF,#000000,#808080,#000000,#3399FF,#99FFCC,#CC00CC,#B2B2B2"/>
+   </p:schemes>
+  </p:master>
+  <p:slide id="4" href="slide0004.htm" xmlhref="slide0004.xml"/>
+  <p:slide id="7" href="slide0007.htm"/>
+  <p:slide id="6" href="slide0006.htm"/>
+  <p:slide id="8" href="slide0008.htm" xmlhref="slide0008.xml"/>
+  <p:slide id="9" href="slide0009.htm" xmlhref="slide0009.xml"/>
+  <p:slide id="10" href="slide0010.htm" xmlhref="slide0010.xml"/>
+  <p:slide id="11" href="slide0011.htm" xmlhref="slide0011.xml"/>
+  <p:slide id="12" href="slide0012.htm" xmlhref="slide0012.xml"/>
+  <p:viewstate type="outline" scale="100" restoredleft="118"
+   manualadjustleft="t"/>
+  <p:font name="Times New Roman" charset="0" type="4"/>
+  <p:font name="新細明體" charset="136" type="4" family="18"/>
+  <p:font name="Arial Unicode MS" charset="136" type="6" family="34"/>
+  <p:headersfooters noheader="t"/>
+  <p:pptdocumentsettings framecolors="WhiteTextOnBlack" hideslideanimation="t"/>
+ </p:presentation>
+ <o:shapedefaults v:ext="edit" spidmax="21506">
+  <o:colormru v:ext="edit" colors="#f30"/>
+  <o:colormenu v:ext="edit" fillcolor="none [0]"/>
+ </o:shapedefaults></xml>

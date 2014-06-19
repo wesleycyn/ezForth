@@ -1,0 +1,725 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Created from PDF via Acrobat SaveAsXML -->
+<!-- Mapping Table version: 28-February-2003 -->
+<TaggedPDF-doc>
+<?xpacket begin='﻿' id='W5M0MpCehiHzreSzNTczkc9d'?>
+<?xpacket begin="﻿" id="W5M0MpCehiHzreSzNTczkc9d"?>
+<x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="3.1-702">
+   <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about=""
+            xmlns:pdf="http://ns.adobe.com/pdf/1.3/">
+         <pdf:Producer>Acrobat Distiller 7.0.5 (Windows)</pdf:Producer>
+      </rdf:Description>
+      <rdf:Description rdf:about=""
+            xmlns:xap="http://ns.adobe.com/xap/1.0/">
+         <xap:CreatorTool>PScript5.dll Version 5.2</xap:CreatorTool>
+         <xap:ModifyDate>2013-11-22T09:40:32+08:00</xap:ModifyDate>
+         <xap:CreateDate>2013-11-22T09:40:32+08:00</xap:CreateDate>
+      </rdf:Description>
+      <rdf:Description rdf:about=""
+            xmlns:dc="http://purl.org/dc/elements/1.1/">
+         <dc:format>xml</dc:format>
+         <dc:title>
+            <rdf:Alt>
+               <rdf:li xml:lang="x-default">Microsoft PowerPoint - ! (1).ppt</rdf:li>
+            </rdf:Alt>
+         </dc:title>
+         <dc:creator>
+            <rdf:Seq>
+               <rdf:li>wesley</rdf:li>
+            </rdf:Seq>
+         </dc:creator>
+      </rdf:Description>
+      <rdf:Description rdf:about=""
+            xmlns:xapMM="http://ns.adobe.com/xap/1.0/mm/">
+         <xapMM:DocumentID>uuid:fa0c4edf-03a7-4c13-a01c-54d9365ba75b</xapMM:DocumentID>
+         <xapMM:InstanceID>uuid:4c780a01-aded-4817-a929-5b781ec6edd4</xapMM:InstanceID>
+      </rdf:Description>
+   </rdf:RDF>
+</x:xmpmeta>
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                           
+<?xpacket end="w"?>
+<?xpacket end='r'?>
+
+<P>! ( wadr--)<br /></P>
+
+<P>CODE ! ( w a --) \ Pop the data stack to memory.<br /></P>
+
+<L>
+<LI>
+<LI_Label>(</LI_Label>
+
+<LI_Title> 1 ) [SP]-&gt;WP,SP+4-&gt;SP </LI_Title>
+</LI>
+
+<LI>
+<LI_Label>(</LI_Label>
+
+<LI_Title> 2 ) WP-&gt;[TOS] </LI_Title>
+</LI>
+
+<LI>
+<LI_Label>(</LI_Label>
+
+<LI_Title> 3 ) [SP]-&gt;TOS,SP+4-&gt;SP $NEXT \ NEST END-CODE \ ;CODE </LI_Title>
+</LI>
+</L>
+
+<Table>
+<TR>
+<TH>Data Stack </TH>
+</TR>
+
+<TR>
+<TH>TOS </TH>
+
+<TD>adr </TD>
+</TR>
+
+<TR>
+<TH>SP+0 </TH>
+
+<TD>w </TD>
+</TR>
+
+<TR>
+<TH>SP+4 </TH>
+
+<TD>n </TD>
+</TR>
+
+<TR>
+<TH>SP+8 </TH>
+
+<TD>m </TD>
+</TR>
+
+<TR>
+<TH>SP+12 </TH>
+
+<TD>: </TD>
+</TR>
+</Table>
+<Figure>
+
+<ImageData src="images/! (1)_img_0.jpg"/>
+! </Figure>
+
+<P>SP<br /></P>
+
+<P>SP<br /></P>
+
+<P>SP<br /></P>
+
+<P>TOP<br /></P>
+<Figure>
+
+<ImageData src="images/! (1)_img_1.jpg"/>
+</Figure>
+
+<P>Memory<br /></P>
+
+<Part>
+<Sect>
+<H2>SP+0<br />SP+4<br />SP+8<br /></H2>
+</Sect>
+
+<P><Figure>
+
+<ImageData src="images/! (1)_img_2.jpg"/>
+</Figure>
+adr </P>
+
+<Sect><Figure>
+
+<ImageData src="images/! (1)_img_3.jpg"/>
+mSP+0 nTOS :SP+4 Data Stack w </Figure>
+</Sect>
+<Figure>
+
+<ImageData src="images/! (1)_img_4.jpg"/>
+w m n w WP ( 1 ) [SP]-&gt;WP,SP+4-&gt;SP </Figure>
+
+<Sect><Figure>
+
+<ImageData src="images/! (1)_img_5.jpg"/>
+</Figure>
+
+<P>w<br /></P>
+
+<P>( 2 ) WP-&gt;[TOS] </P>
+
+<P>( 3 ) [SP]-&gt;TOS,SP+4-&gt;SP </P>
+
+<P>! ( wadr--) </P>
+</Sect>
+
+<P>CODE ! ( w a --) \ Pop the data stack to memory. </P>
+
+<Sect>
+<L>
+<LI>
+<LI_Label>(</LI_Label>
+
+<LI_Title> 1 ) [SP]-&gt;WP,SP+4-&gt;SP </LI_Title>
+</LI>
+
+<LI>
+<LI_Label>(</LI_Label>
+
+<LI_Title> 2 ) WP-&gt;[TOS] </LI_Title>
+</LI>
+
+<LI>
+<LI_Label>(</LI_Label>
+
+<LI_Title> 3 ) [SP]-&gt;TOS,SP+4-&gt;SP <br />$NEXT \ NEST <br />END-CODE \ ;CODE <br /></LI_Title>
+</LI>
+</L>
+
+<Table>
+<TR>
+<TH>Data Stack </TH>
+</TR>
+
+<TR>
+<TH>TOS </TH>
+
+<TD>adr </TD>
+</TR>
+
+<TR>
+<TH>SP+0 </TH>
+
+<TD>w </TD>
+</TR>
+
+<TR>
+<TH>SP+4 </TH>
+
+<TD>n </TD>
+</TR>
+
+<TR>
+<TH>SP+8 </TH>
+
+<TD>m </TD>
+</TR>
+
+<TR>
+<TH>SP+12 </TH>
+
+<TD>: </TD>
+</TR>
+</Table>
+
+<P>! ( wadr--) </P>
+</Sect>
+
+<P>CODE ! ( w a --) \ Pop the data stack to memory. </P>
+
+<Sect>
+<L>
+<LI>
+<LI_Label>(</LI_Label>
+
+<LI_Title> 1 ) [SP]-&gt;WP,SP+4-&gt;SP </LI_Title>
+</LI>
+
+<LI>
+<LI_Label>(</LI_Label>
+
+<LI_Title> 2 ) WP-&gt;[TOS] </LI_Title>
+</LI>
+
+<LI>
+<LI_Label>(</LI_Label>
+
+<LI_Title> 3 ) [SP]-&gt;TOS,SP+4-&gt;SP <br />$NEXT \ NEST <br />END-CODE \ ;CODE <br /></LI_Title>
+</LI>
+</L>
+
+<Table>
+<TR>
+<TH>Data Stack </TH>
+</TR>
+
+<TR>
+<TH>TOS </TH>
+
+<TD>adr </TD>
+</TR>
+
+<TR>
+<TH>SP+0 </TH>
+
+<TD>w </TD>
+</TR>
+
+<TR>
+<TH>SP+4 </TH>
+
+<TD>n </TD>
+</TR>
+
+<TR>
+<TH>SP+8 </TH>
+
+<TD>m </TD>
+</TR>
+
+<TR>
+<TH>SP+12 </TH>
+
+<TD>: </TD>
+</TR>
+</Table>
+<Figure>
+
+<ImageData src="images/! (1)_img_6.jpg"/>
+! </Figure>
+
+<P>! ( wadr--)<br /></P>
+</Sect>
+
+<P>CODE ! ( w a --) \ Pop the data stack to memory. </P>
+
+<L>
+<LI>
+<LI_Label>(</LI_Label>
+
+<LI_Title> 1 ) [SP]-&gt;WP,SP+4-&gt;SP Memory </LI_Title>
+</LI>
+
+<Sect>
+<LI>
+<LI_Label>(</LI_Label>
+
+<LI_Title> 2 ) WP-&gt;[TOS] </LI_Title>
+</LI>
+
+<LI>
+<LI_Label>(</LI_Label>
+
+<LI_Title> 3 ) [SP]-&gt;TOS,SP+4-&gt;SP $NEXT \ NEST END-CODE \ ;CODE </LI_Title>
+</LI>
+</Sect>
+</L>
+
+<Sect>
+<Table>
+<TR>
+<TH>Data Stack </TH>
+</TR>
+
+<TR>
+<TH>TOS </TH>
+
+<TD>adr </TD>
+</TR>
+
+<TR>
+<TH>SP+0 </TH>
+
+<TD>w </TD>
+</TR>
+
+<TR>
+<TH>SP+4 </TH>
+
+<TD>n </TD>
+</TR>
+
+<TR>
+<TH>SP+8 </TH>
+
+<TD>m </TD>
+</TR>
+
+<TR>
+<TH>SP+12 </TH>
+
+<TD>: </TD>
+</TR>
+</Table>
+<Figure>
+
+<ImageData src="images/! (1)_img_7.jpg"/>
+: mSP+8 nSP+4 wSP+0SP ! w WP ( 1 ) [SP]-&gt;WP </Figure>
+
+<P>! ( wadr--)<br /></P>
+</Sect>
+
+<P>CODE ! ( w a --) \ Pop the data stack to memory. </P>
+
+<L>
+<LI>
+<LI_Label>(</LI_Label>
+
+<LI_Title> 1 ) [SP]-&gt;WP,SP+4-&gt;SP Memory </LI_Title>
+</LI>
+
+<Sect>
+<LI>
+<LI_Label>(</LI_Label>
+
+<LI_Title> 2 ) WP-&gt;[TOS] </LI_Title>
+</LI>
+
+<LI>
+<LI_Label>(</LI_Label>
+
+<LI_Title> 3 ) [SP]-&gt;TOS,SP+4-&gt;SP <br />$NEXT \ NEST <br />END-CODE \ ;CODE <br /></LI_Title>
+</LI>
+</Sect>
+</L>
+
+<Sect><Figure>
+
+<ImageData src="images/! (1)_img_8.jpg"/>
+mSP+8 nSP+4SP wSP+0 ! w WP ( 1 ) [SP]-&gt;WP,SP+4-&gt;SP </Figure>
+
+<Table>
+<TR>
+<TH>Data Stack </TH>
+</TR>
+
+<TR>
+<TH>TOS </TH>
+
+<TD>adr </TD>
+</TR>
+
+<TR>
+<TH>SP+0 </TH>
+
+<TD>w </TD>
+</TR>
+
+<TR>
+<TH>SP+4 </TH>
+
+<TD>n </TD>
+</TR>
+
+<TR>
+<TH>SP+8 </TH>
+
+<TD>m </TD>
+</TR>
+
+<TR>
+<TH>SP+12 </TH>
+
+<TD>: </TD>
+</TR>
+</Table>
+
+<P>! ( wadr--)<br /></P>
+</Sect>
+
+<P>CODE ! ( w a --) \ Pop the data stack to memory. </P>
+
+<L>
+<LI>
+<LI_Label>(</LI_Label>
+
+<LI_Title> 1 ) [SP]-&gt;WP,SP+4-&gt;SP Memory </LI_Title>
+</LI>
+
+<Sect>
+<LI>
+<LI_Label>(</LI_Label>
+
+<LI_Title> 2 ) WP-&gt;[TOS] </LI_Title>
+</LI>
+
+<LI>
+<LI_Label>(</LI_Label>
+
+<LI_Title> 3 ) [SP]-&gt;TOS,SP+4-&gt;SP <br />$NEXT \ NEST <br />END-CODE \ ;CODE <br /></LI_Title>
+</LI>
+</Sect>
+</L>
+
+<Sect><Figure>
+
+<ImageData src="images/! (1)_img_9.jpg"/>
+wadrTOP mSP+8 nSP+4SP wSP+0 ! w WP ( 1 ) [SP]-&gt;WP,SP+4-&gt;SP ( 2 ) WP-&gt;[TOS] </Figure>
+
+<Table>
+<TR>
+<TH>Data Stack </TH>
+</TR>
+
+<TR>
+<TH>TOS </TH>
+
+<TD>adr </TD>
+</TR>
+
+<TR>
+<TH>SP+0 </TH>
+
+<TD>w </TD>
+</TR>
+
+<TR>
+<TH>SP+4 </TH>
+
+<TD>n </TD>
+</TR>
+
+<TR>
+<TH>SP+8 </TH>
+
+<TD>m </TD>
+</TR>
+
+<TR>
+<TH>SP+12 </TH>
+
+<TD>: </TD>
+</TR>
+</Table>
+
+<P>! ( wadr--) </P>
+</Sect>
+
+<P>CODE ! ( w a --) \ Pop the data stack to memory. </P>
+
+<Sect>
+<L>
+<LI>
+<LI_Label>(</LI_Label>
+
+<LI_Title> 1 ) [SP]-&gt;WP,SP+4-&gt;SP </LI_Title>
+</LI>
+
+<LI>
+<LI_Label>(</LI_Label>
+
+<LI_Title> 2 ) WP-&gt;[TOS] </LI_Title>
+</LI>
+
+<LI>
+<LI_Label>(</LI_Label>
+
+<LI_Title> 3 ) [SP]-&gt;TOS,SP+4-&gt;SP $NEXT \ NEST END-CODE \ ;CODE </LI_Title>
+</LI>
+</L>
+
+<Table>
+<TR>
+<TH>Data Stack </TH>
+</TR>
+
+<TR>
+<TH>TOS </TH>
+
+<TD>adr </TD>
+</TR>
+
+<TR>
+<TH>SP+0 </TH>
+
+<TD>w </TD>
+</TR>
+
+<TR>
+<TH>SP+4 </TH>
+
+<TD>n </TD>
+</TR>
+
+<TR>
+<TH>SP+8 </TH>
+
+<TD>m </TD>
+</TR>
+
+<TR>
+<TH>SP+12 </TH>
+
+<TD>: </TD>
+</TR>
+</Table>
+
+<P>Memory<br /></P>
+</Sect>
+</Part>
+
+<Part>
+<H2>SP+0 </H2>
+
+<P>SP </P>
+</Part>
+
+<Part>
+<H2><Figure>
+
+<ImageData src="images/! (1)_img_10.jpg"/>
+</Figure>
+SP+4<br />SP+8<br /></H2>
+
+<P>TOP </P>
+
+<P><Figure>
+
+<ImageData src="images/! (1)_img_11.jpg"/>
+</Figure>
+adr</P>
+<Figure>
+
+<ImageData src="images/! (1)_img_12.jpg"/>
+! </Figure>
+<Figure>
+
+<ImageData src="images/! (1)_img_13.jpg"/>
+nTOS Data Stack w </Figure>
+
+<Sect><Figure>
+
+<ImageData src="images/! (1)_img_14.jpg"/>
+w m n w WP ( 1 ) [SP]-&gt;WP,SP+4-&gt;SP </Figure>
+<Figure>
+
+<ImageData src="images/! (1)_img_15.jpg"/>
+</Figure>
+
+<P>w<br /></P>
+
+<P>( 2 ) WP-&gt;[TOS] </P>
+
+<P>( 3 ) [SP]-&gt;TOS </P>
+</Sect>
+
+<P>! ( wadr--) </P>
+
+<P>CODE ! ( w a --) \ Pop the data stack to memory. </P>
+
+<Sect>
+<L>
+<LI>
+<LI_Label>(</LI_Label>
+
+<LI_Title> 1 ) [SP]-&gt;WP,SP+4-&gt;SP </LI_Title>
+</LI>
+
+<LI>
+<LI_Label>(</LI_Label>
+
+<LI_Title> 2 ) WP-&gt;[TOS] </LI_Title>
+</LI>
+
+<LI>
+<LI_Label>(</LI_Label>
+
+<LI_Title> 3 ) [SP]-&gt;TOS,SP+4-&gt;SP $NEXT \ NEST END-CODE \ ;CODE </LI_Title>
+</LI>
+</L>
+
+<Table>
+<TR>
+<TH>Data Stack </TH>
+</TR>
+
+<TR>
+<TH>TOS </TH>
+
+<TD>adr </TD>
+</TR>
+
+<TR>
+<TH>SP+0 </TH>
+
+<TD>w </TD>
+</TR>
+
+<TR>
+<TH>SP+4 </TH>
+
+<TD>n </TD>
+</TR>
+
+<TR>
+<TH>SP+8 </TH>
+
+<TD>m </TD>
+</TR>
+
+<TR>
+<TH>SP+12 </TH>
+
+<TD>: </TD>
+</TR>
+</Table>
+</Sect>
+
+<P>Memory<br /></P>
+</Part>
+
+<Part>
+<H2>SP+0<br />SP+4<br /></H2>
+
+<P>SP </P>
+</Part>
+
+<Part>
+<H2><Figure>
+
+<ImageData src="images/! (1)_img_16.jpg"/>
+</Figure>
+SP+8 </H2>
+
+<P>TOP </P>
+
+<P><Figure>
+
+<ImageData src="images/! (1)_img_17.jpg"/>
+</Figure>
+adr</P>
+<Figure>
+
+<ImageData src="images/! (1)_img_18.jpg"/>
+! </Figure>
+<Figure>
+
+<ImageData src="images/! (1)_img_19.jpg"/>
+mSP+0 nTOS :SP+4 Data Stack w </Figure>
+<Figure>
+
+<ImageData src="images/! (1)_img_20.jpg"/>
+w m n w WP ( 1 ) [SP]-&gt;WP,SP+4-&gt;SP </Figure>
+<Figure>
+
+<ImageData src="images/! (1)_img_21.jpg"/>
+</Figure>
+
+<P>w<br /></P>
+
+<P>( 2 ) WP-&gt;[TOS] </P>
+
+<P>( 3 ) [SP]-&gt;TOS,SP+4-&gt;SP </P>
+</Part>
+</TaggedPDF-doc>

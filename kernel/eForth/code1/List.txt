@@ -1,0 +1,43 @@
+\ Copyright (c) 2001 by Blueputer Technology Inc.
+\ All rights reserved 
+\
+\ ARM7KERL.F   24OCT01 created by Wuja.
+\
+\ ARM7eForth low-level definitions.
+\
+\ (Translated from eForth 1.0 by Bill Muench and C. H. Ting, 1990)
+\ 
+\ V1.00,   24OTC01WUJA,  Translate low-level defintions from eForth 1.0.
+\
+                 
+\ The ARM7EF kernel
+CODE doLIT  ( -- w )                        \ Push an inline literal.
+CODE doLIST  ( -- )                         \ Colon word run-time code                   
+CODE EXIT    ( -- )                         \ Terminate a colon definition.
+CODE EXECUTE ( ca -- )                      \ Execute the word at ca.
+CODE ?branch  ( f -- )                      \ Branch if flag is zero.
+CODE branch  ( -- )                         \ Branch to an inline address.
+CODE ! ( w a -- )                           \ Pop the data stack to memory.
+CODE @ ( a -- w )                           \ Push memory location to the data stack.
+CODE C! ( c b -- )                          \ Pop the data stack to byte memory.
+CODE C@ ( b -- c )                          \ Push byte memory location to the data stack.
+CODE P! ( w p -- )                          \ Pop the data stack to io port.  
+CODE P@ ( p -- w )                          \ Push io port to the data stack.
+CODE RP@ ( -- a )                           \ Push the current RP to the data stack.
+CODE RP! ( a -- )                           \ Set the return stack pointer.
+CODE R> ( -- w )                            \ Pop the return stack to the data stack.
+CODE R@ ( -- w )                            \ Copy top of return stack to the data stack. 
+CODE >R ( w -- )                            \ Push the data stack to the return stack.
+CODE SP@ ( -- a )                           \ Push the current data stack pointer.  
+CODE SP! ( a -- )                           \ Set the data stack pointer.
+CODE DROP ( w -- )                          \ Discard top stack item.
+CODE DUP ( w -- w w )                       \ Duplicate the top stack item.
+CODE SWAP ( w1 w2 -- w2 w1 )                \ Exchange top two stack items.
+CODE OVER ( w1 w2 -- w1 w2 w1 )             \ Copy second stack item to top. 
+CODE 0< ( n -- t )                          \ Return true if n is negative.
+CODE AND ( w1 w2 -- w )                     \ Bitwise AND.   
+CODE OR ( w w -- w )                        \ Bitwise inclusive OR.
+CODE XOR ( w w -- w )                       \ Bitwise exclusive OR. 
+CODE UM+ ( w1 w2 -- w cy )                  \ Add two numbers, return the sum and carry flag.
+
+

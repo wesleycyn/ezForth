@@ -1,0 +1,196 @@
+[Config]
+Compilator.SaveAll=0
+Compilator.Capture=0
+Compilator.HideOutput=0
+Compilator.LogType=0
+DefaultDir=E:\www\Forth\ezForth\eForth
+DefaultCPIndex=0
+LogtoEnd=1
+DontOpen=0
+AbsolutePath=0
+FileFormat=0
+ProjectFilesOnly=0
+Extensions=*.*
+[Project tree]
+eForth
+	+eForth
+		+code
+			code\!.f
+			code\@.f
+			code\0_LT.f
+			code\AND.f
+			code\branch.f
+			code\C!.f
+			code\C@.f
+			code\dir.bat
+			code\dir.txt
+			code\doLIST.f
+			code\doLIT.f
+			code\DROP.f
+			code\DUP.f
+			code\EXECUTE.f
+			code\EXIT.f
+			code\FastCode.f
+			code\GbaForth.f
+			code\GT_R.f
+			code\List.txt
+			code\Main.f
+			code\OR.f
+			code\OVER.f
+			code\P!.f
+			code\P@.f
+			code\question_branch.f
+			code\R@.f
+			code\R_GT.f
+			code\ren.bat
+			code\RP!.f
+			code\RP@.f
+			code\SP!.f
+			code\SP@.f
+			code\SWAP.f
+			code\UM+.f
+			code\XOR.f
+[Open project files]
+0=code\!.f
+1=code\@.f
+2=code\0_LT.f
+3=code\AND.f
+4=code\Arm_eForth.h
+5=code\branch.f
+6=code\C!.f
+7=code\C@.f
+8=code\dir.bat
+9=code\dir.txt
+10=code\doLIST.f
+11=code\DROP.f
+12=code\DUP.f
+13=code\EXECUTE.f
+14=code\EXIT.f
+15=code\FastCode.f
+16=code\GbaForth.f
+17=code\GT_R.f
+18=code\List.txt
+19=code\Main.f
+20=code\OVER.f
+21=code\P!.f
+22=code\P@.f
+23=code\question_branch.f
+24=code\R@.f
+25=code\R_GT.f
+26=code\ren.bat
+27=code\RP!.f
+28=code\RP@.f
+29=code\SP!.f
+30=code\SP@.f
+31=code\SWAP.f
+32=code\UM+.f
+33=code\XOR.f
+34=code\doLIT.f
+[Selected Project Files]
+Main=
+Selected=code\doLIT.f
+[code\!.f]
+TopLine=1
+Caret=1,8
+[code\@.f]
+TopLine=1
+Caret=1,7
+[code\0_LT.f]
+TopLine=1
+Caret=1,7
+[code\AND.f]
+TopLine=1
+Caret=1,7
+[code\Arm_eForth.h]
+TopLine=1
+Caret=1,1
+[code\branch.f]
+TopLine=1
+Caret=1,6
+[code\C!.f]
+TopLine=1
+Caret=1,9
+[code\C@.f]
+TopLine=1
+Caret=1,7
+[code\dir.bat]
+TopLine=1
+Caret=1,1
+[code\dir.txt]
+TopLine=1
+Caret=1,1
+[code\doLIST.f]
+TopLine=1
+Caret=1,8
+[code\DROP.f]
+TopLine=1
+Caret=1,7
+[code\DUP.f]
+TopLine=1
+Caret=1,6
+[code\EXECUTE.f]
+TopLine=1
+Caret=1,9
+[code\EXIT.f]
+TopLine=1
+Caret=1,6
+[code\FastCode.f]
+TopLine=1
+Caret=1,8
+[code\GbaForth.f]
+TopLine=7
+Caret=1,1
+[code\GT_R.f]
+TopLine=1
+Caret=1,10
+[code\List.txt]
+TopLine=1
+Caret=1,1
+[code\Main.f]
+TopLine=1
+Caret=1,1
+[code\OVER.f]
+TopLine=1
+Caret=24,8
+[code\P!.f]
+TopLine=1
+Caret=1,9
+[code\P@.f]
+TopLine=1
+Caret=1,6
+[code\question_branch.f]
+TopLine=16
+Caret=1,16
+[code\R@.f]
+TopLine=1
+Caret=1,8
+[code\R_GT.f]
+TopLine=1
+Caret=1,10
+[code\ren.bat]
+TopLine=1
+Caret=1,1
+[code\RP!.f]
+TopLine=1
+Caret=1,8
+[code\RP@.f]
+TopLine=1
+Caret=1,7
+[code\SP!.f]
+TopLine=1
+Caret=1,6
+[code\SP@.f]
+TopLine=1
+Caret=1,8
+[code\SWAP.f]
+TopLine=1
+Caret=1,7
+[code\UM+.f]
+TopLine=1
+Caret=1,9
+[code\XOR.f]
+TopLine=1
+Caret=1,7
+[code\doLIT.f]
+TopLine=1
+Caret=1,6
