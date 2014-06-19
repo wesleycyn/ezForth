@@ -1,0 +1,174 @@
+[Config]
+Compilator.SaveAll=0
+Compilator.Capture=0
+Compilator.HideOutput=0
+Compilator.LogType=0
+DefaultDir=E:\www\Forth\ezForth\ASM
+DefaultCPIndex=0
+LogtoEnd=1
+DontOpen=0
+AbsolutePath=0
+FileFormat=0
+ProjectFilesOnly=0
+Extensions=*.*
+[Project tree]
+ASM
+	+ASM
+		+Arm
+			+Arm7
+				Arm\Arm7\eForth.f
+			+thumb2
+				+LDRB
+					Arm\thumb2\LDRB\LDRB.f
+				+STRB
+					Arm\thumb2\STRB\STRB.f
+				+ADD
+					Arm\thumb2\ADD\ADD.f
+				+ADC
+					Arm\thumb2\ADC\ADC.f
+					Arm\thumb2\ADC\ADC.html
+					Arm\thumb2\ADC\ADC.JPG
+					Arm\thumb2\ADC\ADC.odt
+					Arm\thumb2\ADC\ADC_test.f
+					Arm\thumb2\ADC\ADC1.f
+					Arm\thumb2\ADC\ADC1.html
+					Arm\thumb2\ADC\ADC1.odt
+					Arm\thumb2\ADC\ADC1.s
+					Arm\thumb2\ADC\ADC1_html_41409676.gif
+					Arm\thumb2\ADC\ADC1_html_c641759.jpg
+					Arm\thumb2\ADC\ADC1_html_m5ac7def1.gif
+					Arm\thumb2\ADC\Thumb2_ADCS.JPG
+				+AND
+					Arm\thumb2\AND\AND.f
+				-B
+					Arm\thumb2\B\B.f
+				-Instruction Set
+					Arm\thumb2\Instruction Set\QRC0001_UAL.pdf
+					Arm\thumb2\Instruction Set\QRC0001H_rvct_v2.1_thumb.pdf
+					Arm\thumb2\Instruction Set\Thumb-2+Supplement+Reference+Manual.pdf
+				-LDR
+					Arm\thumb2\LDR\LDR.f
+					Arm\thumb2\LDR\LDR.JPG
+					Arm\thumb2\LDR\LDR_20131019pm0204.JPG
+					Arm\thumb2\LDR\LDR_20131019pm0535.JPG
+					Arm\thumb2\LDR\LDR_20131019pm1027.JPG
+					Arm\thumb2\LDR\LDR_test.f
+					Arm\thumb2\LDR\Thumbs.db
+					Arm\thumb2\XOR\XOR.f
+					Arm\thumb2\LDR\½Æ»s -LDR.f
+				+MOV
+					Arm\thumb2\MOV\MOV.f
+				+ORR
+					Arm\thumb2\ORR\ORR.f
+				+STR
+					Arm\thumb2\STR\STR.f
+					Arm\thumb2\STR\STR_test.f
+				+XOR
+					Arm\thumb2\XOR\XOR.f
+				Arm\thumb2\EFORTH.bak
+				Arm\thumb2\eForth.f
+				Arm\thumb2\eFroth VM Thumb2.JPG
+				Arm\thumb2\Thumb2.f
+				Arm\thumb2\Thumb2.html
+				Arm\thumb2\Thumb2.JPG
+				Arm\thumb2\Thumb2.mpp
+				Arm\thumb2\Thumb2.ods
+				Arm\thumb2\Thumb2_eForth_20131105pm0011.JPG
+				Arm\thumb2\thumb2_test.f
+				Arm\thumb2\Thumbs.db
+				Arm\thumb2\main_thumb2.f
+				Arm\thumb2\eForth_test.f
+		-Intel
+			-Quark_SoC_X1000
+				Intel\Quark_SoC_X1000\eForth.f
+				Intel\Quark_SoC_X1000\Quark_SoC_X1000.f
+			-Vortex86EX
+				Intel\Vortex86EX\eForth.f
+				Intel\Vortex86EX\Vortex86EX.f
+		ARG.f
+		arg.html
+		arg.JPG
+		arg.odt
+		arg_html_m2c1d614c.jpg
+		arg_html_m6cc88afc.jpg
+		asm.f
+		ASM.mpp
+		ASM.ppr
+		main_asm.f
+		make_asm.f
+[Open project files]
+0=Arm\thumb2\eForth.f
+1=Arm\thumb2\eForth_test.f
+2=Arm\thumb2\AND\AND.f
+3=Arm\thumb2\Thumb2.f
+4=asm.f
+5=Arm\thumb2\LDR\LDR.f
+6=Arm\thumb2\STR\STR.f
+7=Arm\thumb2\MOV\MOV.f
+8=Arm\thumb2\STR\STR_test.f
+9=main_asm.f
+10=make_asm.f
+11=Arm\thumb2\ADD\ADD.f
+12=Arm\thumb2\ORR\ORR.f
+13=Arm\thumb2\main_thumb2.f
+14=Arm\thumb2\XOR\XOR.f
+15=Arm\thumb2\LDRB\LDRB.f
+16=Arm\thumb2\STRB\STRB.f
+17=Arm\thumb2\ADC\ADC.f
+[Selected Project Files]
+Main=
+Selected=Arm\thumb2\Thumb2.f
+[Arm\thumb2\eForth.f]
+TopLine=16
+Caret=26,22
+[Arm\thumb2\eForth_test.f]
+TopLine=19
+Caret=1,27
+[Arm\thumb2\AND\AND.f]
+TopLine=1
+Caret=1,1
+[Arm\thumb2\Thumb2.f]
+TopLine=417
+Caret=93,392
+[asm.f]
+TopLine=63
+Caret=56,15
+[Arm\thumb2\LDR\LDR.f]
+TopLine=67
+Caret=4,77
+[Arm\thumb2\STR\STR.f]
+TopLine=19
+Caret=1,37
+[Arm\thumb2\MOV\MOV.f]
+TopLine=11
+Caret=6,27
+[Arm\thumb2\STR\STR_test.f]
+TopLine=1
+Caret=1,11
+[main_asm.f]
+TopLine=1
+Caret=1,1
+[make_asm.f]
+TopLine=1
+Caret=1,1
+[Arm\thumb2\ADD\ADD.f]
+TopLine=69
+Caret=1,1
+[Arm\thumb2\ORR\ORR.f]
+TopLine=41
+Caret=1,53
+[Arm\thumb2\main_thumb2.f]
+TopLine=1
+Caret=1,1
+[Arm\thumb2\XOR\XOR.f]
+TopLine=38
+Caret=1,50
+[Arm\thumb2\LDRB\LDRB.f]
+TopLine=67
+Caret=1,81
+[Arm\thumb2\STRB\STRB.f]
+TopLine=15
+Caret=22,30
+[Arm\thumb2\ADC\ADC.f]
+TopLine=19
+Caret=106,28

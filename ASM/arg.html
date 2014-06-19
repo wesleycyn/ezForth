@@ -1,0 +1,63 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=big5">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 3.4.1  (Win32)">
+	<META NAME="CREATED" CONTENT="20131011;16360618">
+	<META NAME="CHANGED" CONTENT="20131011;16430560">
+	<STYLE TYPE="text/css">
+	<!--
+		@page { margin: 2cm }
+		P { margin-bottom: 0.21cm }
+		A:link { so-language: zxx }
+	-->
+	</STYLE>
+</HEAD>
+<BODY LANG="zh-TW" DIR="LTR">
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Times New Roman, serif"><SPAN LANG="en-US">create
+	a1$	512 allot	</SPAN></FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Times New Roman, serif"><SPAN LANG="en-US">create
+	a2$	512 allot	</SPAN></FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Times New Roman, serif"><SPAN LANG="en-US">create
+	a3$	512 allot	  </SPAN></FONT>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Times New Roman, serif"><SPAN LANG="en-US">create
+	a4$	512 allot</SPAN></FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Times New Roman, serif"><SPAN LANG="en-US">:
+arg	( --- kiss )</SPAN></FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Times New Roman, serif"><SPAN LANG="en-US">		0x0a
+word count a1$ place</SPAN></FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Times New Roman, serif"><SPAN LANG="en-US">		a1$
+count ascii ; scan temp$ place 		\ </SPAN></FONT>取得註解 
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Times New Roman, serif"><SPAN LANG="en-US">		a1$
+c@ temp$ c@ - a1$ c!	  		\ </SPAN></FONT>取得參數<FONT FACE="Times New Roman, serif"><SPAN LANG="en-US">	</SPAN></FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Times New Roman, serif"><SPAN LANG="en-US">		a1$
+count ascii , scan a2$ place	\ </SPAN></FONT>分離 第一跟二三參數<FONT FACE="Times New Roman, serif"><SPAN LANG="en-US">		</SPAN></FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Times New Roman, serif"><SPAN LANG="en-US">		a1$
+c@ a2$ c@ - a1$ c!		\ </SPAN></FONT>取得 第一參數</P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Times New Roman, serif"><SPAN LANG="en-US">		a1$
+dup count BL skip rot place			\ 	</SPAN></FONT>第一參數去頭</P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Times New Roman, serif"><SPAN LANG="en-US">		a1$
+dup count  -trailing rot place		\ 	</SPAN></FONT>第一參數去尾<FONT FACE="Times New Roman, serif"><SPAN LANG="en-US">			</SPAN></FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Times New Roman, serif"><SPAN LANG="en-US">		a2$
+dup count ascii , skip rot place		\ 	</SPAN></FONT>第二三參數去頭</P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Times New Roman, serif"><SPAN LANG="en-US">		a2$
+count ascii , scan a3$ place	\ </SPAN></FONT>分離 第二跟三參數</P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Times New Roman, serif"><SPAN LANG="en-US">		a2$
+c@ a3$ c@ - a2$ c!		\ </SPAN></FONT>取得 第二參數</P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Times New Roman, serif"><SPAN LANG="en-US">		a2$
+dup count  -trailing rot place		\ 	</SPAN></FONT>第二參數去尾<FONT FACE="Times New Roman, serif"><SPAN LANG="en-US">			</SPAN></FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Times New Roman, serif"><SPAN LANG="en-US">		a3$
+dup count ascii , skip rot place		\	</SPAN></FONT>第三參數去頭<FONT FACE="Times New Roman, serif"><SPAN LANG="en-US">		</SPAN></FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Times New Roman, serif"><SPAN LANG="en-US">		a3$
+dup count  -trailing rot place		\ 	</SPAN></FONT>第三參數去尾</P>
+<P STYLE="margin-bottom: 0cm">    <FONT FACE="Times New Roman, serif"><SPAN LANG="en-US">;<BR><BR></SPAN></FONT><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><IMG SRC="arg_html_m2c1d614c.jpg" NAME="圖形1" ALIGN=LEFT WIDTH=610 HEIGHT=456 BORDER=0><BR CLEAR=LEFT><BR>
+</P>
+</BODY>
+</HTML>

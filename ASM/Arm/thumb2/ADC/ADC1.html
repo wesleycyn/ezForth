@@ -1,0 +1,443 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=big5">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 3.4.1  (Win32)">
+	<META NAME="CREATED" CONTENT="20131010;8573229">
+	<META NAME="CHANGED" CONTENT="20131011;19563062">
+	<STYLE TYPE="text/css">
+	<!--
+		@page { margin: 2cm }
+		P { margin-bottom: 0.21cm }
+		TD P { margin-bottom: 0cm }
+		A:link { so-language: zxx }
+	-->
+	</STYLE>
+</HEAD>
+<BODY LANG="zh-TW" DIR="LTR">
+<P STYLE="margin-bottom: 0cm"> <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">1.
+Tumb2 ADC </SPAN></FONT></FONT><FONT SIZE=2>指令原始描述</FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"> <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">ADC
+(immediate)</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm">  <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">ADC&lt;c&gt;	&lt;Rd&gt;,&lt;Rn&gt;,#&lt;const&gt;	</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm">  <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">ADCS&lt;c&gt;	&lt;Rd&gt;,&lt;Rn&gt;,#&lt;const&gt;				</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"> <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">ADC
+(register) T1</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm">  <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">ADCS	&lt;Rdn&gt;,&lt;Rm&gt;	</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"> <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">ADC
+(register) T2	</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm">  <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">ADC&lt;c&gt;.W	&lt;Rd&gt;,&lt;Rn&gt;,&lt;Rm&gt;{,&lt;shift&gt;}</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm">  <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">ADCS&lt;c&gt;.W
+	&lt;Rd&gt;,&lt;Rn&gt;,&lt;Rm&gt;{,&lt;shift&gt;}</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"> <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">Encoding
+T1 All versions of the Thumb instruction set from Thumb-2 onwards.</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"> <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">S
+If present, specifies that the instruction updates the flags.
+Otherwise, the instruction does not update the flags.</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"> <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">Standard
+assembler syntax fields</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"> <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">The
+following assembler syntax fields are standard across all or most
+instructions:</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"> <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">&lt;c&gt;
+Is an optional field. It specifies the condition under which the
+instruction is executed. </SPAN></FONT></FONT>
+</P>
+<P STYLE="margin-bottom: 0cm"> <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">If
+&lt;c&gt;is omitted, it defaults to always (AL). For details see
+Conditional execution on page 3-34.</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"> <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">&lt;q&gt;
+Specifies optional assembler qualifiers on the instruction. The
+following qualifiers are</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"> <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">defined:</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"> <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">.N
+Meaning narrow, specifies that the assembler must select a 16-bit
+encoding for the instruction. If this is not possible, an assembler
+error is produced.</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"> <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">.W
+Meaning wide, specifies that the assembler must select a 32-bit
+encoding for theinstruction. If this is not possible, n assembler
+error is produced.</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"> <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">If
+neither .W nor .N is specified, the assembler can select either
+16-bit or 32-bit encodings.</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"> <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">If
+both are available, it must select a 16-bit encoding. In a few cases,
+more than one encoding of the same length can be available for an
+instruction. The rules for selecting between such</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"> <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">encodings
+are instruction-specific and are part of the instruction description.</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"> <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">Note</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"> <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">When
+assembling to ARM, the .N qualifier will produce an assembler error
+and the .W</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"> <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">qualifier
+has no effect, because all ARM instructions have length 32 bits.</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"> <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">4.3
+Constant shifts applied to a register</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"> <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">Thumb-2
+constant-shifted register operands are the same as in the ARM
+instruction set, except that the input bits come from different
+positions.</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"> <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">&lt;shift&gt;
+is an optional shift to be applied to &lt;Rm&gt;. It can be any one
+of:</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"> <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">(omitted)
+Equivalent to LSL #0.</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"> <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">LSL
+#n logical shift left n bits. 0 ? n ? 31.</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"> <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">LSR
+#n logical shift right n bits. 1 ? n ? 32.</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"> <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">ASR
+#n arithmetic shift right n bits. 1 ? n ? 32.</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"> <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">ROR
+#n rotate right n bits. 1 ? n ? 31.</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"> <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">RRX
+rotate right one bit, with extend. Bit[0] is written to
+shifter_carry_out, bits[31:1] are shifted right one bit, and the
+Carry Flag is shifted into bit[31].</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"> <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">4.3.1
+Encoding</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"> <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">The
+assembler encodes &lt;shift&gt; into two type bits and five immediate
+bits, as follows:</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"> <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">(omitted)
+type = 0b00, immediate = 0.</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"> <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">LSL
+#n type = 0b00, immediate = n.</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"> <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">LSR
+#n type = 0b01.</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"> <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">If
+n &lt; 32, immediate = n.</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"> <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">If
+n == 32, immediate = 0.</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"> <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">ASR
+#n type = 0b10.</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"> <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">If
+n &lt; 32, immediate = n.</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"> <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">If
+n == 32, immediate = 0.</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"> <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">ROR
+#n type = 0b11, immediate = n.</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"> <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">RRX
+type = 0b11, immediate = 0.</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm; page-break-before: always">
+<FONT FACE="Times New Roman, serif"><SPAN LANG="en-US">2.ADC&amp;ADCS</SPAN></FONT>的描述</P>
+<P STYLE="margin-bottom: 0cm"><IMG SRC="ADC1_html_m5ac7def1.gif" NAME="物件1" ALIGN=LEFT WIDTH=641 HEIGHT=62><BR CLEAR=LEFT><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#800000"> <FONT FACE="Times New Roman, serif"><SPAN LANG="en-US"><FONT COLOR="#000000"><FONT SIZE=1 STYLE="font-size: 8pt">ADC
+(immediate)</FONT></FONT></SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm; background: #ffffff">  <FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US"><FONT COLOR="#ff0000">ADC&lt;c&gt;</FONT>
+     <FONT COLOR="#ff950e">&lt;Rd4b11&gt;,</FONT><FONT COLOR="#3deb3d"><SPAN STYLE="background: #ffffff">&lt;Rn4b19&gt;,</SPAN></FONT><FONT COLOR="#0047ff">#&lt;I1b26:Imm3b14:imm8b7&gt;	</FONT>
+                           ::S1b20=0</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm">  <FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US"><FONT COLOR="#ff0000">ADCS&lt;c&gt;</FONT>
+  <FONT COLOR="#ff950e">&lt;Rd4b11&gt;,</FONT><FONT COLOR="#ffff00">&lt;</FONT><FONT COLOR="#3deb3d">Rn4b19&gt;,</FONT><FONT COLOR="#0047ff">#&lt;I1b26:Imm3b14:imm8b7&gt;	</FONT>		
+    ::S1b20=1	 </SPAN></FONT></FONT>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US"><FONT COLOR="#000000">ADC
+(register) T1</FONT>	</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"> <FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US"><FONT COLOR="#ff0000">ADCS</FONT>
+       <FONT COLOR="#ff950e">&lt;Rdn3b2&gt;,</FONT><FONT COLOR="#3deb3d">&lt;Rm3b5&gt;</FONT>	</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US"><FONT COLOR="#000000">ADC
+(register) T2</FONT>	</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"> 
+<FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US"><FONT COLOR="#ff0000">ADC&lt;c&gt;.W</FONT>	<FONT COLOR="#ff950e">&lt;Rd4b11&gt;,</FONT><FONT COLOR="#3deb3d">&lt;Rn4b19&gt;,</FONT><FONT COLOR="#0047ff">&lt;Rm4b3&gt;,</FONT><FONT COLOR="#00cccc">&lt;shiftType2b5
+imm3b14:imm2b7&gt;</FONT>  ::S1b20=0</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm">  <FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US"><FONT COLOR="#ff0000">ADCS&lt;c&gt;.W</FONT>
+<FONT COLOR="#ff950e">&lt;Rd4b11&gt;,</FONT><FONT COLOR="#3deb3d">&lt;Rn4b19&gt;,</FONT><FONT COLOR="#0047ff">&lt;Rm4b3&gt;,</FONT><FONT COLOR="#00cccc">&lt;shiftType2b5
+imm3b14:imm2b7&gt;</FONT> ::S1b20=1</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">Rd4b11
+                                               </SPAN></FONT></FONT><FONT SIZE=1 STYLE="font-size: 8pt">目的暫存器</FONT><FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">R0~R15
+</SPAN></FONT></FONT><FONT SIZE=1 STYLE="font-size: 8pt">放在 </FONT><FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">bit11~8
+ </SPAN></FONT></FONT><FONT SIZE=1 STYLE="font-size: 8pt">的位置
+共</FONT><FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">4bit</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">Rn4b19
+                                               </SPAN></FONT></FONT><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="zh-TW">來源</SPAN>暫存器</FONT><FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">R0~R15
+</SPAN></FONT></FONT><FONT SIZE=1 STYLE="font-size: 8pt">放在
+</FONT><FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">bit19~16
+</SPAN></FONT></FONT><FONT SIZE=1 STYLE="font-size: 8pt">的位置 共</FONT><FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">4bit</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#000000"><FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">Rdn3b2
+                                                </SPAN></FONT></FONT><FONT SIZE=1 STYLE="font-size: 8pt">目的暫存器</FONT><FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">R0~R7
+</SPAN></FONT></FONT><FONT SIZE=1 STYLE="font-size: 8pt">放在 </FONT><FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">bit2~0
+ </SPAN></FONT></FONT><FONT SIZE=1 STYLE="font-size: 8pt">的位置
+共</FONT><FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">3bit</SPAN></FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT COLOR="#000000"><FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">Rm3b5
+                                                 </SPAN></FONT></FONT><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="zh-TW">來源</SPAN>暫存器</FONT><FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">R0~R7
+</SPAN></FONT></FONT><FONT SIZE=1 STYLE="font-size: 8pt">放在 </FONT><FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">bit5~3
+ </SPAN></FONT></FONT><FONT SIZE=1 STYLE="font-size: 8pt">的位置
+共</FONT><FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">3bit</SPAN></FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"> <FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">I1b26:Imm3b14:imm8b7
+                   </SPAN></FONT></FONT><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="zh-TW">立即值</SPAN></FONT></P>
+<P STYLE="margin-bottom: 0cm"> <FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">&lt;shiftType2b5
+imm3b14:imm2b7&gt;    </SPAN></FONT></FONT><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="zh-TW">旋轉運算值</SPAN>
+</FONT>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<TABLE WIDTH=100% BORDER=1 BORDERCOLOR="#000000" CELLPADDING=4 CELLSPACING=0>
+	<COL WIDTH=50*>
+	<COL WIDTH=60*>
+	<COL WIDTH=68*>
+	<COL WIDTH=26*>
+	<COL WIDTH=52*>
+	<TR>
+		<TD COLSPAN=5 WIDTH=100% HEIGHT=41 VALIGN=TOP>
+			<P><IMG SRC="ADC1_html_41409676.gif" NAME="物件2" ALIGN=LEFT WIDTH=637 HEIGHT=29><BR CLEAR=LEFT><BR>
+			</P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=20%>
+			<P><FONT FACE="Times New Roman, serif"><SPAN LANG="en-US">ASM</SPAN></FONT><SPAN LANG="zh-TW">助憶碼特徵</SPAN></P>
+		</TD>
+		<TD WIDTH=23%>
+			<P>對應類型分支</P>
+		</TD>
+		<TD WIDTH=27%>
+			<P>類型轉變成機械碼</P>
+		</TD>
+		<TD WIDTH=10%>
+			<P><FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">.case
+			</SPAN></FONT></FONT><FONT SIZE=2><SPAN LANG="zh-TW">處理</SPAN></FONT></P>
+		</TD>
+		<TD WIDTH=20%>
+			<P><FONT SIZE=2>連接網址</FONT></P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=20% HEIGHT=144>
+			<P><FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">:
+			ADC	( --- )</SPAN></FONT></FONT></P>
+			<P> <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">state
+			@  if</SPAN></FONT></FONT></P>
+			<P>   <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">\
+			_ADC [COMPILE]  .case</SPAN></FONT></FONT></P>
+			<P>  <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">else</SPAN></FONT></FONT></P>
+			<P>   <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">_ADC</SPAN></FONT></FONT></P>
+			<P>  <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">then</SPAN></FONT></FONT></P>
+			<P>  <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">;
+			IMMEDIATE	</SPAN></FONT></FONT></P>
+		</TD>
+		<TD WIDTH=23%>
+			<P><FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">:
+			_ADC ( -- )</SPAN></FONT></FONT></P>
+			<P> <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">arg
+			</SPAN></FONT></FONT>
+			</P>
+			<P><FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">ADC_&lt;Rd4b11&gt;,&lt;Rn4b19&gt;</SPAN></FONT></FONT></P>
+			<P> <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">;</SPAN></FONT></FONT></P>
+		</TD>
+		<TD WIDTH=27%>
+			<P><FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">:
+			ADC_&lt;Rd4b11&gt;,&lt;Rn4b19&gt; ( -- )</SPAN></FONT></FONT></P>
+			<P>  <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">0xF1400000
+			 </SPAN></FONT></FONT>
+			</P>
+			<P><FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">\
+			Code_ADC</SPAN></FONT></FONT></P>
+			<P>  <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">0
+			 n1b20      or </SPAN></FONT></FONT>
+			</P>
+			<P><FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">\
+			0 S1b20    </SPAN></FONT></FONT>
+			</P>
+			<P>  <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">A1$
+			count </SPAN></FONT></FONT>
+			</P>
+			<P>  <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">$&gt;reg
+			( dup rd ! ) </SPAN></FONT></FONT>
+			</P>
+			<P>  <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">n4b11
+			or </SPAN></FONT></FONT>
+			</P>
+			<P><FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">\
+			a$1---&gt; Rd4b11</SPAN></FONT></FONT></P>
+			<P>  <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">A2$
+			count </SPAN></FONT></FONT>
+			</P>
+			<P>  <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">$&gt;reg
+			( dup rn ! ) </SPAN></FONT></FONT>
+			</P>
+			<P>  <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">n4b19
+			or </SPAN></FONT></FONT>
+			</P>
+			<P><FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">\
+			a$2---&gt; Rn4b19</SPAN></FONT></FONT></P>
+			<P>  <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">AsmCode2!
+			</SPAN></FONT></FONT>
+			</P>
+			<P> <FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">;</SPAN></FONT></FONT></P>
+		</TD>
+		<TD WIDTH=10%>
+			<P><FONT SIZE=2>模擬器</FONT><FONT FACE="Times New Roman, serif"><FONT SIZE=2><SPAN LANG="en-US">.....</SPAN></FONT></FONT></P>
+		</TD>
+		<TD WIDTH=20%>
+			<P><BR>
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD COLSPAN=5 WIDTH=100% HEIGHT=143>
+			<P><IMG SRC="ADC1_html_c641759.jpg" NAME="圖形1" ALIGN=LEFT WIDTH=608 HEIGHT=454 BORDER=0><BR CLEAR=LEFT><BR>
+			</P>
+		</TD>
+	</TR>
+</TABLE>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm; page-break-before: always"><FONT FACE="Times New Roman, serif"><SPAN LANG="en-US">\<FONT SIZE=1 STYLE="font-size: 8pt">
+asm arg</FONT></SPAN></FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">create
+	a1$	512 allot	</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">create
+	a2$	512 allot	</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">create
+	a3$	512 allot	  </SPAN></FONT></FONT>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">create
+	a4$	512 allot</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">:
+arg	( --- kiss )</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">		0x0a
+word count a1$ place</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">		a1$
+count ascii ; scan temp$ place 		\ </SPAN></FONT></FONT><FONT SIZE=1 STYLE="font-size: 8pt">取得註解
+</FONT>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">		a1$
+c@ temp$ c@ - a1$ c!	  		\ </SPAN></FONT></FONT><FONT SIZE=1 STYLE="font-size: 8pt">取得參數</FONT><FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">	</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">		a1$
+count ascii , scan a2$ place	\ </SPAN></FONT></FONT><FONT SIZE=1 STYLE="font-size: 8pt">分離
+第一跟二三參數</FONT><FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">		</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">		a1$
+c@ a2$ c@ - a1$ c!		\ </SPAN></FONT></FONT><FONT SIZE=1 STYLE="font-size: 8pt">取得
+第一參數</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">		a1$
+dup count BL skip rot place			\ 	</SPAN></FONT></FONT><FONT SIZE=1 STYLE="font-size: 8pt">第一參數去頭</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">		a1$
+dup count  -trailing rot place		\ 	</SPAN></FONT></FONT><FONT SIZE=1 STYLE="font-size: 8pt">第一參數去尾</FONT><FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">			</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">		a2$
+dup count ascii , skip rot place		\ 	</SPAN></FONT></FONT><FONT SIZE=1 STYLE="font-size: 8pt">第二三參數去頭</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">		a2$
+count ascii , scan a3$ place	\ </SPAN></FONT></FONT><FONT SIZE=1 STYLE="font-size: 8pt">分離
+第二跟三參數</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">		a2$
+c@ a3$ c@ - a2$ c!		\ </SPAN></FONT></FONT><FONT SIZE=1 STYLE="font-size: 8pt">取得
+第二參數</FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">		a2$
+dup count  -trailing rot place		\ 	</SPAN></FONT></FONT><FONT SIZE=1 STYLE="font-size: 8pt">第二參數去尾</FONT><FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">			</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">		a3$
+dup count ascii , skip rot place		\	</SPAN></FONT></FONT><FONT SIZE=1 STYLE="font-size: 8pt">第三參數去頭</FONT><FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">		</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">		a3$
+dup count  -trailing rot place		\ 	</SPAN></FONT></FONT><FONT SIZE=1 STYLE="font-size: 8pt">第三參數去尾</FONT></P>
+<P STYLE="margin-bottom: 0cm">    <FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">;</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">:
+AsmCode!</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm">  <FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">;</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">:
+AsmCode2!</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm">   <FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">u.</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm">  <FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">;</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">:
+n4b11  ( m  -- n )</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm">  <FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">8
+lshift   \ 11-4+1 = 8</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm">  <FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">;</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm">  
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">:
+n4b19  ( m  -- n )</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm">  <FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">16
+lshift   \ 19-4+1 = 16</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm">  <FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">;</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm">  
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">:
+n1b20  ( m  -- n )</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm">  <FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">20
+lshift   \ 20-1+1 = 20</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm">  <FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">;
+ </SPAN></FONT></FONT>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">:
+$&gt;reg ( adr count  --- n )</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm">  <FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">1
+- swap</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm">  <FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">1
++ swap</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm">  <FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">number?</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm">  <FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">drop
+drop</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm">  <FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">;</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">\
+Thumb2 </SPAN></FONT></FONT>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">\
+ADC</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">:
+ADC_&lt;Rd4b11&gt;,&lt;Rn4b19&gt; ( -- )</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm">  <FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">0xF1400000
+                  \ Code_ADC</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm">  <FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">0
+ n1b20                  or \ 0 S1b20    </SPAN></FONT></FONT>
+</P>
+<P STYLE="margin-bottom: 0cm">  <FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">A1$
+count $&gt;reg ( dup rd ! ) n4b11 or \ a$1---&gt; Rd4b11</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm">  <FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">A2$
+count $&gt;reg ( dup rn ! ) n4b19 or \ a$2---&gt; Rn4b19</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm">  <FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">AsmCode2!
+</SPAN></FONT></FONT>
+</P>
+<P STYLE="margin-bottom: 0cm"> <FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">;</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm">    
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">:
+_ADC ( -- )</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">	arg
+</SPAN></FONT></FONT>
+</P>
+<P STYLE="margin-bottom: 0cm">  <FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">ADC_&lt;Rd4b11&gt;,&lt;Rn4b19&gt;</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"> <FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">;</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">:
+ADC	( --- )</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">	state
+@ </SPAN></FONT></FONT>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">	if</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm">   <FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">\
+_ADC [COMPILE]  .case</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm">  <FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">else</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm">   <FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">_ADC</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm">  <FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">then</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm">  <FONT FACE="Times New Roman, serif"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN LANG="en-US">;
+IMMEDIATE	 </SPAN></FONT></FONT>
+</P>
+</BODY>
+</HTML>
