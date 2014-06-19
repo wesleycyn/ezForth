@@ -1,0 +1,14 @@
+: DAC_CR       0x00 DAC + ;
+: DAC_SWTRIGR  0x04 DAC + ;
+: DAC_DHR12R1  0x08 DAC + ;
+: DAC_DHR12L1  0x0C DAC + ;
+: DAC_DHR8R1   0x10 DAC + ;
+: DAC_DHR12R2  0x14 DAC + ;
+: DAC_DHR12L2  0x18 DAC + ;
+: DAC_DHR8R2   0x1C DAC + ;
+: DAC_DHR12RD  0x20 DAC + ;
+: DAC_DHR12LD  0x24 DAC + ;
+: DAC_DHR8RD   0x28 DAC + ;
+: DAC_DOR1     0x2C DAC + ;
+: DAC_DOR2     0x30 DAC + ;
+: DAC_SR       0x34 DAC + ;   

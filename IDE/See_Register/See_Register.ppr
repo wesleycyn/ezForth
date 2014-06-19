@@ -1,0 +1,554 @@
+[Config]
+Compilator.SaveAll=0
+Compilator.Capture=0
+Compilator.HideOutput=0
+Compilator.LogType=0
+DefaultDir=E:\www\Forth\ezForth\IDE\See_Register
+DefaultCPIndex=0
+LogtoEnd=1
+DontOpen=0
+AbsolutePath=0
+FileFormat=0
+ProjectFilesOnly=0
+Extensions=*.*
+[Project tree]
+See_Register
+	+See_Register
+		-.git
+			+hooks
+				.git\hooks\README.sample
+			+info
+				.git\info\exclude
+			-logs
+				-refs
+					-heads
+						.git\logs\refs\heads\master
+					-remotes
+						-origin
+							.git\logs\refs\remotes\origin\master
+				.git\logs\HEAD
+			-objects
+				-01
+					.git\objects\01\d7dc6e88b01c5b57a73732e8165bfad1d0624e
+				-02
+					.git\objects\02\0fa68cd726e16bff4b006dc05fb7e9467cd3ea
+				-07
+					.git\objects\07\5987a5ffd1366c10eb5134edc786554d707bac
+				-08
+					.git\objects\08\1da54b81c1faf342ed790564da6f33b248804d
+				-0e
+					.git\objects\0e\b14030d8c6380e6fea388fdc00691f27cc024b
+				-11
+					.git\objects\11\6d07216a07d7b15fcf9f45094067ff72de45e3
+				-12
+					.git\objects\12\fe9840814cb90c457acf5d00415a7c00b5f80d
+				-14
+					.git\objects\14\19cc780454237825cda47da777d4509e7269f5
+				-15
+					.git\objects\15\2fd81f970f43039317927cf83982214d276c7d
+				-16
+					.git\objects\16\2dededeff86610536a0a3b2957b106df04708b
+				-18
+					.git\objects\18\9bd6b822cdcdfdaad471d0dea753f7f1fd2b4e
+				-23
+					.git\objects\23\aec3022eb61095be24efc8d14448fe03b0c638
+				-25
+					.git\objects\25\08bbf1cbe7520ff7feb58704fa0575d089b077
+				-27
+					.git\objects\27\f7a70822cc4145b0422468278570552d7b3cbf
+				-28
+					.git\objects\28\b47ce558a9bb0973ac2c878a0cea132a2570ae
+				-2c
+					.git\objects\2c\fde812b143e83d354d76fc721905d6812fc019
+				-2d
+					.git\objects\2d\775710e55b1030cade2ee5bd9540ff538fbd89
+					.git\objects\2d\caeb63bb9b0500c25b137c6bc822b8349c9347
+				-2e
+					.git\objects\2e\929673942d9efb52f6445873bed268eed4e58e
+				-32
+					.git\objects\32\98bf733c8d0393c5a0b708c9de06009f0fa22c
+				-33
+					.git\objects\33\633fd7f9519a27a3de645a190cd56b01161d67
+				-34
+					.git\objects\34\72e3a48b79426c54821e460ecce7d8a287cdc3
+				-35
+					.git\objects\35\63a1622b37217b40b4bbed5e26263e34f4604c
+				-36
+					.git\objects\36\231ae83b9c1350a935d36dac137384c85c13c1
+				-3a
+					.git\objects\3a\dd90338209e2637bdad2ff66e9d1175329e794
+				-41
+					.git\objects\41\2eeda78dc9de1186c2e0e1526764af82ab3431
+					.git\objects\41\691a15cd75f70c838b8f802999ddad48c8e625
+				-43
+					.git\objects\43\f0051c74f607e795c9c59a51ff14891bac76ff
+				-46
+					.git\objects\46\ead23b97b0914ee9863827d912d9abc1897ca8
+				-47
+					.git\objects\47\9f8010a865da5db85d0f20e614eeeb9c000445
+					.git\objects\47\b99030b6bf80d53e9e9e21e2402708322fbc80
+				-4a
+					.git\objects\4a\0390b9abb74a79877b462a2339852989902411
+				-4b
+					.git\objects\4b\b7dde142351c9c2688e304e2740f91e2dae04a
+				-4d
+					.git\objects\4d\49d9860eab291b450c7fe4bf0ee18f9a89707a
+				-50
+					.git\objects\50\e8085ad41796014ab45d7f774192bdb9b62455
+				-54
+					.git\objects\54\76d527ab74c9bc7758a1ce648a4ca3d946ee01
+				-59
+					.git\objects\59\8348741cefd041d4575286af305d8b9b350166
+				-62
+					.git\objects\62\b85c7210d797e14f5e816d4d325c2830b6b04e
+				-63
+					.git\objects\63\12d4a878d7c7e388242a384c73d7bfb2a708f3
+					.git\objects\63\bbffe8bc3765079a6b7fd0f396cc5182647f24
+				-64
+					.git\objects\64\e8314754d3058505df40b9d97aa46823b96573
+				-68
+					.git\objects\68\3276876c34a67807d9396168907e563dabd508
+				-6c
+					.git\objects\6c\cc65a43507509a9ee32cfe0b1743e9899e3265
+				-71
+					.git\objects\71\af26aa9e428277157b61f238bcb85c1554a590
+				-72
+					.git\objects\72\dce3b0228b8062ecff0b2c0a28a2bd7bab3472
+				-75
+					.git\objects\75\51bc55eb0ff8b5d7afd2865db524596aa29efa
+				-79
+					.git\objects\79\3391b3db3075d5e31e2a5b547e55865eaaf2d8
+				-83
+					.git\objects\83\c29f967334d288678d5faff47dcafa39e21646
+				-86
+					.git\objects\86\31dcede1fdf3dacf65c4e6bcf5196a741a958b
+				-8b
+					.git\objects\8b\cfcc83a2b6197bfd5bbed24f05cdd75ae0568b
+				-8c
+					.git\objects\8c\a6984767d82964fb8698e3148ab3a85475f65a
+				-92
+					.git\objects\92\2a4f3574c7075cbb510599f220aae2015feff4
+					.git\objects\92\67a1576eb2e9b2a071df8738e5c0b3059f2186
+				-94
+					.git\objects\94\2f15a4ca4525bb6c92c3eaf62013986293da74
+				-95
+					.git\objects\95\5da2e12d94e20827546d40f8b033718426f1da
+				-99
+					.git\objects\99\2b21d07cd51cdb5b84cdf336ad38e0bd5f89d9
+					.git\objects\99\b91ee3daaf7f7bc66f9976943f85f2c4d82c10
+				-9c
+					.git\objects\9c\125b5042f970d220cb595728c9b06bd5c32f08
+				-9f
+					.git\objects\9f\6582267deac6671d9f8b9f52d4ed862e66e7bd
+				-a1
+					.git\objects\a1\b5d27c6ab081f0862471a433facdb43100dae5
+				-a4
+					.git\objects\a4\8673fbf8c7aae9334740802db6631b658ac667
+				-a5
+					.git\objects\a5\60d3aec0a82f15243c9c667b0006b3ccd26206
+				-a6
+					.git\objects\a6\61787133c00c3cf08c92f959fb5b72a9472685
+					.git\objects\a6\d6dbd8cca430cff0407a776fc050c8c7ad293b
+				-a7
+					.git\objects\a7\b36083572192596f82f64211dc5e1fc5236fab
+				-aa
+					.git\objects\aa\20c6df8fcadf2390d2f5ef0b972469ab1890ec
+				-ab
+					.git\objects\ab\63ce15d7f724a4279addae400c4b725e894501
+				-b1
+					.git\objects\b1\a15615891628042568fbe248ac342b2b4bb699
+				-b3
+					.git\objects\b3\1c4776fe672dd02c082998d442173b91a274e6
+				-b6
+					.git\objects\b6\698945a08af3b6ee53e5ce0368fd0027593821
+				-b7
+					.git\objects\b7\a42da086b88ae270cbf41b8aee2b2bbe84037f
+				-b9
+					.git\objects\b9\6021c248852685718edfa0a8f70b655333637b
+					.git\objects\b9\d6bd92f5f09e195d6bc19536500b6494dd2b75
+				-bc
+					.git\objects\bc\a534c3a0c0ea1c78179b5171f8bcbeb89d8837
+					.git\objects\bc\cd0984647ee9232c2a769b14697d1be15a8026
+				-be
+					.git\objects\be\4af0d9132ff836d7a0bc71dbfe6e076978a8d6
+				-bf
+					.git\objects\bf\a56aa1dd31b3cc7b8560ceabf34def6de5466d
+				-c1
+					.git\objects\c1\2347b01490ace0b2e99f78d7bffaa8f252bd61
+					.git\objects\c1\44b67a144e83ec9d07b5b1690c7dac850eebf9
+				-c2
+					.git\objects\c2\bfba4a271548ef6f1e8f13c0e4700c482c59fe
+				-c3
+					.git\objects\c3\8d59ca4722327232ee3d2a8688029d465cd8ed
+				-c9
+					.git\objects\c9\f3326b81e2aba34a369b6a186cf5d9f3160540
+				-cc
+					.git\objects\cc\d439363dba20b9ee7f0fcf9357d71f4ef6366d
+				-cd
+					.git\objects\cd\67e780d1d2dde9b8f120960b981d93559818ed
+					.git\objects\cd\e1b4c8524a286570a342b9c2930f1133ad1bf4
+				-cf
+					.git\objects\cf\48a67099b50503417fdb579e53c1290fdd39e4
+				-d6
+					.git\objects\d6\61de4d2b051f8d975fb5fada9c179ce3ddc687
+				-da
+					.git\objects\da\0ab9a989b72f0ff4b08aa6a2fff7b964f64717
+				-db
+					.git\objects\db\a463d0ac186d7e17919cdaf07018cc9fec4679
+				-dc
+					.git\objects\dc\9f0b7705f74937169946c3cf898801e11fd543
+				-df
+					.git\objects\df\09689bfcdcc8288ebf1454065a9b0a59ec22f4
+				-e5
+					.git\objects\e5\3027fddbb1e5b360a5de7a9dc1c30ca85e002c
+					.git\objects\e5\57d8f384e599597bdb2180e6d06bc72c6f8ca7
+				-e6
+					.git\objects\e6\9de29bb2d1d6434b8b29ae775ad8c2e48c5391
+					.git\objects\e6\fadb828b686cf7c83155db226299fed212d1a6
+				-ed
+					.git\objects\ed\60f84db81699369867ecad44442157260f0300
+				-ef
+					.git\objects\ef\490bd6de5dbe7ae53b71518cf48a29e987a964
+				-f1
+					.git\objects\f1\0540aecf7d39f1279544f22e5844dabe40eb9f
+				-f4
+					.git\objects\f4\3f070d84765574bf15f41b48dd0c990f3c3d1d
+				-fa
+					.git\objects\fa\19747d15579558045aef157cb131a38d9e0795
+				-fc
+					.git\objects\fc\015bedb310ad592ee329fc08a6a5d99dc56730
+					.git\objects\fc\c6b6f544361ad17599f13ded1349bdc30ae121
+				-fe
+					.git\objects\fe\62dc6beb11c20db7f359a8e4a6795bd9731203
+			-refs
+				-heads
+					.git\refs\heads\master
+				-remotes
+					-origin
+						.git\refs\remotes\origin\master
+			.git\config
+			.git\description
+			.git\FETCH_HEAD
+			.git\HEAD
+			.git\index
+		-CPU
+			CPU\CPU.f
+		-GPIO
+			GPIO\GPIO.f
+			GPIO\GPIO_A.f
+		+Target
+			+Arm
+				+STM32F407
+					+ADC
+						Target\Arm\STM32F407\ADC\ADC.f
+					+bxCAN
+						Target\Arm\STM32F407\bxCAN\bxCAN.f
+					+CPU
+						Target\Arm\STM32F407\CPU\CPU.f
+					-CRYP
+						Target\Arm\STM32F407\CRYP\CRYP.f
+					-DAC
+						Target\Arm\STM32F407\DAC\DAC.f
+					-DBG
+						Target\Arm\STM32F407\DBG\DBG.f
+					-DCMI
+						Target\Arm\STM32F407\DCMI\DCMI.f
+					-DMA
+						Target\Arm\STM32F407\DMA\DMA.f
+					+EtherNet
+						Target\Arm\STM32F407\EtherNet\EtherNet_Tree.f
+						Target\Arm\STM32F407\EtherNet\EtherNet.f
+					-EXTI
+						Target\Arm\STM32F407\EXTI\EXTI.f
+					-FSMC
+						Target\Arm\STM32F407\FSMC\FSMC.f
+					-GPIO
+						Target\Arm\STM32F407\GPIO\GPIO.f
+						Target\Arm\STM32F407\GPIO\GPIO_A.f
+						Target\Arm\STM32F407\GPIO\GPIO_Tree.f
+						Target\Arm\STM32F407\GPIO\GPIO_I_Tree.f
+						Target\Arm\STM32F407\GPIO\GPIO_I.f
+						Target\Arm\STM32F407\GPIO\GPIO_H_Tree.f
+						Target\Arm\STM32F407\GPIO\GPIO_H.f
+						Target\Arm\STM32F407\GPIO\GPIO_G_Tree.f
+						Target\Arm\STM32F407\GPIO\GPIO_G.f
+						Target\Arm\STM32F407\GPIO\GPIO_F_Tree.f
+						Target\Arm\STM32F407\GPIO\GPIO_F.f
+						Target\Arm\STM32F407\GPIO\GPIO_E_Tree.f
+						Target\Arm\STM32F407\GPIO\GPIO_E.f
+						Target\Arm\STM32F407\GPIO\GPIO_D_Tree.f
+						Target\Arm\STM32F407\GPIO\GPIO_D.f
+						Target\Arm\STM32F407\GPIO\GPIO_C_Tree.f
+						Target\Arm\STM32F407\GPIO\GPIO_C.f
+						Target\Arm\STM32F407\GPIO\GPIO_B_Tree.f
+						Target\Arm\STM32F407\GPIO\GPIO_B.f
+						Target\Arm\STM32F407\GPIO\GPIO_A_Tree.f
+					-HASH
+						Target\Arm\STM32F407\HASH\HASH.f
+					-I2C
+						Target\Arm\STM32F407\I2C\I2C.f
+					-ID
+						Target\Arm\STM32F407\ID\ID.f
+					-IWDG
+						Target\Arm\STM32F407\IWDG\IWDG.f
+					-OTG
+						-OTG_FS
+							Target\Arm\STM32F407\OTG\OTG_FS\OTG_FS.f
+						-OTG_HS
+							Target\Arm\STM32F407\OTG\OTG_HS\OTG_HS.f
+					-PWR
+						Target\Arm\STM32F407\PWR\PWR.f
+					+RCC
+						Target\Arm\STM32F407\RCC\RCC.f
+						Target\Arm\STM32F407\RCC\RCC_Tree.f
+					-RNG
+						Target\Arm\STM32F407\RNG\RNG.f
+					+RTC
+						Target\Arm\STM32F407\RTC\RTC.f
+					-SDIO
+						Target\Arm\STM32F407\SDIO\SDIO.f
+					-SPI
+						Target\Arm\STM32F407\SPI\SPI.f
+					-SYSCFG
+						Target\Arm\STM32F407\SYSCFG\SYSCFG.f
+					-TIM
+						Target\Arm\STM32F407\TIM\TIM.f
+						Target\Arm\STM32F407\TIM\TIM1.f
+						Target\Arm\STM32F407\TIM\TIM1_Tree.f
+						Target\Arm\STM32F407\TIM\TIM10.f
+						Target\Arm\STM32F407\TIM\TIM11.f
+						Target\Arm\STM32F407\TIM\TIM12.f
+						Target\Arm\STM32F407\TIM\TIM13.f
+						Target\Arm\STM32F407\TIM\TIM14.f
+						Target\Arm\STM32F407\TIM\TIM2.f
+						Target\Arm\STM32F407\TIM\TIM3.f
+						Target\Arm\STM32F407\TIM\TIM4.f
+						Target\Arm\STM32F407\TIM\TIM5.f
+						Target\Arm\STM32F407\TIM\TIM6.f
+						Target\Arm\STM32F407\TIM\TIM7.f
+						Target\Arm\STM32F407\TIM\TIM8.f
+						Target\Arm\STM32F407\TIM\TIM9.f
+						Target\Arm\STM32F407\TIM\TIM9_Tree.f
+						Target\Arm\STM32F407\TIM\TIM8_Tree.f
+						Target\Arm\STM32F407\TIM\TIM7_Tree.f
+						Target\Arm\STM32F407\TIM\TIM6_Tree.f
+						Target\Arm\STM32F407\TIM\TIM5_Tree.f
+						Target\Arm\STM32F407\TIM\TIM4_Tree.f
+						Target\Arm\STM32F407\TIM\TIM3_Tree.f
+						Target\Arm\STM32F407\TIM\TIM2_Tree.f
+						Target\Arm\STM32F407\TIM\TIM14_Tree.f
+						Target\Arm\STM32F407\TIM\TIM13_Tree.f
+						Target\Arm\STM32F407\TIM\TIM12_Tree.f
+						Target\Arm\STM32F407\TIM\TIM11_Tree.f
+						Target\Arm\STM32F407\TIM\TIM10_Tree.f
+						Target\Arm\STM32F407\TIM\TIM_Tree.f
+					-USART
+						Target\Arm\STM32F407\USART\USART.f
+						Target\Arm\STM32F407\USART\USART1.f
+						Target\Arm\STM32F407\USART\USART2.f
+						Target\Arm\STM32F407\USART\USART3.f
+						Target\Arm\STM32F407\USART\USART4.f
+						Target\Arm\STM32F407\USART\USART4_Tree.f
+						Target\Arm\STM32F407\USART\USART3_Tree.f
+						Target\Arm\STM32F407\USART\USART2_Tree.f
+						Target\Arm\STM32F407\USART\USART1_Tree.f
+						Target\Arm\STM32F407\USART\USART_Tree.f
+			Target\Target.f
+			Target\Target_Tree.f
+		.gitattributes
+		.gitignore
+		PopupWindow.f
+		RESOURCES.F
+		SEE_REGISTER.bak
+		See_Register.f
+		See_Register.ppr
+		see_register_20131218am1058.JPG
+		see_register_20131218pm0537.JPG
+		see_register_20131218pm1610.JPG
+		see_register_20131219am0019.JPG
+		see_register_20131219am0026.JPG
+		see_register_20131224am0930.JPG
+		see_register_20131227am0152.JPG
+		see_register_20131227am1022.JPG
+		Tree_Data.f
+		treeview.f
+[Open project files]
+0=Tree_Data.f
+1=Target\Target.f
+2=Target\Arm\STM32F407\USART\USART.f
+3=Target\Arm\STM32F407\USART\USART_Tree.f
+4=Target\Arm\STM32F407\USART\USART1_Tree.f
+5=Target\Arm\STM32F407\USART\USART1.f
+6=Target\Arm\STM32F407\USART\USART4.f
+7=Target\Arm\STM32F407\USART\USART3.f
+8=Target\Arm\STM32F407\USART\USART2.f
+9=Target\Arm\STM32F407\TIM\TIM9.f
+10=Target\Arm\STM32F407\USART\USART3_Tree.f
+11=Target\Arm\STM32F407\USART\USART4_Tree.f
+12=Target\Arm\STM32F407\USART\USART2_Tree.f
+13=Target\Arm\STM32F407\GPIO\GPIO.f
+14=Target\Arm\STM32F407\GPIO\GPIO_A.f
+15=Target\Arm\STM32F407\RCC\RCC.f
+16=Target\Arm\STM32F407\ADC\ADC.f
+17=Target\Arm\STM32F407\CPU\CPU.f
+18=Target\Arm\STM32F407\GPIO\GPIO_Tree.f
+19=Target\Target_Tree.f
+20=Target\Arm\STM32F407\GPIO\GPIO_I.f
+21=Target\Arm\STM32F407\GPIO\GPIO_H.f
+22=Target\Arm\STM32F407\GPIO\GPIO_G.f
+23=Target\Arm\STM32F407\GPIO\GPIO_F.f
+24=Target\Arm\STM32F407\GPIO\GPIO_E.f
+25=Target\Arm\STM32F407\GPIO\GPIO_D.f
+26=Target\Arm\STM32F407\GPIO\GPIO_C.f
+27=Target\Arm\STM32F407\GPIO\GPIO_B.f
+28=Target\Arm\STM32F407\GPIO\GPIO_A_Tree.f
+29=Target\Arm\STM32F407\GPIO\GPIO_B_Tree.f
+30=Target\Arm\STM32F407\GPIO\GPIO_C_Tree.f
+31=Target\Arm\STM32F407\GPIO\GPIO_D_Tree.f
+32=Target\Arm\STM32F407\GPIO\GPIO_E_Tree.f
+33=Target\Arm\STM32F407\GPIO\GPIO_F_Tree.f
+34=Target\Arm\STM32F407\GPIO\GPIO_G_Tree.f
+35=Target\Arm\STM32F407\GPIO\GPIO_H_Tree.f
+36=Target\Arm\STM32F407\GPIO\GPIO_I_Tree.f
+37=Target\Arm\STM32F407\RCC\RCC_Tree.f
+38=PopupWindow.f
+39=RESOURCES.F
+40=treeview.f
+41=See_Register.f
+42=Target\Arm\STM32F407\Ethernet\Ethernet.f
+43=Target\Arm\STM32F407\EtherNet\EtherNet_Tree.f
+[Selected Project Files]
+Main=
+Selected=Tree_Data.f
+[Tree_Data.f]
+TopLine=11
+Caret=6,69
+[Target\Target.f]
+TopLine=1
+Caret=45,9
+[Target\Arm\STM32F407\USART\USART.f]
+TopLine=1
+Caret=1,1
+[Target\Arm\STM32F407\USART\USART_Tree.f]
+TopLine=1
+Caret=1,10
+[Target\Arm\STM32F407\USART\USART1_Tree.f]
+TopLine=31
+Caret=10,64
+[Target\Arm\STM32F407\USART\USART1.f]
+TopLine=1
+Caret=1,1
+[Target\Arm\STM32F407\USART\USART4.f]
+TopLine=1
+Caret=10,3
+[Target\Arm\STM32F407\USART\USART3.f]
+TopLine=1
+Caret=10,9
+[Target\Arm\STM32F407\USART\USART2.f]
+TopLine=1
+Caret=10,4
+[Target\Arm\STM32F407\TIM\TIM9.f]
+TopLine=1
+Caret=1,1
+[Target\Arm\STM32F407\USART\USART3_Tree.f]
+TopLine=32
+Caret=19,58
+[Target\Arm\STM32F407\USART\USART4_Tree.f]
+TopLine=32
+Caret=19,58
+[Target\Arm\STM32F407\USART\USART2_Tree.f]
+TopLine=7
+Caret=19,58
+[Target\Arm\STM32F407\GPIO\GPIO.f]
+TopLine=1
+Caret=39,1
+[Target\Arm\STM32F407\GPIO\GPIO_A.f]
+TopLine=1
+Caret=1,3
+[Target\Arm\STM32F407\RCC\RCC.f]
+TopLine=1
+Caret=1,1
+[Target\Arm\STM32F407\ADC\ADC.f]
+TopLine=1
+Caret=22,1
+[Target\Arm\STM32F407\CPU\CPU.f]
+TopLine=1
+Caret=1,1
+[Target\Arm\STM32F407\GPIO\GPIO_Tree.f]
+TopLine=1
+Caret=1,3
+[Target\Target_Tree.f]
+TopLine=1
+Caret=1,7
+[Target\Arm\STM32F407\GPIO\GPIO_I.f]
+TopLine=1
+Caret=27,12
+[Target\Arm\STM32F407\GPIO\GPIO_H.f]
+TopLine=1
+Caret=27,12
+[Target\Arm\STM32F407\GPIO\GPIO_G.f]
+TopLine=1
+Caret=27,12
+[Target\Arm\STM32F407\GPIO\GPIO_F.f]
+TopLine=1
+Caret=27,12
+[Target\Arm\STM32F407\GPIO\GPIO_E.f]
+TopLine=1
+Caret=27,12
+[Target\Arm\STM32F407\GPIO\GPIO_D.f]
+TopLine=1
+Caret=27,12
+[Target\Arm\STM32F407\GPIO\GPIO_C.f]
+TopLine=1
+Caret=27,12
+[Target\Arm\STM32F407\GPIO\GPIO_B.f]
+TopLine=1
+Caret=27,12
+[Target\Arm\STM32F407\GPIO\GPIO_A_Tree.f]
+TopLine=1
+Caret=40,16
+[Target\Arm\STM32F407\GPIO\GPIO_B_Tree.f]
+TopLine=1
+Caret=40,16
+[Target\Arm\STM32F407\GPIO\GPIO_C_Tree.f]
+TopLine=1
+Caret=40,16
+[Target\Arm\STM32F407\GPIO\GPIO_D_Tree.f]
+TopLine=1
+Caret=40,16
+[Target\Arm\STM32F407\GPIO\GPIO_E_Tree.f]
+TopLine=1
+Caret=40,16
+[Target\Arm\STM32F407\GPIO\GPIO_F_Tree.f]
+TopLine=1
+Caret=40,16
+[Target\Arm\STM32F407\GPIO\GPIO_G_Tree.f]
+TopLine=1
+Caret=40,16
+[Target\Arm\STM32F407\GPIO\GPIO_H_Tree.f]
+TopLine=1
+Caret=40,16
+[Target\Arm\STM32F407\GPIO\GPIO_I_Tree.f]
+TopLine=10
+Caret=35,10
+[Target\Arm\STM32F407\RCC\RCC_Tree.f]
+TopLine=21
+Caret=1,97
+[PopupWindow.f]
+TopLine=1
+Caret=1,1
+[RESOURCES.F]
+TopLine=307
+Caret=1,307
+[treeview.f]
+TopLine=358
+Caret=1,404
+[See_Register.f]
+TopLine=103
+Caret=22,171
+[Target\Arm\STM32F407\Ethernet\Ethernet.f]
+TopLine=13
+Caret=29,64
+[Target\Arm\STM32F407\EtherNet\EtherNet_Tree.f]
+TopLine=46
+Caret=28,92

@@ -1,0 +1,106 @@
+\ Forthuino Board II
+\ ISP, IAP
+create ISP_Receive_Buffer 257 allot
+create ISP_Send_Buffer    257 allot
+defer ComInit
+defer ComKey
+defer ComEmit
+
+fload WINSER.f  \ 根據 COM 指向 ,範例為 com2
+' Com3Init is ComInit
+' Com3Key  is ComKey
+' Com3Emit is ComEmit
+
+: STM_Link
+  cr ." STM Link Start."
+  0x7f ComEmit
+  ;
+
+
+: ACK/NACK?
+  Comkey 0x79 =
+  ;
+
+: begin_STM_Link
+  ComInit
+  cr ." STM Link begin."
+  STM_Link
+  ACK/NACK?
+  if
+    cr ." STM Link OK!!!"
+  then
+  ;
+
+
+
+: Receive_Data_Lenth ( -- len )
+  Comkey
+  1 +
+  dup ISP_Receive_Buffer c!
+  ;
+
+: Receive_Data ( count -- )
+   Comkey swap ISP_Receive_Buffer 1 + + c!
+  ;
+
+: Send_Address_with_checksum
+  ISP_Address c@ dup ComEmit
+  ISP_Address c@ dup ComEmit
+  ISP_Address c@ dup ComEmit
+  ISP_Address c@ dup ComEmit
+  xor xor xor ComEmit
+  ;
+
+: Send_Read_Bytes_with_checksum
+  ISP_Receive_Buffer c@  dup ComEmit
+  0xFF xor ComEmit
+  ;
+
+: Send_Write_Byte&Data_with_checksum
+  ISP_Send_Buffer c@  dup dup ComEmit
+  0 do
+    ISP_Send_Buffer c@  dup ComEmit xor
+  loop
+  ComEmit
+  ;
+
+\ Get command: host side of ISP of Forthuino Board II
+
+: Start_Get_command
+   0x00 ComEmit
+   0xFF ComEmit
+   ;
+
+: End_of_Get_Command ( -- )
+  Hex
+  cr s"                                       number :" ISP_Receive_Buffer      c@ u.
+  cr s"                           Bootloader version :" ISP_Receive_Buffer  1 + c@ u.
+  cr s"                             Get command Code :" ISP_Receive_Buffer  2 + c@ u.
+  cr s"                          Get ID command Code :" ISP_Receive_Buffer  3 + c@ u.
+  cr s"                     Read Memory command Code :" ISP_Receive_Buffer  4 + c@ u.
+  cr s"                              Go command Code :" ISP_Receive_Buffer  5 + c@ u.
+  cr s"                    Write Memory command Code :" ISP_Receive_Buffer  6 + c@ u.
+  cr s" Erase command or Extended Erase command Code :" ISP_Receive_Buffer  7 + c@ u.
+  cr s"                   Write Protect command Code :" ISP_Receive_Buffer  8 + c@ u.
+  cr s"                 Write Unprotect command Code :" ISP_Receive_Buffer  9 + c@ u.
+  cr s"                 Readout Protect command Code :" ISP_Receive_Buffer 10 + c@ u.
+  cr s"               Readout Unprotect command Code :" ISP_Receive_Buffer 11 + c@ u.
+  DECIMAL
+ ;
+
+: Get_command
+  Start_Get_command
+  ACK/NACK?
+  if
+    Receive_Data_Lenth
+    0 do
+     i Receive_Data
+    loop
+    ACK/NACK?
+    if
+      s" Get__command is Over !"
+    then
+  then
+  End_of_Get_Command
+  ;
+

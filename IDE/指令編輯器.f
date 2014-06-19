@@ -1,0 +1,356 @@
+\ NOTE! THIS IS A TEST FILE ONLY, NOT INTENDED TO BE EDITED!
+\ MAKE ANY CHANGES OR CORRECTIONS FROM THE FORM CODE EDITOR OR THE .FRM FILE ONLY
+
+\ 指令磅輯器.FRM
+\- textbox needs excontrols.f
+
+
+:Object Form1                <Super DialogWindow
+
+Font WinFont           \ default font
+' 2drop value WmCommand-Func   \ function pointer for WM_COMMAND
+ColorObject FrmColor      \ the background color 
+
+ComboBox 指令清單
+TextBox TextBox1
+TextBox TextBox2
+TextBox TextBox3
+ComboBox Arg1
+TextBox TextBox4
+TextBox TextBox5
+ComboBox Arg2
+ComboBox Arg3
+ComboBox Arg4
+PushButton Button1
+ComboBox bit31
+ComboBox bit30
+ComboBox bit29
+ComboBox bit28
+ComboBox bit27
+ComboBox bit26
+ComboBox bit25
+ComboBox bit24
+Label Label1
+Label Label2
+ComboBox bit23
+ComboBox bit22
+ComboBox bit21
+ComboBox bit20
+ComboBox bit19
+ComboBox bit18
+ComboBox bit17
+ComboBox bit16
+RadioButton Radio1
+RadioButton Radio2
+RadioButton Radio3
+ComboBox bit15
+ComboBox bit14
+ComboBox bit13
+ComboBox bit12
+ComboBox bit11
+ComboBox bit10
+ComboBox bit9
+ComboBox bit8
+RadioButton Radio4
+ComboBox bit7
+ComboBox bit6
+ComboBox bit5
+ComboBox bit4
+ComboBox bit3
+ComboBox bit2
+ComboBox bit1
+ComboBox bit0
+Label Label3
+Label Label4
+Label Label5
+
+
+:M ClassInit:   ( -- )
+                ClassInit: super
+                \ Insert your code here, e.g initialize variables, values etc.
+                ;M
+
+:M WindowStyle:  ( -- style )
+                WS_POPUPWINDOW WS_DLGFRAME or 
+                ;M
+
+\ N.B if this form is a modal form a non-zero parent must be set
+:M ParentWindow:  ( -- hwndparent | 0 if no parent )
+                hWndParent
+                ;M
+
+:M WindowTitle: ( -- ztitle )
+                z" 指令編輯器"
+                ;M
+
+:M StartSize:   ( -- width height )
+                662 569 
+                ;M
+
+:M StartPos:    ( -- x y )
+                350  175
+                ;M
+
+:M Close:        ( -- )
+                \ Insert your code here, e.g any data entered in form that needs to be saved
+                Close: super
+                ;M
+
+:M WM_COMMAND   ( h m w l -- res )
+                dup 0=      \ id is from a menu if lparam is zero
+                if        over LOWORD CurrentMenu if dup DoMenu: CurrentMenu then
+                          CurrentPopup if dup DoMenu: CurrentPopup then drop
+                else	  over LOWORD ( ID ) self   \ object address on stack
+                          WMCommand-Func ?dup    \ must not be zero
+                          if        execute
+                          else    2drop   \ drop ID and object address
+                          then
+                then      0 ;M
+
+:M SetCommand:  ( cfa -- )  \ set WMCommand function
+                to WMCommand-Func
+                ;M
+
+:M On_Init:     ( -- )
+                s" MS Sans Serif" SetFaceName: WinFont
+                8 Width: WinFont
+                Create: WinFont 
+
+                \ set form color to system color
+                COLOR_BTNFACE Call GetSysColor NewColor: FrmColor
+
+
+                self Start: 指令清單
+                555 1 103 883 Move: 指令清單
+                Handle: Winfont SetFont: 指令清單
+
+                self Start: TextBox1
+                3 38 100 25 Move: TextBox1
+                Handle: Winfont SetFont: TextBox1
+
+                self Start: TextBox2
+                118 40 47 23 Move: TextBox2
+                Handle: Winfont SetFont: TextBox2
+
+                self Start: TextBox3
+                187 42 55 21 Move: TextBox3
+                Handle: Winfont SetFont: TextBox3
+
+                self Start: Arg1
+                122 75 46 22 Move: Arg1
+                Handle: Winfont SetFont: Arg1
+
+                self Start: TextBox4
+                263 42 48 22 Move: TextBox4
+                Handle: Winfont SetFont: TextBox4
+
+                self Start: TextBox5
+                326 42 44 22 Move: TextBox5
+                Handle: Winfont SetFont: TextBox5
+
+                self Start: Arg2
+                190 74 49 21 Move: Arg2
+                Handle: Winfont SetFont: Arg2
+
+                self Start: Arg3
+                265 75 46 22 Move: Arg3
+                Handle: Winfont SetFont: Arg3
+
+                self Start: Arg4
+                327 74 51 22 Move: Arg4
+                Handle: Winfont SetFont: Arg4
+
+                self Start: Button1
+                370 520 60 25 Move: Button1
+                Handle: Winfont SetFont: Button1
+                s" 加入" SetText: Button1
+
+                self Start: bit31
+                9 159 89 25 Move: bit31
+                Handle: Winfont SetFont: bit31
+
+                self Start: bit30
+                106 159 100 25 Move: bit30
+                Handle: Winfont SetFont: bit30
+
+                self Start: bit29
+                213 157 100 25 Move: bit29
+                Handle: Winfont SetFont: bit29
+
+                self Start: bit28
+                323 158 100 25 Move: bit28
+                Handle: Winfont SetFont: bit28
+
+                self Start: bit27
+                9 191 90 25 Move: bit27
+                Handle: Winfont SetFont: bit27
+
+                self Start: bit26
+                107 187 100 25 Move: bit26
+                Handle: Winfont SetFont: bit26
+
+                self Start: bit25
+                216 187 100 25 Move: bit25
+                Handle: Winfont SetFont: bit25
+
+                self Start: bit24
+                328 188 100 25 Move: bit24
+                Handle: Winfont SetFont: bit24
+
+                self Start: Label1
+                7 1 100 23 Move: Label1
+                Handle: Winfont SetFont: Label1
+                s" ASM" SetText: Label1
+
+                self Start: Label2
+                2 113 100 25 Move: Label2
+                Handle: Winfont SetFont: Label2
+                s" DISASM" SetText: Label2
+
+                self Start: bit23
+                4 246 100 25 Move: bit23
+                Handle: Winfont SetFont: bit23
+
+                self Start: bit22
+                112 247 100 25 Move: bit22
+                Handle: Winfont SetFont: bit22
+
+                self Start: bit21
+                219 246 100 25 Move: bit21
+                Handle: Winfont SetFont: bit21
+
+                self Start: bit20
+                330 244 100 25 Move: bit20
+                Handle: Winfont SetFont: bit20
+
+                self Start: bit19
+                4 279 100 25 Move: bit19
+                Handle: Winfont SetFont: bit19
+
+                self Start: bit18
+                113 279 100 25 Move: bit18
+                Handle: Winfont SetFont: bit18
+
+                self Start: bit17
+                220 278 100 25 Move: bit17
+                Handle: Winfont SetFont: bit17
+
+                self Start: bit16
+                331 277 100 25 Move: bit16
+                Handle: Winfont SetFont: bit16
+
+                IDIGNORE SetID: Radio1
+                self Start: Radio1
+                13 134 100 25 Move: Radio1
+                Handle: Winfont SetFont: Radio1
+                s" Radio1" SetText: Radio1
+
+                self Start: Radio2
+                13 220 100 25 Move: Radio2
+                Handle: Winfont SetFont: Radio2
+                s" Radio2" SetText: Radio2
+
+                self Start: Radio3
+                8 311 100 25 Move: Radio3
+                Handle: Winfont SetFont: Radio3
+                s" Radio3" SetText: Radio3
+
+                self Start: bit15
+                10 344 98 25 Move: bit15
+                Handle: Winfont SetFont: bit15
+
+                self Start: bit14
+                117 343 100 25 Move: bit14
+                Handle: Winfont SetFont: bit14
+
+                self Start: bit13
+                221 342 100 25 Move: bit13
+                Handle: Winfont SetFont: bit13
+
+                self Start: bit12
+                326 341 100 25 Move: bit12
+                Handle: Winfont SetFont: bit12
+
+                self Start: bit11
+                11 375 100 25 Move: bit11
+                Handle: Winfont SetFont: bit11
+
+                self Start: bit10
+                117 373 100 25 Move: bit10
+                Handle: Winfont SetFont: bit10
+
+                self Start: bit9
+                220 371 100 25 Move: bit9
+                Handle: Winfont SetFont: bit9
+
+                self Start: bit8
+                326 370 100 25 Move: bit8
+                Handle: Winfont SetFont: bit8
+
+                self Start: Radio4
+                12 408 100 25 Move: Radio4
+                Handle: Winfont SetFont: Radio4
+                s" Radio4" SetText: Radio4
+
+                self Start: bit7
+                13 440 100 25 Move: bit7
+                Handle: Winfont SetFont: bit7
+
+                self Start: bit6
+                118 437 100 25 Move: bit6
+                Handle: Winfont SetFont: bit6
+
+                self Start: bit5
+                226 437 100 25 Move: bit5
+                Handle: Winfont SetFont: bit5
+
+                self Start: bit4
+                333 436 100 25 Move: bit4
+                Handle: Winfont SetFont: bit4
+
+                self Start: bit3
+                13 470 100 25 Move: bit3
+                Handle: Winfont SetFont: bit3
+
+                IDRETRY SetID: bit2
+                self Start: bit2
+                120 467 100 25 Move: bit2
+                Handle: Winfont SetFont: bit2
+
+                self Start: bit1
+                225 464 100 25 Move: bit1
+                Handle: Winfont SetFont: bit1
+
+                self Start: bit0
+                331 464 100 25 Move: bit0
+                Handle: Winfont SetFont: bit0
+
+                self Start: Label3
+                173 41 10 23 Move: Label3
+                Handle: Winfont SetFont: Label3
+                s" ," SetText: Label3
+
+                self Start: Label4
+                247 40 14 21 Move: Label4
+                Handle: Winfont SetFont: Label4
+                s" ," SetText: Label4
+
+                self Start: Label5
+                314 46 17 20 Move: Label5
+                Handle: Winfont SetFont: Label5
+                s" ," SetText: Label5
+
+                ;M
+
+:M On_Paint:    ( -- )
+                0 0 GetSize: self Addr: FrmColor FillArea: dc
+                ;M
+
+:M On_Done:    ( -- )
+                Delete: WinFont
+                \ Insert your code here, e.g delete fonts, any bitmaps etc.
+                On_Done: super
+                ;M
+
+;Object
+Start: Form1

@@ -1,0 +1,4 @@
+: IWDG_KR   0x00 IWDG ;
+: IWDG_PR   0x04 IWDG ;
+: IWDG_RLR  0x08 IWDG ;
+: IWDG_SR   0x0C IWDG ; 

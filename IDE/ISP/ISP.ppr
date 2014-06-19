@@ -1,0 +1,153 @@
+[Config]
+Compilator.SaveAll=0
+Compilator.Capture=0
+Compilator.HideOutput=0
+Compilator.LogType=0
+DefaultDir=E:\www\Forth\ezForth\IDE\ISP
+DefaultCPIndex=0
+LogtoEnd=1
+DontOpen=0
+AbsolutePath=0
+FileFormat=0
+ProjectFilesOnly=0
+Extensions=*.*
+[Project tree]
+ISP
+	+ISP
+		-.git
+			-hooks
+				.git\hooks\README.sample
+			-info
+				.git\info\exclude
+			-logs
+				-refs
+					-heads
+						.git\logs\refs\heads\master
+					-remotes
+						-origin
+							.git\logs\refs\remotes\origin\master
+				.git\logs\HEAD
+			-objects
+				-19
+					.git\objects\19\4a06cef2fc4650ca2b9aa5387650301e53beed
+				-28
+					.git\objects\28\f56ba03e16e463d1cb0e7c455472ab6c47d4ff
+				-41
+					.git\objects\41\2eeda78dc9de1186c2e0e1526764af82ab3431
+				-42
+					.git\objects\42\26369fdc6ccfdc8ed74ff803dec1c76f9b3aa2
+				-54
+					.git\objects\54\4785430ed615b568f5ec6a6809302d8d22df8f
+				-62
+					.git\objects\62\6835a5661b0fc38234b849151caf12e2bfc77e
+				-6e
+					.git\objects\6e\461f73f699baa81b85ce6599d8096ccabfbd82
+				-8d
+					.git\objects\8d\ebcacf599b5dc0c0fdbd7d1e17ba52bf5de121
+				-aa
+					.git\objects\aa\393b3287fc30bd67b3d0e48b38a48599a6c569
+				-b5
+					.git\objects\b5\dc11957960fafb05ef0e69019041de575e86c1
+				-b9
+					.git\objects\b9\d6bd92f5f09e195d6bc19536500b6494dd2b75
+				-c6
+					.git\objects\c6\26bdd0f8ff39d391e47025ac6a0862d5d6d404
+				-c9
+					.git\objects\c9\bb2bfd57f7071dd8511db72d364a2773dbb919
+				-cb
+					.git\objects\cb\51f254f924a8db0d032949781948531382b4ea
+				-d3
+					.git\objects\d3\4d35f2d21f0fb66556da0dca7ca75792e0b0e3
+				-dc
+					.git\objects\dc\9bf1ab81c4639367c5c226a17961c051df64f2
+				-e1
+					.git\objects\e1\f1151877684eed00fe97155320a8c4fea6eb2b
+				-ed
+					.git\objects\ed\5e2ee08fd4cc49a1a536cf4052deceb76c24b4
+				-f7
+					.git\objects\f7\a620d769201e25cd72ebf81cb8ba3d85759dfd
+				-f9
+					.git\objects\f9\950f9a85ff09d9f97a8f85bb5d49e673aff8f3
+				-ff
+					.git\objects\ff\42e36737a3181b483c1460e31df6853d6c1471
+			-refs
+				-heads
+					.git\refs\heads\master
+				-remotes
+					-origin
+						.git\refs\remotes\origin\master
+			.git\config
+			.git\description
+			.git\FETCH_HEAD
+			.git\HEAD
+			.git\index
+		+Target
+			+Arm
+				+STM32F407
+					Target\Arm\STM32F407\Erase_Memory_command.f
+					Target\Arm\STM32F407\Extended_Erase_Memory_command.f
+					Target\Arm\STM32F407\Get_command.f
+					Target\Arm\STM32F407\Get_ID_command.f
+					Target\Arm\STM32F407\Get_Version&Read_Protection_Status_command.f
+					Target\Arm\STM32F407\Go_command.f
+					Target\Arm\STM32F407\Read_Memory_command.f
+					Target\Arm\STM32F407\Readout_Protect_command.f
+					Target\Arm\STM32F407\Readout_UnProtect_command.f
+					Target\Arm\STM32F407\Write_Memory_command.f
+					Target\Arm\STM32F407\Write_Protect_command.f
+					Target\Arm\STM32F407\Write_Unprotect_command.f
+		.gitattributes
+		.gitignore
+		ISP.ppr
+[Open project files]
+0=Target\Arm\STM32F407\Erase_Memory_command.f
+1=Target\Arm\STM32F407\Extended_Erase_Memory_command.f
+2=Target\Arm\STM32F407\Get_command.f
+3=Target\Arm\STM32F407\Get_ID_command.f
+4=Target\Arm\STM32F407\Get_Version&Read_Protection_Status_command.f
+5=Target\Arm\STM32F407\Go_command.f
+6=Target\Arm\STM32F407\Read_Memory_command.f
+7=Target\Arm\STM32F407\Readout_Protect_command.f
+8=Target\Arm\STM32F407\Readout_UnProtect_command.f
+9=Target\Arm\STM32F407\Write_Memory_command.f
+10=Target\Arm\STM32F407\Write_Protect_command.f
+11=Target\Arm\STM32F407\Write_Unprotect_command.f
+[Selected Project Files]
+Main=
+Selected=Target\Arm\STM32F407\Erase_Memory_command.f
+[Target\Arm\STM32F407\Erase_Memory_command.f]
+TopLine=1
+Caret=1,4
+[Target\Arm\STM32F407\Extended_Erase_Memory_command.f]
+TopLine=1
+Caret=1,4
+[Target\Arm\STM32F407\Get_command.f]
+TopLine=1
+Caret=1,5
+[Target\Arm\STM32F407\Get_ID_command.f]
+TopLine=1
+Caret=1,5
+[Target\Arm\STM32F407\Get_Version&Read_Protection_Status_command.f]
+TopLine=1
+Caret=1,5
+[Target\Arm\STM32F407\Go_command.f]
+TopLine=1
+Caret=1,5
+[Target\Arm\STM32F407\Read_Memory_command.f]
+TopLine=1
+Caret=1,4
+[Target\Arm\STM32F407\Readout_Protect_command.f]
+TopLine=1
+Caret=1,4
+[Target\Arm\STM32F407\Readout_UnProtect_command.f]
+TopLine=1
+Caret=1,4
+[Target\Arm\STM32F407\Write_Memory_command.f]
+TopLine=1
+Caret=1,4
+[Target\Arm\STM32F407\Write_Protect_command.f]
+TopLine=1
+Caret=1,4
+[Target\Arm\STM32F407\Write_Unprotect_command.f]
+TopLine=1
+Caret=26,4

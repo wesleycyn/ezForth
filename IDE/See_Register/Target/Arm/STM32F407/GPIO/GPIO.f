@@ -1,0 +1,9 @@
+fload Target\Arm\STM32F407\GPIO\GPIO_A.f
+fload Target\Arm\STM32F407\GPIO\GPIO_B.f
+fload Target\Arm\STM32F407\GPIO\GPIO_C.f
+fload Target\Arm\STM32F407\GPIO\GPIO_D.f
+fload Target\Arm\STM32F407\GPIO\GPIO_E.f
+fload Target\Arm\STM32F407\GPIO\GPIO_F.f
+fload Target\Arm\STM32F407\GPIO\GPIO_G.f
+fload Target\Arm\STM32F407\GPIO\GPIO_H.f
+fload Target\Arm\STM32F407\GPIO\GPIO_I.f

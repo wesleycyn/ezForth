@@ -1,0 +1,7 @@
+: EXTI_IMR  0x00 EXTI + ;
+: EXTI_EMR  0x04 EXTI + ; 
+: EXTI_RTSR 0x08 EXTI + ;
+
+: EXTI_FTSR  0x0C EXTI + ;
+: EXTI_SWIER 0x10 EXTI + ;
+: EXTI_PR    0x14 EXTI + ;

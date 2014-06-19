@@ -1,0 +1,208 @@
+[Config]
+Compilator.SaveAll=0
+Compilator.Capture=0
+Compilator.HideOutput=0
+Compilator.LogType=0
+DefaultDir=D:\Project\ezForth\ezForth\IDE\指令編輯器
+DefaultCPIndex=0
+LogtoEnd=1
+DontOpen=0
+AbsolutePath=0
+FileFormat=0
+ProjectFilesOnly=0
+Extensions=*.*
+[Project tree]
+指令編輯器
+	+指令編輯器
+		+Object
+			+ComboBox
+				+指令清單
+					Object\ComboBox\指令清單\指令清單.f
+				+Arg1
+					Object\ComboBox\Arg1\Arg1.f
+				+Arg2
+					Object\ComboBox\Arg2\Arg2.f
+				+Arg3
+					Object\ComboBox\Arg3\Arg3.f
+				-Arg4
+					Object\ComboBox\Arg4\Arg4.f
+				+bits
+					-bit0
+						Object\ComboBox\bits\bit0\bit0.f
+					-bit1
+						Object\ComboBox\bits\bit1\bit1.f
+					-bit10
+						Object\ComboBox\bits\bit10\bit10.f
+					+bit11
+						Object\ComboBox\bits\bit11\bit11.f
+					-bit12
+						Object\ComboBox\bits\bit12\bit12.f
+					-bit13
+						Object\ComboBox\bits\bit13\bit13.f
+					+bit14
+						Object\ComboBox\bits\bit14\bit14.f
+					-bit15
+						Object\ComboBox\bits\bit15\bit15.f
+					-bit16
+						Object\ComboBox\bits\bit16\bit16.f
+					-bit17
+						Object\ComboBox\bits\bit17\bit17.f
+					-bit18
+						Object\ComboBox\bits\bit18\bit18.f
+					+bit19
+						Object\ComboBox\bits\bit19\bit19.f
+					+bit2
+						Object\ComboBox\bits\bit2\bit2.f
+					-bit20
+						Object\ComboBox\bits\bit20\bit20.f
+					-bit21
+						Object\ComboBox\bits\bit21\bit21.f
+					-bit22
+						Object\ComboBox\bits\bit22\bit22.f
+					-bit23
+						Object\ComboBox\bits\bit23\bit23.f
+					-bit24
+						Object\ComboBox\bits\bit24\bit24.f
+					-bit25
+						Object\ComboBox\bits\bit25\bit25.f
+					+bit26
+						Object\ComboBox\bits\bit26\bit26.f
+					-bit27
+						Object\ComboBox\bits\bit27\bit27.f
+					-bit28
+						Object\ComboBox\bits\bit28\bit28.f
+					-bit29
+						Object\ComboBox\bits\bit29\bit29.f
+					-bit3
+						Object\ComboBox\bits\bit3\bit3.f
+					-bit30
+						Object\ComboBox\bits\bit30\bit30.f
+					+bit31
+						Object\ComboBox\bits\bit31\bit31.f
+					+bit4
+						Object\ComboBox\bits\bit4\bit4.f
+					+bit5
+						Object\ComboBox\bits\bit5\bit5.f
+					-bit6
+						Object\ComboBox\bits\bit6\bit6.f
+					+bit7
+						Object\ComboBox\bits\bit7\bit7.f
+					-bit8
+						Object\ComboBox\bits\bit8\bit8.f
+					-bit9
+						Object\ComboBox\bits\bit9\bit9.f
+				Object\ComboBox\ComboBox.f
+			-Form
+				-Form1
+					Object\Form\Form1\ClassInit.f
+					Object\Form\Form1\Close.f
+					Object\Form\Form1\Form1.f
+					Object\Form\Form1\Form1_List.f
+					Object\Form\Form1\On_Done.f
+					Object\Form\Form1\On_Init.f
+					Object\Form\Form1\On_Paint.f
+					Object\Form\Form1\ParentWindow.f
+					Object\Form\Form1\SetCommand.f
+					Object\Form\Form1\StartPos.f
+					Object\Form\Form1\StartSize.f
+					Object\Form\Form1\test.f
+					Object\Form\Form1\WindowStyle.f
+					Object\Form\Form1\WindowTitle.f
+					Object\Form\Form1\WM_COMMAND.f
+			-LabalBox
+				Object\LabalBox\Labal.f
+			-PushButton
+				Object\PushButton\Button.f
+			-RadioButton
+				Object\RadioButton\Radio.f
+			-TextBox
+				Object\TextBox\TextBox.f
+		Instructions.jpg
+		main.f
+		VC_Form.jpg
+		VCL_ComboBox.jpg
+		指令編輯器.f
+		指令編輯器.ff
+		指令編輯器.frm_test
+		指令編輯器.ppr
+		指令編輯器_20140428pm0315.jpg
+[Open project files]
+0=Object\ComboBox\ComboBox.f
+1=Object\ComboBox\bits\bit0\bit0.f
+2=Object\ComboBox\bits\bit3\bit3.f
+3=Object\Form\Form1\Form1.f
+4=Object\ComboBox\bits\bit1\bit1.f
+5=Object\ComboBox\bits\bit2\bit2.f
+6=Object\Form\Form1\On_Init.f
+7=Object\ComboBox\bits\bit4\bit4.f
+8=Object\ComboBox\bits\bit5\bit5.f
+9=Object\ComboBox\bits\bit31\bit31.f
+10=Object\ComboBox\指令清單\指令清單.f
+11=Object\ComboBox\Arg1\Arg1.f
+12=Object\ComboBox\bits\bit11\bit11.f
+13=Object\ComboBox\Arg2\Arg2.f
+14=Object\ComboBox\bits\bit7\bit7.f
+15=Object\ComboBox\bits\bit19\bit19.f
+16=Object\ComboBox\Arg3\Arg3.f
+17=Object\ComboBox\bits\bit26\bit26.f
+18=Object\ComboBox\bits\bit14\bit14.f
+[Selected Project Files]
+Main=
+Selected=Object\ComboBox\指令清單\指令清單.f
+[Object\ComboBox\ComboBox.f]
+TopLine=1
+Caret=28,4
+[Object\ComboBox\bits\bit0\bit0.f]
+TopLine=1
+Caret=4,8
+[Object\ComboBox\bits\bit3\bit3.f]
+TopLine=1
+Caret=1,1
+[Object\Form\Form1\Form1.f]
+TopLine=1
+Caret=1,1
+[Object\ComboBox\bits\bit1\bit1.f]
+TopLine=1
+Caret=4,6
+[Object\ComboBox\bits\bit2\bit2.f]
+TopLine=1
+Caret=26,15
+[Object\Form\Form1\On_Init.f]
+TopLine=24
+Caret=18,29
+[Object\ComboBox\bits\bit4\bit4.f]
+TopLine=1
+Caret=19,14
+[Object\ComboBox\bits\bit5\bit5.f]
+TopLine=1
+Caret=36,15
+[Object\ComboBox\bits\bit31\bit31.f]
+TopLine=1
+Caret=1,1
+[Object\ComboBox\指令清單\指令清單.f]
+TopLine=16
+Caret=1,36
+[Object\ComboBox\Arg1\Arg1.f]
+TopLine=1
+Caret=1,15
+[Object\ComboBox\bits\bit11\bit11.f]
+TopLine=1
+Caret=30,13
+[Object\ComboBox\Arg2\Arg2.f]
+TopLine=1
+Caret=28,12
+[Object\ComboBox\bits\bit7\bit7.f]
+TopLine=1
+Caret=29,13
+[Object\ComboBox\bits\bit19\bit19.f]
+TopLine=1
+Caret=30,13
+[Object\ComboBox\Arg3\Arg3.f]
+TopLine=1
+Caret=47,13
+[Object\ComboBox\bits\bit26\bit26.f]
+TopLine=1
+Caret=20,14
+[Object\ComboBox\bits\bit14\bit14.f]
+TopLine=1
+Caret=20,14

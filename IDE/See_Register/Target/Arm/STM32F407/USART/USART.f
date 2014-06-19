@@ -1,0 +1,4 @@
+fload Target\Arm\STM32F407\USART\USART1.f
+fload Target\Arm\STM32F407\USART\USART2.f
+fload Target\Arm\STM32F407\USART\USART3.f
+fload Target\Arm\STM32F407\USART\USART4.f

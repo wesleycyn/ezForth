@@ -1,0 +1,8 @@
+\ NOTE! THIS IS A TEST FILE ONLY, NOT INTENDED TO BE EDITED!
+\ MAKE ANY CHANGES OR CORRECTIONS FROM THE FORM CODE EDITOR OR THE .FRM FILE ONLY
+\ «ü¥O½S¿è¾¹.FRM
+\- textbox needs excontrols.f
+
+fload Object/Form/Form1/Form1.f
+
+Start: Form1
