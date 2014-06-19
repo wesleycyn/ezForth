@@ -1,0 +1,2 @@
+: MAKE-CODE ( pfa -- )  
+    @ ,-T ;

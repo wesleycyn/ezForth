@@ -1,0 +1,2 @@
+: DEFINED-IN  ( -- xt )
+        ' ( BL WORD COUNT ROT SEARCH-WORDLIST  0= ?MISSING ) ;

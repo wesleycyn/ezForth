@@ -1,0 +1,2 @@
+: RESOLVED? ( pfa -- f )
+    CELL+ @ ;

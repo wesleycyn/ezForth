@@ -1,0 +1,6 @@
+\ Metacompiling initialization
+EMPTY
+HEX
+SYS-WARNING-OFF
+WARNING OFF
+' NOOP IS STACK-CHECK

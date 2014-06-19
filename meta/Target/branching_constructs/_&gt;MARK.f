@@ -1,0 +1,1 @@
+: ?>MARK    ( -- f addr ) TRUE HERE-T 0 ,-T ;                  \ forward reference

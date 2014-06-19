@@ -1,0 +1,1 @@
+T: NEXT    [TARGET] _next    ?<RESOLVE T;

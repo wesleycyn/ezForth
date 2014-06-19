@@ -1,0 +1,1 @@
+T: LITERAL   ( n -- )   [TARGET] DOLIT  ,-T T;

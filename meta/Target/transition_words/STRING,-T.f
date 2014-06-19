@@ -1,0 +1,1 @@
+: STRING,-T  [CHAR] " PARSE  DUP C,-T  S,-T ALIGN-T  ;

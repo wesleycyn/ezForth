@@ -1,0 +1,4 @@
+: DEFERED  ( wordlist -- )
+        BL WORD COUNT POSTPONE SLITERAL
+        POSTPONE LITERAL
+        POSTPONE FIND&EXECUTE ;

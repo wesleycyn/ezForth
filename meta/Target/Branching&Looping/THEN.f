@@ -1,0 +1,1 @@
+T: THEN                      ?>RESOLVE    T;

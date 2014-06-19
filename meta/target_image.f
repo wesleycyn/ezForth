@@ -1,0 +1,17 @@
+       ( Meta compiler create target image )
+VARIABLE TARGET-LINK
+0 TARGET-LINK !
+   
+: DO-TARGET  DOES> MAKE-CODE ;
+
+: TARGET-CREATE ( -- )
+  >IN @ HEADER >IN !
+  TARGET DEFINITIONS
+  CREATE
+    HERE-T ,
+    HERE TARGET-LINK @ , TARGET-LINK !
+  DO-TARGET
+  META DEFINITIONS ;
+     
+: RECREATE  ( -- )
+  >IN @  TARGET-CREATE >IN ! ;

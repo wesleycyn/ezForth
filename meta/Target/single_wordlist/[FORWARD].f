@@ -1,0 +1,1 @@
+: [FORWARD]   ( -- )    'F COMPILE, ;   IMMEDIATE
